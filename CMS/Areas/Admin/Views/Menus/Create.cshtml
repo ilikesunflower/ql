@@ -1,0 +1,144 @@
+﻿@using Castle.Core.Internal
+@using CMS_Lib.Util
+@model CMS.Areas.Admin.ViewModels.Menus.CreateViewModel
+
+@{
+    ViewData["Title"] = "Thêm mới menu | Quản lý menu";
+    string namePage = "Thêm mới menu";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Quản lý Menu";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Admin" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Create">
+                    <div class="card">
+                        <div class="card-header ">
+                            <p class="card-title namePageText">@namePage</p>
+                            <div class="float-right">
+                                @await Html.PartialAsync("Partial/BasicAction/Save")
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Tên menu <span class="text-danger">*</span></label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <input asp-for="Name" class="form-control  " autocomplete="off" />
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Url</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <input asp-for="Url" class="form-control  " autocomplete="off" />
+                                        <span asp-validation-for="Url" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Menu cha</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <select class="form-control   select2" asp-for="Pid">
+                                            <option value="1">#</option>
+                                            @if (!Model.ListMenus.IsNullOrEmpty())
+                                            {
+                                                for (int i = 0; i < Model.ListMenus.Count; i++)
+                                                {
+                                                    <option value="@Model.ListMenus[i].Id">@CmsFunction.BindNameParenChild(Model.ListMenus[i].Name, Model.ListMenus[i].Lvl)</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Css class</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <input asp-for="CssClass" class="form-control  " autocomplete="off" />
+                                        <span asp-validation-for="CssClass" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Trạng thái</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <div class="switch">
+                                            <div class="onoffswitch">
+                                                <input type="checkbox" />
+                                            </div>
+                                        </div>
+                                        <input type="hidden" asp-for="Status" class="form-control" autocomplete="off" />
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Controller</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <select class="form-control  select2" asp-for="ControllerId">
+                                            <option value="0">#</option>
+                                            @if (!Model.ListControllers.IsNullOrEmpty())
+                                            {
+                                                for (int i = 0; i < Model.ListControllers.Count; i++)
+                                                {
+                                                    <option data-action="@Json.Serialize(Model.ListControllers[i].ApplicationActions.Where(x => x.Flag == 0).Select(x => new {id = x.Id, text = x.Title.IsNullOrEmpty() ? x.Name : x.Title})).ToString()" value="@Model.ListControllers[i].Id">@Html.Raw(Model.ListControllers[i].Title.IsNullOrEmpty() ? Model.ListControllers[i].Name : Model.ListControllers[i].Title)</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Action</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <select class="form-control   select2" asp-for="ActionId">
+                                            <option value="0">#</option>
+                                            @if (!Model.ListControllers.IsNullOrEmpty())
+                                            {
+                                                var action = Model.ListControllers.FirstOrDefault(x => x.Id == Model.ControllerId);
+                                                if (action != null && !action.ApplicationActions.IsNullOrEmpty())
+                                                {
+                                                    var actionL = action.ApplicationActions.Where(x => x.Flag == 0).ToList();
+                                                    if (!actionL.IsNullOrEmpty())
+                                                    {
+                                                        for (int i = 0; i < actionL.Count; i++)
+                                                        {
+                                                            <option value="@actionL[i].Id">@Html.Raw(actionL[i].Title.IsNullOrEmpty() ? actionL[i].Name : actionL[i].Title)</option>
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css" />
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/js/Admin/Menu/create.js"></script>
+}

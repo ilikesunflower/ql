@@ -1,0 +1,95 @@
+﻿@using Castle.Core.Internal
+@model CMS_EF.Models.Identity.ApplicationAction
+
+@{
+    ViewData["Title"] = "Xem chi tiết Action | Quản lý Controller";
+    string namePage = "Xem chi tiết Action";
+    string subName = "Quản lý hệ thống";
+    string subName1 = "Quản lý Controller";
+    string subName2 = "Danh sách action";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@namePage</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active" asp-area="Admin" asp-action="Index">@subName1</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <a class="active" asp-area="Admin" asp-action="IndexAction" asp-route-controllerId="@Model.Controller?.Id">@subName2</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        @await Html.PartialAsync("Partial/BasicAction/Edit", new {id = Model.Id, action = "EditAction"})
+                    </div>
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-sm-2">Tên hiển thị controller:</label>
+                                <div class="col-sm-10">
+                                    <span>
+                                        @Html.DisplayFor(model => model.Controller.Title)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Tên Controller:</label>
+                                <div class="col-sm-10">
+                                    <span>
+                                        @Html.DisplayFor(model => model.Controller.Name)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Tên hiển thị action:</label>
+                                <div class="col-sm-10">
+                                    <span>
+                                        @Html.DisplayFor(model => model.Title)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Tên Action:</label>
+                                <div class="col-sm-10">
+                                    <span>
+                                        @Html.DisplayFor(model => model.Name)
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2">Mô tả:</label>
+                                <div class="col-sm-10">
+                                    <span>
+                                        @Html.Raw(Model.Description.IsNullOrEmpty() ? "" : Model.Description.Replace(Environment.NewLine, "<br/>"))
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+}

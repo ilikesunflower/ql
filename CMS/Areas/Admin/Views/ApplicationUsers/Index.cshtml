@@ -1,0 +1,145 @@
+﻿@model CMS.Areas.Admin.ViewModels.ApplicationUser.IndexUserViewModel
+
+
+@{
+    ViewData["Title"] = "Xem danh sách tài khoản| Quản lý hệ thống";
+    int index = Model.Page;
+    string namePage = "Danh sách tài khoản";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Người dùng";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @await Html.PartialAsync("Partial/BasicAction/Create")
+                            @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Admin", action = "DeleteAll" })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-4">
+                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-sl" placeholder="Nhập tên tài khoản" value="@Model.ListData.RouteValue["txtKeyword"]" />
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <select class="form-control select2 " style="width: 100%;" name="status" asp-for="@Model.ListData.RouteValue["status"]">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="0">Chưa kích hoạt</option>
+                                    <option value="1">Đã kích hoạt</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <select class="form-control select2 " style="width: 100%;" name="typeUser" asp-for="@Model.ListData.RouteValue["typeUser"]">
+                                    <option value="">Tất cả loại tài khoản</option>
+
+                                    @foreach (var item in UserConst.ListTypeUser)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-danger btn-block filter btn-sl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table table-bordered table-hover table-check-all table-bordered-index">
+                                <thead class="table-thead">
+                                    <tr>
+                                        <th class="text-center align-middle" style="width: 45px">
+                                            <input type="checkbox" class="i-checks chkAll" />
+                                        </th>
+                                        <th class="text-center align-middle" style="width: 45px">
+                                            STT
+                                        </th>
+                                        <th class="align-middle">
+                                            Tài khoản
+                                        </th>
+                                        <th class="align-middle">
+                                            Họ tên
+                                        </th>
+                                        <th style="width: 150px" class="text-center align-middle">
+                                            Trạng thái
+                                        </th>
+                                        <th class="text-center" style="width: 180px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ListData.Count > 0)
+                                    {
+                                        foreach (var item in Model.ListData)
+                                        {
+                                            <tr>
+                                                <td class="text-center align-middle">
+                                                    <input type="checkbox" class="i-checks chkItem" value="@item.Id" />
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    @(index++)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.Raw(item.UserName)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.FullName)
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    @if (item.IsActive == 1)
+                                                    {
+                                                        <span class="font-normal badge badge-success">Đã kích hoạt</span>
+                                                    }
+                                                    else if (item.IsActive == 0)
+                                                    {
+                                                        <span class="font-normal badge badge-secondary">Chưa kích hoạt</span>
+                                                    }
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = @item.Id })
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/Edit", new { id = @item.Id })
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.Id })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" class="text-center">Không có dữ liệu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = Model.ListData })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/Admin/ApplicationUser/index.js"></script>
+}

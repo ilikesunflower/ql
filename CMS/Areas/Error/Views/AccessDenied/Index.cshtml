@@ -1,0 +1,17 @@
+﻿@using CMS_Lib.Extensions.Session
+
+@{
+    ViewBag.Title = "Không có quyền truy cập | CMS";
+    string urlFail = SessionExtensions.Get<string>(this.Context.Session, "UrlFail");
+}
+
+<div class="wrapper wrapper-content">
+    <div class="middle-box text-center animated fadeInRightBig pt-5" style="max-width: 100%">
+        <h2 class="font-bold">
+            Không có quyền truy cập nội dung trang @Html.Raw((!string.IsNullOrEmpty(urlFail) ? $"<br><span> {urlFail}</span>" : "<span> này?</span>"))
+        </h2>
+        <div class="error-desc">
+            <a href="/" class="btn btn-primary btn-xs"><i class="fa fa-undo"></i> Quay lại trang chủ</a>
+        </div>
+    </div>
+</div>

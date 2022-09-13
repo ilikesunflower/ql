@@ -1,0 +1,132 @@
+﻿@using CMS_EF.Models.Identity
+@model CMS.Models.ModelContainner.ModelCollection
+
+@{
+    ViewData["Title"] = "Xem chi tiết menu | Quản lý Menu";
+    string namePage = "Xem chi tiết menu";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Danh sách Menu";
+    Menu menu = Model.GetModel<Menu>("Menu");
+    Menu menuParent = Model.GetModel<Menu>("MenuParent");
+    ApplicationAction applicationAction = Model.GetModel<ApplicationAction>("ControllerAction");
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Admin" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @await Html.PartialAsync("Partial/BasicAction/Edit", new { id = menu.Id })
+                            @await Html.PartialAsync("Partial/BasicAction/Delete", new { id = menu.Id })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Tên menu</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">@menu.Name</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Menu cha</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">@Html.Raw(menuParent == null ? "" : menuParent.Name)</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Css class</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">@menu.CssClass</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Url</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">@menu.Url</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Trạng thái</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <div class="switch">
+                                        <div class="onoffswitch">
+                                            @if (menu.Status == 1)
+                                            {
+                                                <input type="checkbox" checked="" disabled="" />
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" disabled="" />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Controller</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">
+                                        @if (applicationAction != null)
+                                        {
+                                            if (applicationAction.Controller != null)
+                                            {
+                                                @Html.Raw(String.IsNullOrEmpty(applicationAction.Controller.Title) ? applicationAction.Controller.Name : applicationAction.Controller.Title)
+                                            }
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-md-2 col-xs-2">Action</label>
+                                <div class="col-md-10 col-xs-10">
+                                    <span class="control-label">
+                                        @if (applicationAction != null)
+                                        {
+                                            @Html.Raw(String.IsNullOrEmpty(applicationAction.Title) ? applicationAction.Name : applicationAction.Title)
+                                        }
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        $('.onoffswitch input[type="checkbox"]').bootstrapToggle({
+            on: 'Hiện',
+            off: 'Ẩn',
+            size: 'mini',
+            onstyle: "success",
+            offstyle: "secondary"
+        });
+    </script>
+}

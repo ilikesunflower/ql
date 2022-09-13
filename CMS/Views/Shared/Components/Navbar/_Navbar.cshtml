@@ -1,0 +1,69 @@
+﻿@using CMS.Extensions.HtmlTag
+@using CMS_EF.Models.Identity
+@using CMS_Lib.Util
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> _signInManager
+@inject UserManager<ApplicationUser> _userManager
+
+@{
+    bool isSignIn = _signInManager.IsSignedIn(User);
+    bool isShowChangePassword = !User.HasClaim(CmsClaimType.UserType, "1");
+}
+<!-- Navbar -->
+<nav class="main-header navbar navbar-expand navbar-white navbar-light elevation-c-4" id="navbar-header">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" data-widget="pushmenu" data-enable-remember="true" href="#" role="button">
+                <i class="fas fa-bars navbar-text-color"></i>
+            </a>
+        </li>
+        @*<li class="nav-item d-none d-sm-block">
+            <a class="nav-link navbar-text-color" href="/">Phần mềm Quản lý số liệu - VNSTEEL</a>
+        </li>*@
+    </ul>
+    @* <div class="navbar-nav ml-auto position-relative" style="width: 100% !important;"> *@
+    @* </div> *@
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+        @await Html.PartialAsync("./_Notification.cshtml")
+        <li class="nav-item">
+            <a class="nav-link" data-widget="fullscreen" href="javascript:void(0)" role="button">
+                <i class="fa-regular fa-arrows-maximize p-l-r-5"></i>
+            </a>
+        </li>
+        <li class="nav-item dropdown" style="width: 50px; cursor: pointer">
+            <a class="nav-link py-0 dropdown-toggle p-1" data-toggle="dropdown" aria-expanded="false">
+                @if (!string.IsNullOrEmpty(User.Claims.FirstOrDefault(x => x.Type == CmsClaimType.Avatar)?.Value))
+                {
+                    <img src="@User.Claims.FirstOrDefault(x => x.Type == CmsClaimType.Avatar)?.Value" style="width: 30px !important;height: 30px !important" class="img-fluid img-circle" alt="User Image">
+                }
+                else
+                {
+                    <img src="~/images/user-default.png" class="img-circle " width="30px" height="30px" alt="User Image">
+                }
+            </a>
+            <div class="dropdown-menu m-3">
+                <a class="dropdown-item font-rem-0-9" asp-area="Admin" asp-controller="Personal" asp-action="Details" title="Chi tiết thông tin cá nhân"><i class="far fa-user"></i> &nbsp; Thông tin cá nhân </a>
+                <div class="dropdown-divider"></div>
+                @if (isShowChangePassword)
+                {
+                    <a class="dropdown-item font-rem-0-9" asp-area="Admin" asp-controller="Personal" asp-action="ChangePassword" title="Đổi mật khẩu"> <i class="fal fa-key"></i> &nbsp; Đổi mật khẩu </a>
+                    <div class="dropdown-divider"></div>
+                }
+                @if (isSignIn)
+                {
+                    <a class="dropdown-item font-rem-0-9" title="Đăng xuất"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
+                        <i class="fal fa-sign-out-alt" ></i>&nbsp; Đăng xuất
+                    </a>
+                }
+            </div>
+        </li>
+    </ul>
+</nav>
+<!-- /.navbar -->
+
+
+@using (Html.BeginScripts())
+{
+}

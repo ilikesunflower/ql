@@ -1,0 +1,463 @@
+﻿@using CMS.Areas.Orders.Const
+@using CMS_Lib.Util
+@model CMS.Areas.Orders.Models.DetailsViewModel
+
+@{
+    ViewData["Title"] = "Xem chi tiết đơn hàng | Quản lý đơn hàng";
+    string namePage = "Xem chi tiết  đơn hàng";
+    string subName = "Quản trị đơn hàng";
+    string subName1 = "Danh sách  đơn hàng";
+    var Order = Model.Order;
+    var Ship = Model.Ship;
+    var Payment = Model.Payment;
+    var Address = Model.Address;
+    var IsPoi = Model.IsPoi;
+    var productTotalPrice = Order.OrderProduct.Sum(x => x.Price * x.Quantity) ?? 0;
+    var total = Order.Total;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a >@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <a class="active" asp-area="Orders" asp-action="Index">@subName1</a>
+                    </li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-12">
+<div class="card">
+    <div class="card-header ">
+        <p class="card-title namePageText">@namePage</p>
+        <div class="float-right">
+            <div class="row">
+                <div id="groupStatusBtn" data-typepayment="@Model.Order.PaymentType" data-sumPrice="@total" data-shipPartner="@Model.Order.ShipPartner" data-isStatusShowAll="@Model.IsStatusShowAll" data-codeOrder="@Model.Order!.Code" data-isOrderConfirm="@Model.IsOrderConfirm"
+                     data-isOrderSuccess="@Model.IsOrderSuccess" data-isOrderShip="@Model.IsOrderShip" data-isOrderCancel="@Model.IsOrderCancel" data-isStatusPayment="@Model.IsStatusPayment">
+                </div>
+                @if (Model.IsEdit)
+                {
+                    <div class="m-l-r-5">
+                        @await Html.PartialAsync("Partial/BasicAction/Edit", new { id = Order!.Code })
+                    </div>   
+                }
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                        <label class="col-md-4 col-xs-4">Mã đơn hàng</label>
+                        <div class="col-md-8 col-xs-8">
+                            <span class="control-label">@(Order.Code)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                        <label class="col-md-4 col-xs-4">Trạng thái đơn hàng</label>
+                        <div class="col-md-8 col-xs-8">
+                            <span class="control-label">@Html.Raw(OrderStatusConst.GetStatus(Order.Status!.Value))</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                        <label class="col-md-4 col-xs-4">Tên khách hàng</label>
+                        <div class="col-md-8 col-xs-8">
+                            <span class="control-label">@(Order.Customer.Type == 2 ?  $"Phòng ban Prudential - {Order.Customer.FullName}" : $"{Order.Customer.UserName} - {Order.Customer.FullName}") - @(Order.Customer.Phone)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                        <label class="col-md-4 col-xs-4">Trạng thái thanh toán</label>
+                        <div class="col-md-8 col-xs-8">
+                            <span class="control-label">@Html.Raw(OrderStatusPayment.BindStatus(Order.StatusPayment))</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="row">
+                        <label class="col-md-4 col-xs-4">Thời gian tạo</label>
+                        <div class="col-md-8 col-xs-8">
+                            <span class="control-label">@Order.OrderAt?.ToString("dd/MM/yyyy HH:mm")</span>
+                        </div>
+                    </div>
+                </div>
+                @{
+                    if (!string.IsNullOrEmpty(Model.Order.CodeShip))
+                    {
+                        <div class="col-xs-12 col-md-6">
+                            <div class="row">
+                                <label class="col-md-4 col-xs-4">Mã vận chuyển</label>
+                                <div class="col-md-8 col-xs-8">
+                                    <span class="control-label">@Order.CodeShip</span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="row">
+    <div class="col-xs-12 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-title namePageText">Địa chỉ giao hàng</p>
+            </div>
+            <div class="card-body row ">
+                <div class="col-12">
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-xs-4">Họ tên :</label>
+                            <div class="col-md-8 col-xs-8">
+                                <span class="control-label">@(Order.OrderAddress?.Name ?? "")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-xs-4">Số điện thoại :</label>
+                            <div class="col-md-8 col-xs-8">
+                                <span class="control-label">@(Order.OrderAddress?.Phone ?? "")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-xs-4">Email :</label>
+                            <div class="col-md-8 col-xs-8">
+                                <span class="control-label">@(Order.OrderAddress?.Email ?? "")</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-xs-4">Địa chỉ nhận hàng :</label>
+                            <div class="col-md-8 col-xs-8">
+                                <p class="m-all-0"> @Order.OrderAddress?.Address</p>
+                                <p class="m-all-0">@Address</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-xs-4">Ghi chú đặt hàng :</label>
+                            <div class="col-md-8 col-xs-8">
+                                <span class="control-label">@(Order.OrderAddress?.Note ?? "")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-title namePageText">Theo dõi đơn</p>
+            </div>
+            <div class="card-body row">
+                <div class="col-12" style="height: 270px; overflow-y: auto; padding: 1px;">
+                    <div class="timeline row">
+                        @{
+                            if (Model.ListOrderPartnerShipLog is {Count: > 0 })
+                            {
+                                int i = 0;
+                                foreach (var item in Model.ListOrderPartnerShipLog)
+                                {
+                                    <div class="col-12">
+                                        @if (i == 0)
+                                        {
+                                            <i class="fas fa-solid fa-check bg-green"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fas fa-solid fa-check"></i>
+                                        }
+                                        <div class="timeline-item">
+                                            <div class="timeline-header">
+                                                <span>@(item.PartnerShipCreatedAt?.ToString("HH:mm, dd/MM/yyyy"))</span>
+                                            </div>
+                                            <div class="timeline-body">
+                                                @(item.PartnerShipDetails)
+                                            </div>
+                                        </div>
+                                    </div>
+                                    i++;
+                                }   
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="card">
+    <div class="card-header">
+        <p class="card-title namePageText">Thông tin sản phẩm</p>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive tablePaddingTop">
+            <table class="table table-bordered ">
+                <thead>
+                <tr>
+                    <th class="col-md-6">Sản phẩm</th>
+                    <th class="text-center d-xl-table-cell col-md-2">Đơn giá (đồng)</th>
+                    <th class="text-center d-xl-table-cell col-md-2">Số lượng</th>
+                    <th class="text-center d-xl-table-cell col-md-2">Thành tiền (đồng)</th>
+                </tr>
+                </thead>
+                <tbody>
+                @if (Order.OrderProduct.Count > 0)
+                {
+                    @foreach (var item in Order.OrderProduct)
+                    {
+                        <tr>
+                            <td class="m-0  align-middle">
+                                <div class="row">
+                                    <img src="@item.ProductImage" class="imageCart  pl-2 "/>
+                                    <div class="pl-4">
+                                        <strong> @item.ProductName </strong><br/>
+                                        @if (item.OrderProductSimilarProperty.Count > 0)
+                                        {
+                                            @foreach (var item2 in item.OrderProductSimilarProperty)
+                                            {
+                                                <span> @item2.ProductPropertiesName : @item2.ProductPropertiesValueName</span>
+                                                <br/>
+                                            }
+                                        }
+                                    </div>
+
+                                </div>
+                            </td>
+                            <td class="text-right align-middle">
+                                @CmsFunction.NumberFormatShow(item.Price, true)
+                            </td>
+                            <td class="text-right align-middle">
+                                @CmsFunction.NumberFormatShow(item.Quantity, true)
+                            </td>
+
+                            <td class="text-right align-middle">
+                                @CmsFunction.NumberFormatShow(item.Quantity * item.Price, true)
+                            </td>
+
+                        </tr>
+                    }
+                }
+                </tbody>
+            </table>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-10">
+                <div class="d-flex justify-content-end">
+                    <strong>Tạm tính</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <strong>
+                        @CmsFunction.NumberFormatShow(productTotalPrice) <u>đ</u>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-10">
+                <div class="d-flex justify-content-end">
+                    <strong>Phí giao hàng</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <strong>
+                        @CmsFunction.NumberFormatShow(Order.PriceShip) <u>đ</u>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-10">
+                <div class="d-flex justify-content-end">
+                    <strong>Sử dụng điểm thưởng</strong>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <strong>
+                       - @CmsFunction.NumberFormatShow(Order.Point * IsPoi) <u>đ</u>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-10">
+                <div class="d-flex justify-content-end">
+                    <strong>Coupon  </strong>@(Order.CouponCode == null ? " " : " (" + Order.CouponCode + ")")
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <strong>
+                        -@CmsFunction.NumberFormatShow(Order.CouponDiscount) <u>đ</u>
+                    </strong>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-10">
+                <div class="d-flex justify-content-end">
+                    <div>
+                        <label>Tổng thanh toán</label><br/>
+                        <span >(Đã bao gồm VAT)</span>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex justify-content-end">
+                    <strong>
+                        @CmsFunction.NumberFormatShow(total) <u>đ</u>
+                    </strong>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class=" col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-title namePageText">Phương thức giao hàng</p>
+            </div>
+            <div class="card-body">
+                <label>Đơn vị vận chuyển</label> : @Ship
+            </div>
+        </div>
+    </div>
+    <div class=" col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <p class="card-title namePageText">Phương thức thanh toán</p>
+            </div>
+            <div class="card-body">
+                <label>@(PaymentMethodConst.BindPaymentMethod(Order.PaymentType ?? 0))</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-header">
+        <p class="card-title namePageText">@(Order.Customer.Type == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn")</p>
+    </div>
+    @if (Order.Customer.Type == 2)
+    {
+        <div class="card-body row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-2 col-xs-2">Số PR:</label>
+                    <div class="col-md-10 col-xs-10">
+                        <span class="control-label">@(Order.PrCode ?? "")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-12 col-xs-12">
+                        File PO đính kèm: 
+                        @{
+                            if (!string.IsNullOrEmpty(Order.PrFile)){
+                                <a href="@Order.PrFile" target="_blank">@Order.PrFile</a>
+                            }
+                        }
+                    </label>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-body row">
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-2 col-xs-2">Tên công ty</label>
+                    <div class="col-md-10 col-xs-10">
+                        <span class="control-label">@(Order.BillCompanyName ?? "")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-2 col-xs-2">Địa chỉ</label>
+                    <div class="col-md-10 col-xs-10">
+                        <span class="control-label">@(Order.BillAddress ?? "")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-2 col-xs-2">Mã số thuế</label>
+                    <div class="col-md-10 col-xs-10">
+                        <span class="control-label">@(Order.BillTaxCode ?? "")</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group row">
+                    <label class="col-md-2 col-xs-2">Email nhận hóa đơn</label>
+                    <div class="col-md-10 col-xs-10">
+                        <span class="control-label">@(Order.BillEmail ?? "")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@if (!string.IsNullOrEmpty(Model.Order.Note))
+{
+    <div class="card">
+        <div class="card-header"><p class="card-title">Ghi chú</p></div>
+        <div class="card-body row">
+            @(Model.Order.Note)
+        </div>
+    </div>
+}
+</div>
+</div>
+</div>
+</section>
+@section Styles
+{
+       <link rel="stylesheet" href="~/css/Orders/detailOrder.css"/>
+}
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/dist/js/order/changeStatus/bundle.js" asp-append-version="true"></script>
+}
+

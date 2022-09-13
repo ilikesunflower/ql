@@ -1,0 +1,155 @@
+﻿@using CMS_EF.Models.Articles
+@using CMS.Areas.Categories.Const
+@using CMS_EF.Models.Customers
+@using NPOI.SS.Formula.Functions
+@model CMS.Areas.Coupons.Models.IndexCouponModel
+@{
+    ViewData["Title"] = "Danh sách nhập coupon | Quản lý nhập coupon";
+    string namePage = "Danh sách nhập coupon";
+    string subName = "Quản lý nhập coupon";
+    string subName1 = "Quản lý nhập coupon";
+    int index = (Model.Page - 1) * 20 + 1;
+    var listData = Model.ListData;
+    // var listArticleType = Model.GetModel<List<ArticleType>>("ListArticleType");
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                        
+                            @if (Model.IsImport)
+                                {
+                                    <a class="btn bg-gradient-primary btn-sl" asp-action="Import">
+                                         <i class="fa-solid fa-arrow-up-from-line"></i> Nhập dữ liệu
+                                    </a>
+                                }
+                             @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Coupons", action = "DeleteAll" })
+
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-5">
+                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập tiêu đề" value="@listData.RouteValue["txtKeyword"]"/>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                     <div class="input-group input-group-xl">
+                                         <input type="text" class="input-xl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startDate"]"/>
+                                         <div class="input-group-prepend">
+                                             <span class="input-group-text">đến</span>
+                                         </div>
+                                         <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
+                                     </div>
+                                 </div>        
+                            <div class="col-xs-12 col-sm-3">
+                                <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="text-center align-middle" style="width: 45px">
+                                        <input type="checkbox" class="i-checks chkAll"/>
+                                    </th>
+                                    <th style="width: 45px " class="align-middle">STT</th>
+                                    <th class="text-center align-middle" style="width: 10%" >Mã phiếu yêu cầu</th>
+                                    <th class="text-center align-middle" style="width: 10%">Đơn vị phát hành</th>
+                                    <th class="align-middle">Tên file</th>
+                                    <th class="text-center align-middle" style="width:10%">Ngày tạo</th>
+                                    <th class="text-center align-middle" style="width: 200px"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (listData.Count > 0)
+                                {
+
+                                    @foreach (var item in listData)
+                                    {
+                                        string token = Model.TokenService.GenerateJwtToken(new Dictionary<string, object> { { "pathFile", item.LinkFile }, { "fileName", item.FileName } });
+
+                                        <tr>
+                                            <td class="text-center align-middle">
+                                                <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                @(index++)
+                                            </td>
+                                            <td class="align-middle">
+                                                @(item.Code)
+                                            </td>
+                                            <td class="align-middle ">
+                                                @(item.OrgName ?? "")
+                                            </td>
+                                            <td class="align-middle ">
+                                                @(item.FileName)
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                @item.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm")
+
+                                            </td>
+                                          
+                                            <td class="text-center align-middle">
+                                                @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = @item.Id })
+                                                <button title="Tải file" class="btn bg-gradient-success btn-xs btn-s-m mt-1 mb-1" onclick="downloadFile('@token')">
+                                                     <i class="fal fa-cloud-download"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Tải file</span>
+                                                </button>
+                                                
+                                                @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = @item.Id})
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="js/downloadFile/index.js"></script>
+}
+
+@section Styles
+{  
+
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+
+}

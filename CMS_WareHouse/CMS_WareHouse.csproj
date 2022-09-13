@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CMS_Access\CMS_Access.csproj" />
+    <ProjectReference Include="..\CMS_Lib\CMS_Lib.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="KiotViet\Models\" />
+  </ItemGroup>
+
+</Project>

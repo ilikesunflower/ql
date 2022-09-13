@@ -1,0 +1,30 @@
+﻿@model CMS.Areas.Admin.ViewModels.Home.IndexViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+}
+
+@section Styles
+{
+}
+
+<!-- Main content -->
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row pt-3"></div>
+        @await Html.PartialAsync("Partials/DataSales", new { permission = Model.IsDataSales })
+        @await Html.PartialAsync("Partials/ProductBest", new { permission = Model.IsProductBest })
+        @await Html.PartialAsync("Partials/GroupCustomer", new { permission = Model.IsGroupCustomer })
+        @await Html.PartialAsync("Partials/DataAreas", new { permission = Model.IsDataAreas })
+        <div class="row pt-3">
+            @await Html.PartialAsync("Partials/ProductRating", new { permission = Model.IsProductRating })
+            @await Html.PartialAsync("Partials/CustomerActive", new { permission = Model.IsCustomerActive })
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+@section Scripts {
+
+}

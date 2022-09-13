@@ -1,0 +1,209 @@
+﻿@using CMS.Areas.Orders.Const
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using CMS_Lib.Util
+@using CMS.Areas.Reports.Services
+@model CMS.Areas.Reports.Models.SummaryReports.IndexViewModel
+
+@{
+    string namePage = "Báo cáo tổng hợp";
+    string subName = "Báo cáo";
+    string subName1 = namePage;
+    ViewData["Title"] = namePage;
+    var listData = Model.ListData;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right"></div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get" asp-action="Index">
+                            <div class="col-xs-12 col-sm-2">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control" placeholder="Mã đơn hàng..." autocomplete="off" name="txtSearch" asp-for="@listData.RouteValue["txtSearch"]"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startDate"]"/>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">đến</span>
+                                    </div>
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control form-control-xl" name="paymentStatus" asp-for="@listData.RouteValue["paymentStatus"]">
+                                    <option>Trạng thái thanh toán</option>
+                                    @foreach (var item in Model.OrderStatusPayments)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control form-control-xl" name="status" asp-for="@listData.RouteValue["status"]">
+                                    <option>Trạng thái đơn hàng</option>
+                                    @foreach (var item in Model.ListStatus)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-1">
+                                <button type="submit" name="isExport" value="0" class="btn btn-danger btn-block filter btn-xl">Xem BC</button>
+                            </div>
+                            <div class="col-xs-12 col-sm-1">
+                                <button type="submit" name="isExport" value="1" class="btn btn-success btn-block filter btn-xl">Xuất BC</button>
+                            </div>
+                        </form>
+
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-bordered-index" style="min-width: 2500px;">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="align-middle text-center">Mã đơn hàng</th>
+                                    <th class="align-middle text-center">Thời gian tạo</th>
+                                    <th class="align-middle text-center">Thời gian xác nhận</th>
+                                    <th class="align-middle text-center">Phương thức thanh toán</th>
+                                    <th class="align-middle text-center">Trạng thái thanh toán</th>
+                                    <th class="align-middle text-center">Trạng thái đơn hàng</th>
+                                    <th class="align-middle text-center">Phương thức giao hàng</th>
+                                    <th class="align-middle text-center">Mã đơn vận chuyển</th>
+                                    <th class="align-middle text-center">Hàng đặt</th>
+                                    <th class="align-middle text-center">Số lượng</th>
+                                    <th class="align-middle text-center">Tổng tiền</th>
+                                    <th class="align-middle text-center">Tiền ship</th>
+                                    <th class="align-middle text-center">ID khách</th>
+                                    <th class="align-middle text-center">ID phòng ban</th>
+                                    <th class="align-middle text-center">Họ tên</th>
+                                    <th class="align-middle text-center">SĐT</th>
+                                    <th class="align-middle text-center">Email</th>
+                                    <th class="align-middle text-center">Địa chỉ</th>
+                                    <th class="align-middle text-center">Ghi chú</th>
+                                    <th class="align-middle text-center">Hủy đơn hàng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (listData.Count > 0)
+                                {
+                                    @foreach (var item in listData)
+                                    {
+                                        int productCount = Math.Max(item.OrderProduct.Count, 1);
+                                        var product = item.OrderProduct.FirstOrDefault();
+                                        int sttProduct = 0;
+                                        <tr>
+                                            <td rowspan="@productCount" class="align-middle">@item.Code</td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @item.OrderAt?.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @item.OrderStatusConfirmAt?.ToString("dd/MM/yyyy HH:mm")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(PaymentMethodConst.BindPaymentMethod(item.PaymentType ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-center">
+                                                @Html.Raw(OrderStatusPayment.BindStatus(item.StatusPayment ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @Html.Raw(OrderStatusConst.GetStatus(item.Status ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(ShipConst.GetShipment(item.ShipPartner ?? 0, item.ShipType ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.CodeShip ?? "")
+                                            </td>
+                                            <td class="align-middle text-left">
+                                                @(product!.ProductName ?? "")
+                                            </td>
+                                            <td class="align-middle text-right">
+                                                @(CmsFunction.NumberFormatShow(product!.Quantity ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-right">
+                                                @(CmsFunction.NumberFormatShow(item!.Total ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-right">
+                                                @(CmsFunction.NumberFormatShow(item!.PriceShip ?? 0))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item!.Customer?.UserName ?? "")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(SummaryReportService.BindIdOrg(item!.Customer))
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.OrderAddress?.Name ?? "")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.OrderAddress?.Phone ?? "")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.OrderAddress?.Email ?? "")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.OrderAddress?.Address ?? ""), Xã/Phường: @(item.OrderAddress?.Commune?.Name), Quận/Huyện: @(item.OrderAddress?.District?.Name), Tỉnh/Thành phố: @(item.OrderAddress?.Province?.Name)
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.OrderAddress?.Note ?? "")
+                                            </td>
+                                            <td rowspan="@productCount" class="align-middle text-left">
+                                                @(item.Note)
+                                            </td>
+                                        </tr>
+                                        @foreach (var orderProduct in item.OrderProduct)
+                                        {
+                                            if (sttProduct++ == 0)
+                                            {
+                                                continue;
+                                            }
+                                            <tr>
+                                                <td class="align-middle text-left">
+                                                    @(orderProduct!.ProductName ?? "")
+                                                </td>
+                                                <td class="align-middle text-right">
+                                                    @(@CmsFunction.NumberFormatShow(orderProduct!.Quantity ?? 0))
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="20" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

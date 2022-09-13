@@ -1,0 +1,32 @@
+﻿@model dynamic
+@{
+    var orderCode = Model.GetType().GetProperty("orderCode").GetValue(Model, null);
+    bool? isOrderConfirm = Model.GetType().GetProperty("IsOrderConfirm").GetValue(Model, null);
+    bool? isOrderShip = Model.GetType().GetProperty("IsOrderShip").GetValue(Model, null);
+    bool? isOrderSuccess = Model.GetType().GetProperty("IsOrderSuccess").GetValue(Model, null);
+    bool? isOrderCancel = Model.GetType().GetProperty("IsOrderCancel").GetValue(Model, null);
+
+    <div class="btn-group border-0">
+        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">Cập nhật trạng thái
+        </button>
+        <div class="dropdown-menu">
+            @if (isOrderConfirm == true)
+            {
+                <button class="dropdown-item" asp-area="Orders" asp-controller="Order" asp-action="ChangeOrderConfirm" asp-route-id="@orderCode">Xác nhận đơn hàng</button>
+            }
+            @if (isOrderShip == true)
+            {
+                <button class="dropdown-item" asp-area="Orders" asp-controller="Order" asp-action="ChangeOrderShip" asp-route-id="@orderCode">Gửi vận chuyển</button>
+            }
+            @if (isOrderSuccess == true)
+            {
+                <button class="dropdown-item" asp-area="Orders" asp-controller="Order" asp-action="ChangeOrderSuccess" asp-route-id="@orderCode">Hoàn thành đơn hàng</button>
+            }
+            @if (isOrderCancel == true)
+            {
+                <button class="dropdown-item" asp-area="Orders" asp-controller="Order" asp-action="ChangeOrderCancel" asp-route-id="@orderCode">Hủy đơn</button>
+            }
+        </div>
+    </div>
+}
+

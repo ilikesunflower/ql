@@ -1,0 +1,56 @@
+﻿@model CMS.Models.ModelContainner.ModelCollection
+
+@{
+    ViewData["Title"] = " Quản lý sản phẩm";
+    string namePage = "Sửa sản phẩm";
+    string subName = "Quản lý sản phẩm";
+    string subName1 = "Danh sách sản phẩm";
+    int productId = Model.GetModel<int>("id");
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Products" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div id="product_app">
+        </div>
+    </div>
+</section>
+
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+    <link rel="stylesheet" href="~/css/Article/createEdit.css"/>
+}
+@section Scripts
+{
+    <script type="text/javascript">
+        window.id = @productId;
+    </script>
+    <script type="text/javascript" src="~/lib/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="~/lib/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="~/js/file-manager-upload/dist/filemanagerupload.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/js/Article/createEdit.js"></script>
+     <script type="text/javascript" src="~/dist/js/product/edit/bundle.js" asp-append-version="true"></script>
+
+}

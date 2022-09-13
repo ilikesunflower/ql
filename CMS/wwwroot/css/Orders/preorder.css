@@ -1,0 +1,17 @@
+﻿.table__product-contain{
+    display: flex;
+    gap: 10px;
+}
+.table__product-contain .table__product-image{
+    flex: 0 1 auto;
+    width: 50px;
+    height: 50px;
+    border: solid 1px #e6eaef;
+    border-radius: 3px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.table__product-contain .table__product-info{
+    
+}

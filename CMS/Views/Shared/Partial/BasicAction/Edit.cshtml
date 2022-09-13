@@ -1,0 +1,38 @@
+﻿
+@model dynamic
+@{
+    var id = Model.GetType().GetProperty("id").GetValue(Model, null);
+    var isAction = Model.GetType().GetProperty("action");
+    var isPermission = Model.GetType().GetProperty("permission");
+    if (isPermission == null)
+    {
+        if (TempData.ContainsKey("isEdit") && (bool)TempData["isEdit"])
+        {
+            if (isAction == null)
+            {
+                <a class="btn bg-gradient-success " asp-action="Edit" asp-route-id="@id"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</a>
+            }
+            else
+            {
+                var actionController = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a class="btn bg-gradient-success" asp-action="@actionController" asp-route-id="@id"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</a>
+            }
+        }
+    }
+    else
+    {
+        bool isEdit = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isEdit)
+        {
+            if (isAction == null)
+            {
+                <a class="btn bg-gradient-success " asp-action="Edit" asp-route-id="@id"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</a>
+            }
+            else
+            {
+                var actionController = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a class="btn bg-gradient-success " asp-action="@actionController" asp-route-id="@id"><i class="fa fa-pencil" aria-hidden="true"></i> Sửa</a>
+            }
+        }
+    }
+}

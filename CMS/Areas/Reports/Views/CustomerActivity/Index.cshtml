@@ -1,0 +1,122 @@
+﻿@using CMS.Areas.Customer.Const
+@using CMS.Areas.Reports.Services
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using CMS_Lib.Util
+@model CMS.Areas.Reports.Models.CustomerActivity.IndexViewModel
+
+@{
+    string namePage = "Báo cáo hoạt động khách hàng";
+    string subName = "Báo cáo";
+    string subName1 = namePage;
+    ViewData["Title"] = namePage;
+    var listData = Model.Customers;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right"></div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get" asp-action="Index">
+                            <div class="col-xs-12 col-sm-2">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control" placeholder="Khách hàng..." autocomplete="off" name="txtSearch" asp-for="@listData.RouteValue["txtSearch"]"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startDate"]"/>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">đến</span>
+                                    </div>
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control form-control-xl" name="type" asp-for="@listData.RouteValue["type"]">
+                                    <option>Chọn phòng ban</option>
+                                    @foreach (var item in CustomerTypeGroupConst.ListCustomerTypeGroupConst)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" name="isExport" value="0" class="btn btn-danger btn-block filter btn-xl">Xem báo cáo</button>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" name="isExport" value="1" class="btn btn-success btn-block filter btn-xl">Xuất báo cáo</button>
+                            </div>
+                        </form>
+                       <div class="tablePaddingTop">
+                            <dl class="row">
+                              <dt class="col-sm-2">Staff: @CmsFunction.NumberFormatShow(Model.CustomerType.Staff)</dt>
+                              <dt class="col-sm-2">GA: @CmsFunction.NumberFormatShow(Model.CustomerType.GA)</dt>
+                              <dt class="col-sm-2">Phòng ban: @CmsFunction.NumberFormatShow(Model.CustomerType.Org)</dt>
+                            </dl>
+                        </div>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-bordered-index">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="align-middle text-center">STT</th>
+                                    <th class="align-middle text-center">Tên khách hàng</th>
+                                    <th class="align-middle text-center">ID Khách hàng</th>
+                                    <th class="align-middle text-center">Phòng ban</th>
+                                    <th class="align-middle text-center">Thời gian hoạt động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (listData is {Count:>0})
+                                {
+                                    var stt = 1;
+                                    @foreach (var item in listData)
+                                    {
+                                        <tr>
+                                            <td class="align-middle text-center">@(stt++)</td>
+                                            <td class="align-middle">@item.FullName</td>
+                                            <td class="align-middle">@item.Username</td>
+                                            <td class="align-middle">@(CustomerActivityService.BindIdOrg(item.TypeGroup, item.Org))</td>
+                                            <td class="align-middle">@(item.ActiveTime?.ToString("dd/MM/yyyy HH:mm") ?? "") </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="20" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

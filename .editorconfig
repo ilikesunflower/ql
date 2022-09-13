@@ -1,0 +1,13 @@
+﻿[*.cs]
+
+# CS0809: Obsolete member overrides non-obsolete member
+dotnet_diagnostic.CS0809.severity = none
+
+# Default severity for analyzer diagnostics with category 'Design'
+dotnet_analyzer_diagnostic.category-Design.severity = none
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = none
+
+# CS8603: Possible null reference return.
+dotnet_diagnostic.CS8603.severity = none

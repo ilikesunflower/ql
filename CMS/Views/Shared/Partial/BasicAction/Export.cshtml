@@ -1,0 +1,24 @@
+﻿@model dynamic
+@{
+    var text = Model.GetType().GetProperty("text") == null ? "Xuất excel" : (string) Model.GetType().GetProperty("text").GetValue(Model, null);
+    var url = Model.GetType().GetProperty("url") == null ? "" : (string) Model.GetType().GetProperty("url").GetValue(Model, null);
+    @if (string.IsNullOrEmpty(url))
+    {
+        var actionController = Model.GetType().GetProperty("action") == null ? "Export" : (string) Model.GetType().GetProperty("action").GetValue(Model, null);
+        var area = Model.GetType().GetProperty("area") == null ? "" : (string) Model.GetType().GetProperty("area").GetValue(Model, null);
+        IDictionary<string, string> parameters = Model.GetType().GetProperty("parameters") == null ? new Dictionary<string, string>() : (Dictionary<string, string>) Model.GetType().GetProperty("parameters").GetValue(Model, null);
+        <div class="d-inline-block">
+            <a asp-area="@area" asp-action="@actionController" asp-all-route-data="parameters" type="submit" class="btn bg-gradient-success btn-sl">
+                <i class="fas fa-download"></i> @text
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="d-inline-block">
+            <a href="@url" class="btn bg-gradient-success btn-sl">
+                <i class="fas fa-download"></i> @text
+            </a>
+        </div>
+    }
+}

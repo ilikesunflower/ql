@@ -1,0 +1,176 @@
+﻿@using CMS.Areas.Customer.Const
+@using CMS_Lib.Util
+@using CMS.Areas.Coupons.Const
+@model CMS.Areas.Customer.Models.Customer.DetailsViewModel
+
+@{
+    ViewBag.Title = "Chi tiết tài khoản khách hàng";
+    string namePage = "Chi tiết thông tin tài khoản";
+    string subName = "Quản lý tài khoản khách hàng";
+    string subName1 = "Danh sách tài khoản khách hàng";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a >@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Customer" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @if (Model.IsResetPass == true)
+                            {
+                                <button type="button" class="btn bg-gradient-info resetPassword"  asp-action="ResetPassWord" asp-route-id="@Model.Customer.Id"><i class="fa-solid fa-key"></i> Reset Mật khẩu</button>
+                            }
+                            @await Html.PartialAsync("Partial/BasicAction/Edit", new { id = Model.Customer.Id })
+                            @await Html.PartialAsync("Partial/BasicAction/Delete", new { id = Model.Customer.Id })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-horizontal col-xs-12 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Tài khoản</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <span class="control-label">@Model.Customer.UserName</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Họ tên </label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <span class="control-label">@Model.Customer.FullName</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Email</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        @Model.Customer.Email
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">SĐT </label>
+                                    <div class="col-md-10 col-xs-10">
+                                        <span class="control-label">@Model.Customer.Phone</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-2">Ghi chú</label>
+                                    <div class="col-md-10 col-xs-10">
+                                        @Model.Customer.Detail
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-horizontal col-xs-12 col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-xs-4">Trạng thái hoạt động</label>
+                                    <div class="col-md-8 col-xs-8">
+                                        <span class="control-label">@Html.Raw(CustomerConst.ListStatusCustomerColor.FirstOrDefault(x => x.Key == Model.Customer.Status)!.Value)</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-xs-4">Đối tượng khách hàng</label>
+                                    <div class="col-md-8 col-xs-8">
+                                        <span class="control-label">@Html.Raw(CustomerTypeGroupConst.ListCustomerTypeGroupConstColor.FirstOrDefault(x => x.Key == Model.Customer.TypeGroup)!.Value)</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-xs-4">Hình thức đăng nhập</label>
+                                    <div class="col-md-8 col-xs-8">
+                                        <span class="control-label">@Html.Raw(CustomerConst.ListTypeCustomerColor.FirstOrDefault(x => x.Key == Model.Customer.Type)!.Value)</span>
+                                    </div>
+                                </div>
+                                @if (Model.Customer.Type == CustomerConst.TypeOrgPru)
+                                {
+                                    <div class="form-group row">
+                                        <label class="col-md-4 col-xs-4">Bộ phận</label>
+                                        <div class="col-md-8 col-xs-8">
+                                            @Model.Customer.Org
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <div id="coupon_app"></div>     
+            </div>
+            <div class="col-md-6 col-xs-12" id="table-point"></div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script>
+        const customerId = @Model.Customer.Id;
+    </script>
+    <script type="text/javascript" src="/dist/js/customers/customerDetailPoint/bundle.js"></script>
+    <script type="text/javascript">
+        window.id = @(Model.Customer.Id);
+        $(".resetPassword").click(function (e) {
+        var url = $(this).attr('formaction');
+        var urlRedirect = $(this).attr('data-url-back');
+        Swal.fire({
+            title: 'Bạn có chắc chắn reset mật khẩu cho dữ liệu này?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            confirmButtonColor: '#ed5565',
+            cancelButtonText: 'Thoát'
+        }).then((result) => {
+            if (result.value) {
+                UserInterface.prototype.showLoading();
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    dataType: 'json',
+                    data: {},
+                    headers: {
+                        RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function (response) {
+                        UserInterface.prototype.hideLoading();
+                        if (response.statusCode == 200) {
+                            if (urlRedirect !== undefined) {
+                                window.location.href = urlRedirect;
+                            } else {
+                                window.location.reload();
+                            }
+                        } else {
+                            window.location.reload();
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        UserInterface.prototype.hideLoading();
+                    }
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                return false;
+            }
+        });
+    });
+    </script>
+    <script type="text/javascript" src="~/dist/js/coupon/bundle.js" asp-append-version="true"></script>
+
+}

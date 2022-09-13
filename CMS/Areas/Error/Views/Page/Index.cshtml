@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = ViewBag.Id;
+}
+
+<div class="wrapper wrapper-content">
+    <div class="middle-box text-center animated fadeInRightBig pt-5" style="max-width: 100%">
+        <h2 style="font-size: 7rem;">@ViewBag.Id</h2>
+        @{
+            if (@ViewBag.ErrorMessage != null)
+            {
+                <div class="error-desc">
+                    @Html.Encode(ViewBag.ErrorMessage)
+                </div>       
+            }
+        }
+    <p> @Html.Encode(ViewBag.RouteOfException)</p>
+    </div>
+</div>

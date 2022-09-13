@@ -1,0 +1,38 @@
+﻿@model dynamic
+@{
+    var isPermission = Model.GetType().GetProperty("permission");
+    string actionController = "";
+    if (Model.GetType().GetProperty("action") == null)
+    {
+        actionController = "Create";
+    }
+    else
+    {
+        actionController = Model.GetType().GetProperty("action").GetValue(Model, null);
+    }
+    string area = "";
+    if (Model.GetType().GetProperty("area") == null)
+    {
+        area = "";
+    }
+    else
+    {
+        area = Model.GetType().GetProperty("area").GetValue(Model, null);
+    }
+
+    if (isPermission == null)
+    {
+        if (TempData.ContainsKey("isCreate") && (bool)TempData["isCreate"])
+        {
+            <a class="btn bg-gradient-primary btn-sl" asp-area="@area" asp-action="@actionController"><i class="fa fa-solid fa-plus"></i> Thêm mới</a>
+        }
+    }
+    else
+    {
+       bool isCreated = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isCreated)
+        {
+            <a class="btn bg-gradient-primary btn-sl" asp-area="@area" asp-action="@actionController"><i class="fa fa-solid fa-plus"></i> Thêm mới</a>
+        }
+    }
+}

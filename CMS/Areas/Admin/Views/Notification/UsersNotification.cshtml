@@ -1,0 +1,130 @@
+﻿@model CMS.Areas.Admin.ViewModels.Notification.UserNotificationViewModel
+
+@{
+    ViewData["Title"] = "Danh sách thông báo đến";
+    string namePage = "Danh sách thông báo đến";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Quản lý danh sách thông báo đến";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-8 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            <button type="button" class="btn bg-gradient-info btn-sl read-all-notification" asp-action="ReadUserNotificationAll"><i class="fal fa-street-view"></i> Đọc tất cả</button>
+                            @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new {area = "Categories", action = "DeleteAll", permission = true})
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-4">
+                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-sl " placeholder="Tìm kiếm" value="@Model.ListData.RouteValue["txtKeyword"]" />
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <input autocomplete="off" name="senderName" class="form-control form-control-sl " placeholder="Nhập tên người gửi" value="@Model.ListData.RouteValue["senderName"]" />
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control input-sm select2" name="isUnread" asp-for="@Model.ListData.RouteValue["isUnread"]">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option value="0">Chưa đọc</option>
+                                    <option value="1">Đã đọc</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-danger btn-block filter btn-sl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive m-t-15">
+                            <table class="table tab-content table-bordered table-check-all table-hover table-bordered-index">
+                                <thead class="table-thead">
+                                    <tr>
+                                        <th class="text-center align-middle" style="width: 45px">
+                                            <input type="checkbox" class="i-checks chkAll" />
+                                        </th>
+                                        <th style="width: 45px" class="align-middle">STT</th>
+                                        <th class="col-sm-2 align-middle">Người gửi</th>
+                                        <th class="align-middle">Tiêu đề</th>
+                                        <th class="align-middle">Chi tiết</th>
+                                        <th style="width: 120px" class="align-middle">Thời gian gửi</th>
+                                        <th class="text-center align-middle" style="width: 100px">Trạng thái</th>
+                                        <th style="width: 140px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ListData != null && Model.ListData.Count > 0)
+                                    {
+                                        int index = (Model.ListData.PageIndex - 1) * Model.PageSize + 1;
+                                        foreach (var item in Model.ListData)
+                                        {
+                                            <tr>
+                                                <td class="text-center align-middle">
+                                                    <input type="checkbox" class="i-checks chkItem" value="@item.Id" />
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    @(index++)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @(item.SenderName)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.Raw(item.Title)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.Raw(item.Detail)
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    @Html.Raw(item.SenderTime.ToString("dd/MM/yyyy HH:mm:ss"))
+                                                </td>
+                                                <td class="text-center align-middle" id="IsUnread_@item.Id">
+                                                    @Html.Raw(item.IsUnread == 0 ? "<small class=\"badge bg-primary badge-sm\">Chưa đọc</small>" : "<small class=\"badge bg-success badge-sm\">Đã đọc</small>")
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="button" data-isunread="@item.IsUnread" data-id="@item.Id" data-link="@item.Link" data-urlread="@Url.Action("ReadUserNotification")" class="btn btn-success btn-xs btn-s-m accessLink mt-1 mb-1" title="Trang liên kết"><i class="fa fa-link"></i></button>
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.Id, permission = true })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" class="text-center">Không có dữ liệu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = Model.ListData })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script src="~/js/notification/user_notification.js"></script>
+}
+

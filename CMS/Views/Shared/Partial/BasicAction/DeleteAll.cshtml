@@ -1,0 +1,24 @@
+﻿@model dynamic
+@{
+    var isPermission = Model.GetType().GetProperty("permission");
+    var backLink = Model.GetType().GetProperty("backLink") != null ? Model.GetType().GetProperty("backLink").GetValue(Model, null) : null;
+    IDictionary<string, string> parameters = Model.GetType().GetProperty("parameters") == null ? new Dictionary<string, string>() : (Dictionary<string, string>) Model.GetType().GetProperty("parameters").GetValue(Model, null);
+
+    if (isPermission == null)
+    {
+        if (TempData.ContainsKey("isDelete") && (bool)TempData["isDelete"])
+        {
+            var actionController = Model.GetType().GetProperty("action").GetValue(Model, null) ?? "DeleteAll";
+            <button type="button" class="btn bg-gradient-danger btn-sl deleteAll" data-url-back="@backLink" asp-action="@actionController" asp-all-route-data="parameters"><i class="fal fa-solid fa-trash"></i> Xóa</button>
+        }
+    }
+    else
+    {
+        bool isDelete = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isDelete)
+        {
+            var actionController = Model.GetType().GetProperty("action").GetValue(Model, null) ?? "DeleteAll";
+            <button type="button" class="btn bg-gradient-danger btn-sl deleteAll" data-url-back="@backLink" asp-action="@actionController" asp-all-route-data="parameters"><i class="fal fa-solid fa-trash"></i> Xóa</button>
+        }
+    }
+}

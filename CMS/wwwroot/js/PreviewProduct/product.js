@@ -1,0 +1,1 @@
+(()=>{"use strict";$((function(){$(".product-preview-slide").owlCarousel({loop:!0,dots:!0,dotsData:!0,dotsEach:!0,dotsContainer:".product-preview-slide-owl-carousel-dot",nav:!0,navText:['<i class="fa-solid fa-angle-left"></i>','<i class="fa-solid fa-angle-right"></i>'],items:1})}))})();

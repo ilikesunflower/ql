@@ -1,0 +1,215 @@
+﻿@using CMS.Areas.Categories.Const
+@using CMS.Areas.OrderComment.Const
+@using CMS_EF.Models.Categories
+@using CMS_EF.Models.Orders
+@using CMS_Lib.Util
+@model CMS.Areas.OrderComment.Models.CommentIndexModel;
+@{
+    ViewData["Title"] = "Danh sách đánh giá | Quản lý đánh giá";
+    string namePage = "Danh sách đánh giá";
+    string subName = "Quản lý đánh giá";
+    string subName1 = "Quản lý đánh giá";
+    int index = (Model.Page- 1) * 20 + 1;
+    var listData = Model.ListData;
+    var ListOrder = Model.ListOrder;
+    
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "OrderComment", action = "DeleteAll" })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                               <div class="col-xs-12 col-sm-4">
+                                   <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập từ khóa" value="@listData.RouteValue["txtKeyword"]"/>
+                               </div>
+                               <div class="col-xs-12 col-sm-3">
+                                   <div class="input-group input-group-xl">
+                                       <input type="text" class="input-xl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startDate"]"/>
+                                       <div class="input-group-prepend">
+                                           <span class="input-group-text">đến</span>
+                                       </div>
+                                       <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
+                                   </div>
+                               </div>
+                               <div class="col-xs-12 col-sm-3">
+                                   <select class="form-control form-control-xl" name="status" asp-for="@listData.RouteValue["status"]">
+                                       <option value="0">Tất cả trạng thái</option>
+                                       <option value="1">Đã xác nhận</option>
+                                       <option value="2">Chưa xác nhận</option>
+                                   </select>
+                               </div>
+                               <div class="col-xs-12 col-sm-2">
+                                   <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                               </div>
+                           </form>                 
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-hover table-bordered-index ">
+                                <thead class="table-thead">
+                                <tr>
+                                   
+                                    <th class="text-center" style="width: 45px"> 
+                                        <input type="checkbox" class="i-checks chkAll"/>
+                                    </th>
+                                     <th class="text-center" style="width: 45px">STT</th>
+                                    <th class="text-center">Mã đơn hàng </th>
+                                    <th class="" style="width:20%">Sản phẩm</th>
+                                    <th class="" style="width:10%">Khách hàng</th>
+                                    <th class="">Đánh giá</th>
+                                    <th class="text-center" style="width:10%">Thời gian tạo</th>
+                                    <th class="text-center" style="width:10%">Trạng thái</th>
+                                    <th class="text-center" style="width: 100px"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                  @if (listData.Count > 0)
+                                  {
+                                      @foreach (var item in listData)
+                                     {
+                                         <tr>
+                                           
+                                             <td class="text-center align-middle">
+                                                 <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                                             </td>
+                                                <td class="text-center align-middle">
+                                                                                              @(index)
+                                                                                          </td> 
+                                             @if (OrderComment.GetOrderIndex(index, ListOrder))
+                                             {
+                                                 <td class="text-center align-middle" rowspan="@(OrderComment.GetOrderCount(item.Orders.Code, ListOrder))">
+                                                     @(item.Orders.Code)
+                                                 </td>
+                                             }                                             
+                                             <td class="align-middle ">
+                                                 <div class="row">
+                                                     <img src="@item.Product.Image" class="imageCart col-md-2"/>
+                                                     <div class=" col-md-10">
+                                                         @item.Product.Name<br/>
+                                                         @if (@item.OrderProduct.OrderProductSimilarProperty.Count > 0)
+                                                         {
+                                                             @foreach (var item1 in item.OrderProduct.OrderProductSimilarProperty)
+                                                             {
+                                                                 <span >
+                                                                     <span >@item1.ProductPropertiesName: @item1.ProductPropertiesValueName</span><br/>
+
+                                                                 </span>
+                                                             }
+                                                         }
+                                                     </div>
+                                                 </div>
+                                             </td>
+                                             <td class="align-middle ">
+                                                 @(item.Customer.FullName)
+                                             </td>
+                                             <td class="align-middle text-comment">
+                                                 <div class="">
+                                                     <label class="@(item.Rate >= 1 ? "fa-solid fa-star checked-star" : "fa-solid fa-star ")"> </label>
+                                                     <label class="@(item.Rate >= 2 ? "fa-solid fa-star checked-star" : "fa-solid fa-star ")"> </label>
+                                                     <label class="@(item.Rate >= 3 ? "fa-solid fa-star checked-star" : "fa-solid fa-star ")"> </label>
+                                                     <label class="@(item.Rate >= 4 ? "fa-solid fa-star checked-star" : "fa-solid fa-star ")"> </label>
+                                                     <label class="@(item.Rate >= 5 ? "fa-solid fa-star checked-star" : "fa-solid fa-star ")"> </label>
+                                                 </div>
+
+                                                 @(item.Comment)
+                                                 <div>
+                                                     @foreach (var item3 in OrderComment.SplitDefaultComment(item.CommentDefault))
+                                                     {
+                                                         @Html.Raw(CmsFunction.GetLayoutBackground(item3, "#5a82c0")) 
+                                                     }
+                                                     
+                                                 </div>
+                                             </td>
+
+                                             <td class="align-middle text-center">
+                                                 @(item.CreatedAt == null ? "" : @item.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm"))
+                                             </td>
+                                             <td class="w-150-px text-center align-middle">
+                                                 <div class="switch">
+                                                     <div class="onoffswitch">
+                                                         <a asp-controller="OrderComment" asp-action="ChangeStatus" class="url_@item.Id" style="display: none"></a>
+                                                         @if (item.Status ?? false)
+                                                         {
+                                                             <input class="ChangeStatus" data-status="true" checked="checked" data-id="@item.Id" type="checkbox" name="status" id="@item.Id"/>
+                                                         }
+                                                         else
+                                                         {
+                                                             <input class="ChangeStatus" data-status="false" data-id="@item.Id" type="checkbox" name="status" id="@item.Id"/>
+                                                         }
+                                                     </div>
+                                                 </div>
+                                             </td>
+                                             <td class="text-center align-middle">
+
+                                                 @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = @item.Id})
+                                             </td>
+                                         </tr>
+                                         index++;
+                                     }
+                                  
+                                  }
+                                  else
+                                  {
+                                     <tr>
+                                            <td colspan="8" class="text-center">Không có dữ liệu</td>
+                                     </tr>
+                                  }
+                                </tbody>
+                            </table>
+                        </div>
+                         @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+ </div>
+</section>
+
+@section Styles
+{
+    <style>
+        .imageCart{
+        width: 40px;
+        height: 40px;
+        }
+        .checked-star{
+        color: #FFC700;
+        }
+        .text-comment{
+          word-break: break-all;
+        }
+    </style>
+    @* <link rel="stylesheet" href="~/css/Admin/Menu/index.css"/> *@
+}
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/js/OrderComment/index.js"></script>
+}

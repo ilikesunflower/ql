@@ -1,0 +1,139 @@
+﻿@using CMS_Lib.Util
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.Extensions.Configuration
+@model CMS.Areas.Admin.ViewModels.ApplicationController.IndexControllerViewModel
+@{
+    ViewData["Title"] = "Xem danh sách Controller | Quản lý Controller";
+    int index = Model.Page;
+    string namePage = "Xem danh sách Controller";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Quản lý Controller";
+    IConfigurationSection claimType = Model.Configuration.GetSection(CmsClaimType.ClaimType);
+    var isCapnhat = User.HasClaim(claimType.GetValue<string>(CmsClaimType.ControllerAction), ViewContext.RouteData.Values["Controller"]?.ToString()?.ToUpper() + "CONTROLLER" + "@" + "Capnhat".ToUpper());
+    var isViewAction = User.HasClaim(claimType.GetValue<string>(CmsClaimType.ControllerAction), ViewContext.RouteData.Values["Controller"]?.ToString()?.ToUpper() + "CONTROLLER" + "@" + "IndexAction".ToUpper());
+    isCapnhat = true;
+    isViewAction = true;
+}
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-8 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                        @{
+                            if (isCapnhat)
+                            {
+                                <button class="btn btn-success btn-sm" onclick="CapnhatController(this)" asp-action="Capnhat">Cập nhật</button>
+                            }
+                        }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get" asp-area="Admin">
+                            <div class="col-xs-12 col-sm-10">
+                                <input autocomplete="off" name="txtKeyword" placeholder="Nội dung tìm kiếm" class="form-control form-control-sl" value="@Model.ListData.RouteValue["txtKeyword"]" />
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-danger btn-sl btn-block">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive m-t-15">
+                            <table class="table tab-content table-bordered table-margin table-hover table-bordered-index">
+                                <thead  class="table-thead">
+                                    <tr>
+                                        <th class="text-center" style="width: 15px">
+                                            STT
+                                        </th>
+                                        <th>
+                                            Tên Hiển thị
+                                        </th>
+                                        <th class="col-xs-4">
+                                            Tên Controller
+                                        </th>
+                                        <th class="col-xs-3"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ListData.Count > 0)
+                                    {
+                                        foreach (var item in Model.ListData)
+                                        {
+                                            <tr>
+                                                <td class="text-center">
+                                                    @(index++)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Title)
+                                                </td>
+                                                <td class="col-xs-4">
+                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                </td>
+                                                <td class="text-center">
+                                                    @{
+                                                        @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = @item.Id, permission = true })
+                                                        @await Html.PartialAsync("Partial/BasicActionTable/Edit", new { id = @item.Id, permission = true })
+                                                        if (isViewAction)
+                                                        {
+                                                            <a class="btn btn-warning btn-xs" asp-area="Admin" asp-action="IndexAction" asp-route-controllerId="@item.Id">Xem Action</a>
+                                                        }
+                                                        @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.Id, is_stt = 1, permission = true })
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" class="text-center">Không có dữ liệu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = Model.ListData })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script>
+        function CapnhatController(e) {
+            var url = $(e).attr("formaction");
+            Swal.fire({
+                title: 'Bạn có chắc chắn muốn cập nhật controller?',
+                type: 'success',
+                showCancelButton: true,
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Thoát'
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = url;
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                }
+            });
+        }
+    </script>
+}

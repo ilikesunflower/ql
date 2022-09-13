@@ -1,0 +1,125 @@
+﻿@using CMS_Lib.Extensions.Json
+@using CMS_Lib.Util
+@using Microsoft.AspNetCore.Http
+@using CMS_Access.Repositories
+@using Castle.Core.Internal
+
+<nav class="mt-2">
+    <ul class="nav nav-pills nav-sidebar flex-column nav-child-indent" data-widget="treeview" role="menu" data-accordion="true">
+        @functions
+        {
+            public string BuildMenu(List<MenuNav> menus, int? pid, string action)
+            {
+                var html = "";
+                if (!menus.IsNullOrEmpty() && menus.Count > 0)
+                {
+                    var sMenu = menus.Where(x => x.Pid == pid).OrderBy(x => x.Rgt).ToList();
+                    foreach (var menu in sMenu)
+                    {
+                        var subMenu = menus.Where(x => x.Pid == menu.Id).OrderBy(x => x.Rgt).ToList();
+                        if (subMenu.Count > 0)
+                        {
+                            string htmlChild = BuildMenu(menus, menu.Id, action);
+                            if (htmlChild.Length > 0)
+                            {
+                                html += $"<li class='nav-item' title='{menu.Name}'>";
+                                html +=
+                                    $"<a href='{menu.Url}' class='nav-link nav-sidebar-custom {IsActive(menu, action)}' data-rgt='{menu.Rgt}' data-lft='{menu.Lft}' >" +
+                                    $"<i class='nav-icon {menu.CssClass}'></i> " +
+                                    $"<p>{menu.Name}{((subMenu.Count > 0 && htmlChild.Length > 0) ? "<i class='right fas fa-angle-left sidebar-r-f'></i>" : "")}</p>" +
+                                    "</a>";
+                                if (subMenu.Count > 0)
+                                {
+                                    html += $"<ul class='nav nav-treeview lv-{menu.Lvl}'>";
+                                    html += htmlChild;
+                                    html += "</ul>";
+                                }
+                                html += "</li>";
+                            }
+                        }
+                        else if (!string.IsNullOrEmpty(menu.Url) && (menu.Url.Length > 1))
+                        {
+                            html += $"<li class='nav-item' title='{menu.Name}'>";
+                            html +=
+                                $"<a href='{menu.Url}' class='nav-link nav-sidebar-custom {IsActive(menu, action)}' data-rgt='{menu.Rgt}' data-lft='{menu.Lft}' >" +
+                                $"<i class='nav-icon {menu.CssClass}'></i> " +
+                                $"<p>{menu.Name}</p>" +
+                                "</a>";
+                            html += "</li>";
+                        }
+                    }
+                }
+                return html;
+            }
+
+            public string IsActive(MenuNav menu, string action)
+            {
+                try
+                {
+                    if (!string.IsNullOrEmpty(action) && menu.Url?.ToLower() == action.ToLower())
+                    {
+                        return "active select-active-menu";
+                    }else if (!string.IsNullOrEmpty(menu.Url) && menu.Url == "/" && action == "/")
+                    {
+                        return "active select-active-menu";
+                    }
+                }
+                catch
+                {
+                    // ignored
+                }
+                return "";
+            }
+        }
+        @{
+            try
+            {
+                var menus = JsonService.DeserializeObject<List<MenuNav>>(ViewContext!.HttpContext!.Session!.GetString(CmsClaimType.Menu) ?? string.Empty);
+                var activeMenu = ViewContext.HttpContext.Session.GetString(CmsClaimType.MenuActive);
+                if (!menus.IsNullOrEmpty() && menus.Count > 0)
+                {
+                    foreach (var item in menus.Where(x => x.Lvl == 1))
+                    {
+                        var menuChild = menus.Where(x =>x.Pid == item.Id).OrderBy(x => x.Rgt).ToList();
+                        @if (menuChild.Count > 0)
+                        {
+                            var html = BuildMenu(menus, item.Id, activeMenu);
+                            if (!string.IsNullOrEmpty(html))
+                            {
+                                <li class="nav-item" title="@item.Name">
+                                    <a href="#" class="nav-link nav-sidebar-custom" data-rgt='@item.Rgt' data-lft='@item.Lft'>
+                                        <i class="nav-icon @item.CssClass"></i>
+                                        <p>@item.Name <i class="right fas fa-angle-left sidebar-r-f"></i></p>
+                                    </a>
+                                    <ul class="nav nav-treeview lv-@item.Lvl">
+                                        @Html.Raw(html)
+                                    </ul>
+                                </li>   
+                            }
+                        }
+                        else
+                        {
+                            if ((!string.IsNullOrEmpty(item.Url) && item.Url.Length > 1) || (item.Url == "/"))
+                            {
+                                <li class="nav-item" title="@item.Name">
+                                    <a href="@item.Url" class="@($"nav-link nav-sidebar-custom {IsActive(item, activeMenu)}")" data-rgt='@item.Rgt' data-lft='@item.Lft'>
+                                        <i class="nav-icon @item.CssClass"></i>
+                                        <p>@Html.Raw(item.Name)</p>
+                                    </a>
+                                </li>
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+        }
+    </ul>
+</nav>
+
+@section Scripts
+{
+}

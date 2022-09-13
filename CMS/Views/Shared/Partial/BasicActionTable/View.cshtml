@@ -1,0 +1,37 @@
+﻿@model dynamic
+@{
+    var id = Model.GetType().GetProperty("id").GetValue(Model, null);
+    var isAction = Model.GetType().GetProperty("action");
+    var isPermission = Model.GetType().GetProperty("permission");
+    if (isPermission == null)
+    {
+        if (TempData.ContainsKey("isView") && (bool)TempData["isView"])
+        {
+            if (isAction == null)
+            {
+                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="Details" asp-route-id="@id"><i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span></a>
+            }
+            else
+            {
+                var action = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="@action" asp-route-id="@id"><i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span></a>
+            }
+        }
+    }
+    else
+    {
+        bool isView = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isView)
+        {
+            if (isAction == null)
+            {
+                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="Details" asp-route-id="@id"><i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span></a>
+            }
+            else
+            {
+                var action = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="@action" asp-route-id="@id"><i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span></a>
+            }
+        }
+    }
+}

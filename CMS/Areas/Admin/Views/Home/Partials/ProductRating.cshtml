@@ -1,0 +1,19 @@
+﻿@using CMS.Extensions.HtmlTag
+
+@{
+    if (Model.GetType().GetProperty("permission") != null )
+    {
+        var isShow = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isShow == true)
+        {
+            <div class="col-12 col-sm-7"><div id="rating-app"></div></div>
+            @using (Html.BeginScripts())
+            {
+                <script type="text/javascript" src="~/dist/js/dashboard/toRating/bundle.js" asp-append-version="true"></script>
+            }   
+        }
+    }
+}
+
+
+

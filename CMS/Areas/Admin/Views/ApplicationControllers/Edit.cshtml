@@ -1,0 +1,73 @@
+﻿@model CMS_EF.Models.Identity.ApplicationController
+
+@{
+    ViewData["Title"] = "Sửa thông tin Controller | Quản lý Controller";
+    string namePage = "Sửa thông tin Controller";
+    string subName = "Quản lý hệ thống";
+    string subName1 = "Quản lý Controller";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@namePage</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <a class="active" asp-area="Admin" asp-action="Index">@subName1</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-area="Admin" asp-action="Edit">
+                    <div class="card">
+                        <div class="card-header">
+                            @await Html.PartialAsync("Partial/BasicAction/Save")
+                        </div>
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                <div class="form-group row">
+                                    <label asp-for="Title" class="col-sm-2 control-label">Tên hiển thị :</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Title" class="form-control form-control-sm"/>
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Name" class="col-sm-2 control-label">Tên Controller :</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Name" class="form-control form-control-sm" readonly="readonly"/>
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Description" class="col-sm-2 control-label">Mô tả :</label>
+                                    <div class="col-sm-10">
+                                        <textarea asp-for="Description" class="form-control"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+}

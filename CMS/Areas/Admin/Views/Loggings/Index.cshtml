@@ -1,0 +1,224 @@
+﻿@using Castle.Core.Internal
+@using CMS.Areas.Admin.Const
+@using CMS_EF.Models.Identity
+@model CMS.Models.ModelContainner.ModelCollection
+
+@{
+    ViewData["Title"] = "Lịch sử hoạt động | Quản lý hệ thống";
+    int index = Model.GetModel<int>("Page");
+    var listData = Model.GetModel<PagingList<Logging>>("ListData");
+    var listUser = Model.GetModel<List<ApplicationUser>>("ListUser");
+    string namePage = "Lịch sử hoạt động";
+    string subName = "Quản trị hệ thống";
+}
+
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@namePage</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @* @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Admin", action = "DeleteAll" }) *@
+                        </div>
+                    </div>
+                    <div class="card-body" >
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-3">
+                                <input autocomplete="off" name="txtKeyword" placeholder="Nội dung tìm kiếm" class="form-control form-control-sl input-sl" value="@listData.RouteValue["txtKeyword"]" />
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="">
+                                    <select class="form-control select2" name="userId" asp-for="@listData.RouteValue["userId"]">
+                                        <option value="">Tất cả người dùng</option>
+                                        @if (!listUser.IsNullOrEmpty() && listUser.Count > 0)
+                                        {
+                                            foreach (var item in listUser)
+                                            {
+                                                <option value="@item.Id">@item.UserName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="input-group input-group-sl">
+                                    <input type="text" class="input-sl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startTime" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startTime"]" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">đến</span>
+                                    </div>
+                                    <input type="text" class="input-sl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endTime" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endTime"]" />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control form-control-sl" name="type" asp-for="@listData.RouteValue["type"]">
+                                    <option value="">Tất cả loại log</option>
+                                    <option value="1">Thông báo</option>
+                                    <option value="2">Lỗi</option>
+                                    <option value="3">Hệ thống</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-1">
+                                <button type="submit" class="btn btn-danger btn-sl btn-block">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-hover table-bordered-index">
+                                <thead class="table-thead">
+                                    <tr>
+                                        @* <th class="text-center align-middle" style="width: 45px"> *@
+                                        @*     <input type="checkbox" class="i-checks chkAll" /> *@
+                                        @* </th> *@
+                                        <th class="text-center align-middle" style="width: 45px">
+                                            STT
+                                        </th>
+                                        <th class="col-md-1 align-middle">
+                                            Loại
+                                        </th>
+                                        <th class="col-md-2 align-middle">
+                                            Thời gian
+                                        </th>
+                                        <th class="col-md-3 align-middle">
+                                            Hành động
+                                        </th>
+                                        <th class="col-md-2 align-middle">Ip</th>
+                                        <th class="align-middle">Người dùng</th>
+                                        <th class="text-center align-middle" style="width: 80px">Xem</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (listData.Count > 0)
+                                    {
+                                        foreach (var item in listData)
+                                        {
+                                            <tr>
+                                                @* <td class="text-center align-middle"> *@
+                                                @*     <input type="checkbox" class="i-checks chkItem" value="@item.Id" /> *@
+                                                @* </td> *@
+                                                <td class="text-center align-middle">
+                                                    @(index++)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.Raw(LoggingConst.BindDataType(item.LogLevel))
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.Raw(item.CreatedAt.ToString("dd/MM/yyyy HH:mm"))
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.Action)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.Ip)
+                                                </td>
+                                                <td class="align-middle">
+                                                    @Html.DisplayFor(modelItem => item.UserFullName)
+                                                </td>
+                                                <td class="text-center align-middle">
+                                                    <button type="button" class="btn btn-primary btn-xs" data-ip="@item.Ip" onclick="openDetail(this)"
+                                                            data-action="'@item.Action'" data-detail="'@item.Detail'" data-useragent="'@item.UserAgent'"
+                                                            data-type="'@LoggingConst.BindDataType(item.LogLevel)'" data-username="'@item.UserFullName'" data-createdDate="@Html.Raw(item.CreatedAt.ToString("dd/MM/yyyy HH:mm"))">
+                                                        <i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td colspan="12" class="text-center">Không có dữ liệu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <div class="modal fade" id="openDetail" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-center text-uppercase">Xem chi tiết nhật ký hoạt động</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <tbody>
+                            <tr>
+                                <td class="col-xs-3">Loại</td>
+                                <td class="col-xs-8" id="logging_type"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-3">Hành động</td>
+                                <td class="col-xs-8">
+                                    <span id="logging_action" style="word-break: break-all;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-3">Chi tiết</td>
+                                <td class="col-xs-8">
+                                    <span id="logging_detail" style="word-break: break-all;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class=" col-xs-3">User Agent</td>
+                                <td class="col-xs-8">
+                                    <span id="logging_useragent" style="word-break: break-all;"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-3">Ip</td>
+                                <td class="col-xs-8" id="logging_ip"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-3">Người dùng</td>
+                                <td class="col-xs-8" id="logging_username"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-xs-3">Thời gian</td>
+                                <td class="col-xs-8" id="logging_createdat"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Thoát</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="~/js/Admin/Loggings/index.js"></script>
+}

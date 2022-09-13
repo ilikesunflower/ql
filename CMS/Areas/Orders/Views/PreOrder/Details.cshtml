@@ -1,0 +1,303 @@
+﻿@using CMS.Areas.Orders.Const
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using CMS_Lib.Util
+@model CMS.Areas.Orders.Models.PreOrder.DetailPreOrderViewModel;
+
+@{
+    ViewData["Title"] = "Chi tiết Pre Order";
+    string subName = "Danh sách Pre Order";
+    string subName1 = "Chi tiết Pre Order";
+    var preOrder = Model.PreOrder;
+    var point = Model.Point;
+    var coupons = Model.Coupons;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a asp-area="Orders" asp-action="Index">@subName</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a >@subName1</a>
+                    </li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title">Xem chi tiết đơn hàng</p>
+                        <div class="float-right">
+                            @if (preOrder?.Status == 0)
+                            {
+                                <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#create-order-model">
+                                    <i class="fa-solid fa-box"></i> Tạo đơn hàng
+                                </button>
+                                <button class="btn btn-sm text-white btn-warning" id="cancel-order" data-id="@preOrder.Id">
+                                    <i class="fa-solid fa-rectangle-xmark"></i> Hủy Pre Order
+                                </button>
+                            }
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <dt class="col-sm-2">Tên khách hàng:</dt>
+                            <dd class="col-sm-4">@preOrder?.Customer?.FullName</dd>
+                            <dt class="col-sm-2">Trạng thái đơn hàng:</dt>
+                            <dd class="col-sm-4">@Html.Raw(PreOrderStatus.BindStatus(preOrder?.Status ?? -2))</dd>
+                            <dt class="col-sm-2">Thời gian đặt:</dt>
+                            <dd class="col-sm-4">@preOrder?.PreOrderAt?.ToString("dd-MM-yyyy HH:mm")</dd>
+                            <dt class="col-sm-2">Số điện thoại:</dt>
+                            <dd class="col-sm-4">@preOrder?.Customer?.Phone</dd>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title">Địa chỉ giao hàng</p>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Họ tên:</dt>
+                            <dd class="col-sm-8">@preOrder?.PreOrderAddress?.Name</dd>
+                            <dt class="col-sm-4">Số điện thoại:</dt>
+                            <dd class="col-sm-8">@preOrder?.PreOrderAddress?.Phone</dd>
+                            <dt class="col-sm-4">Email:</dt>
+                            <dd class="col-sm-8">@preOrder?.PreOrderAddress?.Email</dd>
+                            <dt class="col-sm-4">Địa chỉ nhận hàng:</dt>
+                            <dd class="col-sm-8">
+                                <span>@(preOrder?.PreOrderAddress?.Address)</span><br/>
+                                <span>Tỉnh/TP: @(preOrder?.PreOrderAddress?.Province?.Name) - Quận/Huyện: @(preOrder?.PreOrderAddress?.District?.Name) - Xã/Phường: @(preOrder?.PreOrderAddress?.Commune?.Name)</span>
+                            </dd>
+                            <dt class="col-sm-4">Ghi chú đặt hàng :</dt>
+                            <dd class="col-sm-8">@preOrder?.PreOrderAddress?.Note</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                @if (preOrder!.Customer!.Type == 2)
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <p class="card-title">Thông tin file đính kèm</p>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">PR code:</dt>
+                                <dd class="col-sm-8">@preOrder.PrCode</dd>
+                                <dt class="col-sm-4">PO file:</dt>
+                                <dd class="col-sm-8">
+                                    <a href="@preOrder.PrFile" target="_blank" class="btn btn-default"><i class="fa-solid fa-cloud-arrow-down"></i> Tải file</a>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card">
+                        <div class="card-header">
+                            <p class="card-title">Thông tin xuất hóa đơn</p>
+                        </div>
+                        <div class="card-body">
+                            <dl class="row">
+                                <dt class="col-sm-4">Tên công ty:</dt>
+                                <dd class="col-sm-8">@preOrder?.BillCompanyName</dd>
+                                <dt class="col-sm-4">Địa chỉ:</dt>
+                                <dd class="col-sm-8">@preOrder?.BillAddress</dd>
+                                <dt class="col-sm-4">Mã số thuế:</dt>
+                                <dd class="col-sm-8">@preOrder?.BillTaxCode</dd>
+                                <dt class="col-sm-4">Email nhận hóa đơn:</dt>
+                                <dd class="col-sm-8">@preOrder?.BillEmail</dd>
+                            </dl>
+                        </div>
+                    </div>
+                }
+                
+            </div>
+            <div class="col-xs-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title namePageText">Thông tin sản phẩm</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table table-bordered ">
+                                <thead>
+                                <tr>
+                                    <th class="col-md-6">Sản phẩm</th>
+                                    <th class="text-center d-xl-table-cell col-md-2">Đơn giá (đồng)</th>
+                                    <th class="text-center d-xl-table-cell col-md-2">Số lượng</th>
+                                    <th class="text-center d-xl-table-cell col-md-2">Thành tiền (đồng)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="m-0  align-middle">
+                                        <div class="row">
+                                            <img src="@preOrder?.Product?.Image" class="imageCart " alt="@preOrder?.Product?.Name"/>
+                                            <div class="pl-2">
+                                                <strong>@preOrder?.Product?.Name </strong>
+                                                @if (preOrder?.ProductSimilar?.ProductSimilarProperty.Count > 0)
+                                                {
+                                                    foreach (var productSimilarProperty in preOrder?.ProductSimilar?.ProductSimilarProperty!)
+                                                    {
+                                                        <br/>
+                                                        <span>@productSimilarProperty?.ProductPropertiesValue?.ProductProperties?.Name : @productSimilarProperty?.ProductPropertiesValue?.Value</span>
+                                                    }
+                                                }
+                                            </div>
+    
+                                        </div>
+                                    </td>
+                                    <td class="text-right align-middle">
+                                        @CmsFunction.NumberFormatShow(preOrder?.ProductSimilar?.Price)
+                                    </td>
+                                    <td class="text-right align-middle">
+                                        @CmsFunction.NumberFormatShow(preOrder?.Quantity)
+                                    </td>
+                                    <td class="text-right align-middle">
+                                        @CmsFunction.NumberFormatShow(preOrder?.Quantity * preOrder?.ProductSimilar?.Price) <u>đ</u>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row pt-3">
+                            <div class="col-md-10">
+                                <div class="d-flex justify-content-end">
+                                    <strong>Tạm tính</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex justify-content-end">
+                                    <strong>
+                                        @CmsFunction.NumberFormatShow(preOrder?.Quantity * preOrder?.ProductSimilar?.Price) <u>đ</u>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row pt-3">
+                            <div class="col-md-10">
+                                <div class="d-flex justify-content-end">
+                                    <strong>Phí giao hàng</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="d-flex justify-content-end">
+                                    <strong>
+                                        @CmsFunction.NumberFormatShow(preOrder?.PriceShip) <u>đ</u>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title">Phương thức giao hàng</p>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">Đơn vị vận chuyển:</dt>
+                            <dd class="col-sm-8">@ShipConst.GetShipment(preOrder?.ShipPartner ?? 0, preOrder!.ShipType)</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        <p class="card-title">Phương thức thanh toán</p>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dd class="col-sm-12">@(PaymentMethodConst.BindPaymentMethod(preOrder.PaymentType ?? 0))</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="create-order-model" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin đơn hàng</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="create-order-app">
+                <form asp-action="CreateOrder" method="post">
+                     <input type="hidden" name="preOrderId" value="@preOrder.Id" />
+                    @* <div class="form-group"> *@
+                    @*     <label for="price" class="col-form-label">Tổng tiền:</label> *@
+                    @*     <input id="price" name="price" required="required" class="form-control" type="number" value="@(preOrder.Quantity * preOrder.ProductSimilar?.Price)"> *@
+                    @* </div> *@
+                    <div class="form-group">
+                        <label for="point" class="col-form-label">Điểm (@CmsFunction.NumberFormatShow(point)):</label>
+                        <input id="point" name="point" class="form-control" type="number" min="0" max="@(point)" value="0"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="coupon" class="col-form-label">Mã giảm giá:</label>
+                        <select id="coupon" name="coupon"  class="form-control">
+                            <option value="">Chọn mã</option>
+                            @if (coupons.Count > 0)
+                            {
+                                foreach (var coupon in coupons)
+                                {
+                                    <option value="@coupon.Code">@coupon.Code (@CmsFunction.NumberFormatShow(coupon.ReducedPrice) <u>đ</u>)</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-sm btn-primary" type="submit">Tạo đơn hàng</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="js/Orders/preOrderDetails.js"></script>
+}
+
+@section Styles
+{
+    <style>
+        .imageCart{
+            height: 50px;
+            width: 50px;
+        }
+        .timeline>div>.timeline-item>.timeline-header {
+            border-bottom: none;
+            color: #495057;
+            font-size: 12px;
+            line-height: 1.1;
+            margin: 0;
+            padding: 10px 10px 0 10px;
+        }
+    </style>
+}

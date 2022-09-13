@@ -1,0 +1,36 @@
+﻿.form-upload-label-convert{
+    font-weight:400 !important;
+    margin: 1.1rem 0 1.1rem 0;
+}
+.form-upload{
+    padding: 0.75rem;
+}
+.form-upload-info-file,.form-upload-select-file{
+    cursor: pointer;
+}
+.form-upload-info-file{
+    display: none;
+    padding: 2rem 0 2rem 0;
+}
+.form-upload-file-name{
+    margin: 0.75rem 0px 0px 0px;
+}
+.form-upload-file.has-file .form-upload-info-file{
+    display: block !important;
+}
+.form-upload-file.has-file .form-upload-select-file{
+    display: none;
+}
+.form-upload-file{
+    border: 1px dashed #C9252C;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+.form-upload-text{
+    margin-top: 2rem;
+    font-weight: bold;
+    font-size: 14px;
+}
+.form-upload-choose{
+    margin-bottom: 2rem;
+}

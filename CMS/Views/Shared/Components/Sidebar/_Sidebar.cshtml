@@ -1,0 +1,16 @@
+﻿@using CMS.Extensions.HtmlTag
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary">
+    <!-- Brand Logo -->
+    @await Html.PartialAsync("Components/Sidebar/_SidebarBrand")
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-transition os-host-scrollbar-horizontal-hidden">
+        <!-- Sidebar user panel (optional) -->
+        @await Html.PartialAsync("Components/Sidebar/_SidebarUserPanel")
+        <!-- Sidebar Menu -->
+        @await Html.PartialAsync("Components/Sidebar/_SidebarMenu")
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+

@@ -1,0 +1,85 @@
+﻿@using CMS_Lib.Util
+@model CMS_EF.Models.Identity.ApplicationAction
+
+@{
+    ViewData["Title"] = "Sửa thông tin Action | Quản lý Controller";
+    string namePage = "Sửa thông tin Action";
+    string subName = "Quản lý hệ thống";
+    string subName1 = "Quản lý Controller";
+    string subName2 = "Danh sách action";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>@namePage</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a class="active" asp-area="Admin" asp-action="Index">@subName1</a>
+                    </li>
+                    <li class="breadcrumb-item active">
+                        <a class="active" asp-area="Admin" asp-action="IndexAction" asp-route-controllerId="@Model.Controller?.Id">@subName2</a>
+                    </li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-area="Admin" asp-action="EditAction">
+                    <div class="card">
+                        <div class="card-header">
+                            @await Html.PartialAsync("Partial/BasicAction/Save")
+                        </div>
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                <div class="form-group row">
+                                    <label asp-for="Controller.Name" class="col-sm-2 control-label">Tên Controller :</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Controller.Name" class="form-control form-control-sm" readonly="readonly"/>
+                                        <span asp-validation-for="Controller.Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Title" class="col-sm-2 control-label">Tên hiển thị action:</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Title" class="form-control form-control-sm"/>
+                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Name" class="col-sm-2 control-label">Tên Action:</label>
+                                    <div class="col-sm-10">
+                                        <input asp-for="Name" class="form-control form-control-sm" readonly="readonly"/>
+                                        <span asp-validation-for="Name" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label asp-for="Description" class="col-sm-2 control-label">Mô tả :</label>
+                                    <div class="col-sm-10">
+                                        <textarea asp-for="Description" class="form-control form-control-sm"></textarea>
+                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+}

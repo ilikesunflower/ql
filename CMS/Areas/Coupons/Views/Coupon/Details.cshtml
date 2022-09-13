@@ -1,0 +1,189 @@
+﻿@using CMS.Areas.Coupons.Const
+@using CMS_Lib.Util
+@model CMS.Areas.Coupons.Models.DetailCouponModel
+
+@{
+    ViewData["Title"] = "Danh sách coupon thành công | Quản lý nhập coupon";
+    string namePage = "Danh sách coupon thành công";
+    string subName = "Quản lý nhập coupon";
+    string subName1 = "Danh sách nhập coupon";
+    int index = (Model.Page - 1) * 20 + 1;
+    var listData = Model.ListCustomerCoupon;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Coupons" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+           <div class="col-xs-12 col-md-12">
+               <div class="card">
+                   <div class="card-header ">
+                       <p class="card-title namePageText">@namePage</p>
+                       <div class="float-right">
+                           @if (!Model.IsSendNotification)
+                           {
+                               <button type="button" class="btn bg-gradient-primary sendNotification" asp-action="SendNotification" asp-route-id="@Model.HistoryFile.Id"><i class="fa-solid fa-bell"></i> Gửi thông báo</button>
+                           }
+                           @await Html.PartialAsync("Partial/BasicAction/Delete", new {id = Model.HistoryFile.Id})
+                       </div>
+                   </div>
+                   <div class="card-body">
+                       <div class="form-horizontal row">
+                           <div class="col-md-12">
+                               <div class="form-group row">
+                                   <label class="col-md-2 col-xs-4">Mã phiếu yêu cầu</label>
+                                   <div class="col-md-10 col-xs-8">
+                                       <span class="control-label">@Model.HistoryFile.Code</span>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div class="col-md-12">
+                               <div class="form-group row">
+                                   <label class="col-md-2 col-xs-4">Tên file</label>
+                                   <div class="col-md-10 col-xs-8">
+                                       <span class="control-label">@Model.HistoryFile.FileName</span>
+                                   </div>
+                               </div>
+                           </div>
+
+                           <div class="col-md-12">
+                               <div class="form-group row">
+                                   <label class="col-md-2 col-xs-4">Đơn vị phát hành</label>
+                                   <div class="col-md-10 col-xs-8">
+                                       <span class="control-label">@Model.HistoryFile.OrgName</span>
+                                   </div>
+                               </div>
+                           </div>
+
+
+                       </div>
+                       <div class="table-responsive tablePaddingTop">
+                           <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
+                               <thead class="table-thead">
+                               <tr>
+
+                                   <th style="width: 45px">STT</th>
+                                   <th >Khách hàng</th>
+                                   <th style="width:10%">Mã khách hàng</th>
+                                   <th class="" style="width:10%">Mã code</th>
+                                   <th class="text-center" style="width:10%">Ngày bắt đầu</th>
+                                   <th class="text-center" style="width:10%">Ngày kết thúc</th>
+                                   <th class="text-center" style="width:10%">Trạng thái</th>
+                                   <th class="text-center" style="width:10%">Giá trị (đồng)</th>
+                               </tr>
+                               </thead>
+                               <tbody>
+                               @if (listData.Count > 0)
+                               {
+                                   @foreach (var item in listData)
+                                   {
+                                       <tr>
+
+                                           <td class="text-center align-middle">
+                                               @(index++)
+                                           </td>
+                                           <td class="align-middle">
+                                               @(item.Customer.UserName)
+                                           </td>
+                                           <td class="align-middle">
+                                               @(item.Customer.FullName)
+                                           </td>
+                                           <td class="align-middle ">
+                                               @(item.Code)
+                                           </td>
+
+                                           <td class="align-middle col-md-2 text-center">
+                                               @item.StartTimeUse.Value.ToString("dd/MM/yyyy ")
+                                           </td>
+                                           <td class="align-middle text-center">
+                                               @item.EndTimeUse.Value.ToString("dd/MM/yyyy ")
+                                           </td>
+                                           <td class="align-middle text-center">
+                                               @Html.Raw(StatusConst.BindStatus(item.Status.Value == 1))
+                                           </td>
+                                           <td class="align-middle text-right">
+                                               @CmsFunction.NumberFormatShow(item.ReducedPrice, true)
+                                           </td>
+
+                                       </tr>
+                                   }
+                               }
+                               else
+                               {
+                                   <tr>
+                                       <td colspan="8" class="text-center">Không có dữ liệu</td>
+                                   </tr>
+                               }
+                               </tbody>
+                           </table>
+                       </div>
+                       @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
+                   </div>
+               </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+           $(".sendNotification").click(function (e) {
+               var url = $(this).attr('formaction');
+               Swal.fire({
+                   title: 'Bạn có chắc chắn muốn gửi thông báo đến khách hàng?',
+                   type: 'warning',
+                   showCancelButton: true,
+                   confirmButtonText: 'Đồng ý',
+                   confirmButtonColor: '#ed5565',
+                   cancelButtonText: 'Thoát'
+               }).then((result) => {
+                   if (result.value) {
+                       UserInterface.prototype.showLoading();
+                       $.ajax({
+                           type: 'POST',
+                           url: url,
+                           dataType: 'json',
+                           data: {},
+                           headers: {
+                               RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                           },
+                           success: function (response) {
+                               UserInterface.prototype.hideLoading();
+                               if (response.statusCode === 200) {
+                                   UserInterface.prototype.showFlashMessageInfo(response.message);
+                                   window.location.reload();
+                               } else {
+                                   UserInterface.prototype.showFlashMessageError(response.message);
+                               }
+                           },
+                           error: function (xhr, textStatus, errorThrown) {
+                               UserInterface.prototype.hideLoading();
+                           }
+                       });
+                   } else if (result.dismiss === Swal.DismissReason.cancel) {
+                       return false;
+                   }
+               });
+           });
+       </script>
+}

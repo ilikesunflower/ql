@@ -1,0 +1,123 @@
+﻿@using CMS_Lib.Util
+@model CMS.Areas.Admin.ViewModels.Personal.DetailsViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết thông tin cá nhân";
+}
+<section class="content-header">
+    <div class="container-fluid">
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title namePageText">Chi tiết thông tin cá nhân</h3>
+                        <div class="float-right">
+                            <div class="btn-group-sm">
+                                @await Html.PartialAsync("Partial/BasicActionTable/Edit", new {id = Model.Id,permission = !User.HasClaim(CmsClaimType.UserType, "1")})
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <div class="row" id="card-personal">
+                                    <div class="col-xs-12 col-md-7 d-flex align-items-stretch flex-column">
+                                        <div class="card card-default d-flex flex-fill">
+                                            <div class="card-body">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-xs-3">Tài khoản:</label>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <span class="control-label">@Html.DisplayFor(model => model.UserName)</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-xs-3">Họ tên:</label>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <span class="control-label">@Html.DisplayFor(model => model.FullName)</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-xs-3">Email:</label>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <span class="control-label">@Html.DisplayFor(model => model.Email)</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-xs-3">Giới tính:</label>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <span class="control-label">@Html.Raw(Model.Sex == 1 ? "Nam" : (Model.Sex == 2 ? "Nữ" : ""))</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-md-3 col-xs-3">SĐT liên hệ:</label>
+                                                        <div class="col-md-9 col-xs-9">
+                                                            <span class="control-label">@Html.DisplayFor(model => model.PhoneNumber)</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-5 d-flex align-items-stretch flex-column">
+                                        <div class="card card-default d-flex flex-fill">
+                                            <div class="card-body">
+                                                <div class="form-horizontal">
+                                                    <div class="text-center" style="min-height: 200px; min-width: 200px">
+                                                        @if (string.IsNullOrEmpty(Model.Image))
+                                                        {
+                                                            <img src="~/images/user-default.png" class="img-circle" width="200" height="200"/>
+                                                        }
+                                                        else
+                                                        {
+                                                            <img alt="image" class="img-circle" src="@Html.Raw(Model.Image)" width="200" height="200">
+                                                        }
+                                                    </div>
+                                                    <div class="text-center m-t-15">
+                                                        <h4>@Html.Raw(Model.FullName)</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $('#otp-Off').click(function (e) {
+            var url = $(this).attr('formaction');
+            $.ajax({
+                type: 'POST',
+                url: url,
+                dataType: 'json',
+                data: {},
+                headers: {
+                    RequestVerificationToken:
+                        $('input:hidden[name="__RequestVerificationToken"]').val()
+                },
+                success: function (response) {
+                    if (response.msg == "successful") {
+                        window.location.href = "/Identity/Account/Logout";
+                    } else {
+                        window.location.reload();
+                    }
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                }
+            });
+        });
+    </script>
+}

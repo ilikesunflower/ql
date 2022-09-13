@@ -1,0 +1,76 @@
+﻿@page
+@model LoginWith2faModel
+@{
+    ViewData["Title"] = "Xác thực để đăng nhập hệ thống";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>@ViewData["Title"]</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="~/font/fontawesome/fontawesome6/pro/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/theme/admin-lte/dist/css/adminlte.min.css">
+    <style>
+        body {
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "segoe ui", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        ul {
+            list-style: none;
+        }
+    </style>
+</head>
+<body class="hold-transition lockscreen">
+    <!-- Automatic element centering -->
+    <div class="lockscreen-wrapper">
+        <div class="lockscreen-logo">
+            <a href="/"><b class="text-uppercase">Xác thực OTP</b></a>
+        </div>
+        <div class="lockscreen-name">@ViewData["UserName"]</div>
+        <div class="lockscreen-item">
+            <!-- lockscreen image -->
+            <div class="lockscreen-image">
+                @if (ViewData.ContainsKey("Image") && ViewData["Image"] != null)
+                {
+                    <img alt="image" class="img-circle circle-border" src="@ViewData["Image"]" width="128" height="128">
+                }
+                else
+                {
+                    <img src="~/images/user-default.png" alt="User Image">
+                }
+            </div>
+            <!-- /.lockscreen-image -->
+            <!-- lockscreen credentials (contains the form) -->
+            <form class="lockscreen-credentials" role="form" method="post" asp-route-returnUrl="@Model.ReturnUrl">
+                <div class="input-group">
+                    <input asp-for="Input.TwoFactorCode" class="form-control" placeholder="Nhập mã xác thực">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn">
+                            <i class="fas fa-arrow-right text-muted"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <!-- /.lockscreen credentials -->
+        </div>
+        <div class="text-center text-danger" asp-validation-summary="All"></div>
+
+        <div class="help-block text-center">
+            Nhập mã xác thực để sử dụng hệ thống
+        </div>
+        <div class="text-center">
+            <a asp-area="Identity" asp-page="/Account/Login">Hoặc đăng nhập bằng tài khoản khác</a>
+        </div>
+        <div class="lockscreen-footer text-center">
+            Copyright &copy; <b><a href="/" class="text-black">Prugift.vn </a></b><br>
+        </div>
+    </div>
+    <script type="text/javascript" src="~/theme/admin-lte/plugins/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="~/theme/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <partial name="_ValidationScriptsPartial" />
+</body>
+</html>

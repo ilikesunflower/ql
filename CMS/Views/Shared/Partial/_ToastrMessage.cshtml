@@ -1,0 +1,16 @@
+﻿@using CMS_Lib.Util
+@{
+    <script src="js/shared/toastrConfig.js"></script>
+    <script>
+        @if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))
+        {
+            @Html.Raw("toastr.success('" + TempData["ContentMessage"] + "', \"Thông báo\")");
+            TempData.Remove("ContentMessage");
+        }
+        else if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "-1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))
+        {
+            @Html.Raw("toastr.error('" + TempData["ContentMessage"] + "', \"Thông báo\")");
+            TempData.Remove("ContentMessage");
+        }
+    </script>
+}

@@ -1,0 +1,53 @@
+﻿@model CMS.Models.ModelContainner.ModelCollection
+
+@{
+    ViewData["Title"] = "Sửa đơn hàng  | Quản lý đơn hàng";
+    string namePage = "Sửa đơn hàng";
+    string subName = "Quản trị đơn hàng";
+    string subName1 = "Danh sách đơn hàng";
+    int id = Model.GetModel<int>("id");
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Orders" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div id="product_app">
+        </div>
+    </div>
+</section>
+
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+    <link rel="stylesheet" href="~/css/Orders/edit/app.css"/>
+}
+@section Scripts
+{
+    <script type="text/javascript">
+          window.id = @id;
+      </script>
+    <script type="text/javascript" src="~/lib/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="~/lib/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/dist/js/order/edit/bundle.js" asp-append-version="true"></script>
+
+}

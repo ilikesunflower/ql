@@ -1,0 +1,164 @@
+﻿body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: #F5F5F5 !important;
+    background-size: cover !important;
+    color: #19274B
+}
+
+.page-login {
+    display: inline-block !important;
+    align-items: center !important;
+    height: 100vh !important;
+    width: 100%;
+}
+
+.header-login {
+    height: 120px;
+    width: 100%;
+    border-bottom: 1px dashed #E5EAEF;
+}
+
+.box-img-logo {
+    padding-top: 1.25rem;
+    padding-bottom: 1.688rem;
+    margin-left: 5px !important;
+}
+
+.box-info {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+}
+
+.box-info-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #1B365D;
+}
+
+.box-info-text-1 {
+    color: #1B365D;
+    font-size: 0.75rem;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.box-info-text-2 {
+    color: #1B365D;
+    font-size: 1rem;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.input-label-text {
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 0.938rem !important;
+    color: #1B365D !important;
+}
+
+
+.inputForm {
+    margin: 0;
+    padding: 0;
+}
+
+.noP {
+    padding: 0;
+}
+
+.login-box {
+    width: auto;
+}
+
+.text-dark {
+    position: absolute;
+    padding: 0;
+    z-index: 99999;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 17px;
+}
+
+.positionEye {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 18px;
+}
+
+.btn-color-icon {
+    color: rgba(27, 54, 93, 0.5);
+}
+
+.paddingP {
+    padding-bottom: 25px;
+}
+
+.paddingB {
+    padding-bottom: 15px;
+}
+
+.rounded-pill {
+    height: 50px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+}
+
+.textF {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    align-items: center;
+}
+
+.fontNOR {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 18px;
+    align-items: center;
+    text-align: right;
+    color: #1B365D;
+}
+
+.fontE {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0;
+    color: rgba(27, 54, 93, 0.5);
+}
+
+.btn-outline-light:hover {
+    background-color: transparent;
+}
+
+.full-width {
+    border-radius: 50px;
+    background-color: #ED1B2E;
+    color: #FFFFFF;
+}
+
+.font-btn {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    align-items: center;
+    text-align: center;
+    height: 50px;
+}
+
+@media only screen and (max-width: 420px) {
+    #width-form {
+        width: 420px;
+    }
+}
+
+@media only screen and (max-width: 300px) {
+    #width-form {
+        width: 300px;
+    }
+}

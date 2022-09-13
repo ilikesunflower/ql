@@ -1,0 +1,32 @@
+﻿@{
+    var dataList = Model.GetType().GetProperty("DataList").GetValue(Model, null);
+    int pageSize = Startup.PageSize;
+}
+
+<div>
+    @if (dataList != null && dataList?.TotalRecordCount >= Startup.PageSize)
+    {
+        <nav class="float-left">
+            <ol style="list-style: none; padding-left: 0px !important">
+                <li>
+                    Danh sách từ
+                    <strong>
+                        <span>@Html.Raw((dataList?.PageIndex - 1) * pageSize + 1)</span>
+                    </strong> đến
+                    <strong>
+                        <span>@Html.Raw((dataList?.PageIndex - 1) * pageSize + dataList?.Count)</span>
+                    </strong> trên tổng số
+                    <strong>
+                        <span>@dataList?.TotalRecordCount</span>
+                    </strong> bản ghi
+                </li>
+            </ol>
+        </nav>
+    }
+    @if (dataList != null)
+    {
+        <nav class="float-right pagination-sm" aria-label="Products navigation">
+            <vc:pager paging-list="@dataList"/>
+        </nav>
+    }
+</div>

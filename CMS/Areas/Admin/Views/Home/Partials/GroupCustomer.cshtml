@@ -1,0 +1,23 @@
+﻿@using CMS.Extensions.HtmlTag
+
+@{
+    if (Model.GetType().GetProperty("permission") != null )
+    {
+        var isShow = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isShow == true)
+        {
+            <div class="row pt-3">
+                <div class="col-12">
+                    <div id="sale-group-app"></div>
+                </div>
+            </div>
+            @using (Html.BeginScripts())
+            {
+                <script type="text/javascript" src="~/dist/js/dashboard/saleGroup/bundle.js" asp-append-version="true"></script>
+            }   
+        }
+    }
+}
+
+
+

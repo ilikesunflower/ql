@@ -1,0 +1,9 @@
+[
+  {
+    "outputFileName": "wwwroot/view-resources/Views/_Bundles/test.min.css",
+    "inputFiles": [
+      "wwwroot/fontawesome/fontawesome6/pro/css/all.min.css",
+      "wwwroot/theme/admin-lte/plugins/toastr/toastr.min.css"
+    ]
+  }
+]

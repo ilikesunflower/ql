@@ -1,0 +1,97 @@
+﻿@model CMS.Areas.Admin.ViewModels.Personal.EnableAuthenticatorViewModel
+@{
+    ViewData["Title"] = "Kích hoạt xác thực tài khoản";
+    string subName1 = "Thông tin tài khoản";
+    string subName = "Kích hoạt tài khoản OTP";
+}
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-8 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-area="Admin" asp-controller="Personal" asp-action="Details">@subName1</a>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title namePageText">@subName</h3>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list">
+                            <li>
+                                <p>
+                                    Tải ứng dụng <label>Google Authenticator</label> cho
+                                    <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en">Android</a> và
+                                    <a href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8">iOS</a>
+                                </p>
+                            </li>
+                            <li>
+                                <p>Sử dụng ứng dụng <label>Google Authenticator</label> để quét <label>QR code</label></p>
+                                <div id="qrCode"></div>
+                                <div id="qrCodeData" data-url="@Model.AuthenticatorUri"></div>
+                                <br/>
+                            </li>
+                            <li>
+                                <p>
+                                    Sử dụng dãy số được cung cấp trong <label>Google Authenticator</label> để kích hoạt sử dụng chức năng <label>OTP</label>
+                                </p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <form method="post">
+                                            <div class="form-group">
+                                                <label asp-for="@Model.Code" class="control-label">Mã xác nhận</label>
+                                                <input asp-for="@Model.Code" class="form-control" autocomplete="off" placeholder="Nhập mã xác thực"/>
+                                                <span asp-validation-for="@Model.Code" class="text-danger"></span>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Xác nhận</button>
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts
+{
+    <script src="~/js/Plugins/qrcodejs/qrcode.min.js"></script>
+    <script type="text/javascript">
+        new QRCode(document.getElementById("qrCode"),
+            {
+                text: "@Html.Raw(Model.AuthenticatorUri)",
+                width: 200,
+                height: 200
+            });
+    </script>
+    <script>
+        $(window).scroll(function () {
+            sessionStorage.scrollTop = $(this).scrollTop();
+        });
+        $(document).ready(function () {
+            if (sessionStorage.scrollTop != "undefined") {
+                $(window).scrollTop(sessionStorage.scrollTop);
+            }
+        });
+    </script>
+}

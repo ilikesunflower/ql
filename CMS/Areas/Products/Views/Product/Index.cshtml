@@ -1,0 +1,302 @@
+﻿@using CMS.Areas.Categories.Const
+@using CMS_Access.Repositories.Products
+@using CMS_Lib.Util
+@using CMS.Areas.Products.Const
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.CodeAnalysis.Options
+@model CMS.Models.ModelContainner.ModelCollection;
+
+@{
+    ViewData["Title"] = " Quản lý sản phẩm";
+    string namePage = "Danh sách sản phẩm";
+    string subName = "Quản lý sản phẩm";
+    string subName1 = "Quản lý sản phẩm";
+    int index =( Model.GetModel<int>("Page") - 1) * 20 + 1;
+    var listData = Model.GetModel<PagingList<ProductIndex>>("ListData");
+    var listStatus = Model.GetModel<Dictionary<int, string>>("ListStatus");
+    var listStatusTT = Model.GetModel<Dictionary<int, string>>("ListStatusTT");
+    var isWareHouse = Model.GetModel<bool>("isWareHouse");
+}
+@functions
+{
+    string BindStatus(ProductIndex product)
+    {
+        if (product.IsPublic == true)
+        {
+            return StatusConst.BindStatus(product.IsPublic);
+        }
+        var status = "";
+        var pending = ProductCensorshipConst.Pending.Status;
+        var approved = ProductCensorshipConst.Approved.Status;
+        var notApproved = ProductCensorshipConst.NotApproved.Status;
+        if (product.Org1Status == pending)
+        {
+            status += "<span class='status badge bg-secondary text-dark'>Chờ duyệt giá, mã SP</span>";
+        }
+        if (product.Org1Status == approved)
+        {
+            status += "<span class='status badge bg-success text-dark'>Đã duyệt giá, mã SP</span>";
+        }
+        if (product.Org1Status == notApproved)
+        {
+            status += "<span class='status badge bg-danger text-dark'>Xem lại giá, mã SP</span>";
+        }
+        if (product.Org2Status == pending)
+        {
+            status += "<span class='status badge bg-secondary text-dark'>Chờ duyệt nội dung SP</span>";
+        }
+        if (product.Org2Status == approved)
+        {
+            status += "<span class='status badge bg-success text-dark'>Đã duyệt nội dung SP</span>";
+        }
+        if (product.Org2Status == notApproved)
+        {
+            status += "<span class='status badge bg-danger text-dark'>Xem lại nội dung SP</span>";
+        }
+        if (product.Org3Status == pending)
+        {
+            status += "<span class='status badge bg-secondary text-dark'>Chờ duyệt hình ảnh, màu sắc, thương hiệu</span>";
+        }
+        if (product.Org3Status == approved)
+        {
+            status += "<span class='status badge bg-success text-dark'>Đã duyệt hình ảnh, màu sắc, thương hiệu</span>";
+        }
+        if (product.Org3Status == notApproved)
+        {
+            status += "<span class='status badge bg-danger text-dark'>Xem lại hình ảnh, màu sắc, thương hiệu</span>";
+        }
+        return status;
+    }
+}
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @if (isWareHouse)
+                            {
+                                <button type="button" class="btn bg-gradient-info btn-sl wareHouseAll"  asp-action="WhHouseByProductIdSyncAll"><i class="fa-solid fa-arrows-rotate"></i> Đồng bộ kho</button>
+                            }
+                            @await Html.PartialAsync("Partial/BasicAction/Create", new { area = "Products" })
+                            @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Products", action = "DeleteAll" })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-6">
+                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập mã sản phẩm hoặc tên mặt hàng" value="@listData.RouteValue["txtKeyword"]" />
+                            </div>
+                             <div class="col-xs-12 col-sm-2">
+                                   <select class="form-control form-control-xl" name="statusTT" asp-for="@listData.RouteValue["statusTT"]">
+                                        @foreach (var item in listStatusTT)
+                                             {
+                                                    <option value="@item.Key">@item.Value</option>
+                                             }
+                                   </select>
+                              </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <select class="form-control form-control-xl" name="status" asp-for="@listData.RouteValue["status"]">
+                                   @foreach (var item in listStatus)
+                                   {
+                                       <option value="@item.Key">@item.Value</option>
+                                   }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
+                                <thead class="table-thead">
+                                    <tr>
+                                        <th class="text-center" style="width: 3%">
+                                            <input type="checkbox" class="i-checks chkAll" />
+                                        </th>
+                                        <th  class="text-center" style="width: 3%">STT</th>
+                                        <th class="text-center" style="width: 4%">Ảnh</th>
+                                        <th  style="width: 10%" >Mã hàng</th>
+                                        <th  >Tên mặt hàng</th>
+                                        <th class="text-center" style="width: 10%">Số lượng kho</th>
+                                        <th class="text-center"  style="width: 8%">Trạng thái</th>
+                                        <th style="width: 180px"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  @if (listData.Count > 0)
+                                  {
+                                      @foreach (var item in listData)
+                                     {
+                                          <tr>
+                                                <td class="text-center align-middle">
+                                                    <input type="checkbox" class="i-checks chkItem" value="@item.Id" />
+                                                </td>
+                                                <td class="align-middle text-center">
+                                                    @(index++)
+                                                </td>
+                                                <td class="align-middle m-b-sm text-center ">
+                                                         @if (!string.IsNullOrEmpty(item.Image))
+                                                         {
+                                                             <img alt="image" src="@Html.Raw(item.Image)" width="50" height="50">
+                                                         }
+         
+                                                </td>
+                                                <td class="align-middle">
+                                                      @item.Sku 
+                                                </td>
+                                              
+                                                <td class="align-middle ">
+                                                     @item.Name <br/>
+                                                     @if (item.IsHot ?? false)
+                                                     {
+                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Nổi bật", "#5a82c0")) 
+                                                     }
+                                                     @if (item.IsNew ?? false)
+                                                     {
+                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Mới", "#5a82c0") )
+                                                     }
+                                                     @if (item.IsBestSale ?? false)
+                                                     {
+                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Bán chạy", "#5a82c0") )
+                                                     }
+                                                     @if (item.IsPromotion ?? false)
+                                                     {
+                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Khuyến mãi", "#5a82c0") )
+                                                     }
+                                                </td>
+                                              <td class="text-right align-middle ">
+                                                  @CmsFunction.NumberFormatShow(item.Quantity, true)
+                                              </td>
+                                              <td class="align-middle text-center">
+                                                  
+                                                  @Html.Raw(BindStatus((item)))
+                                              </td>                                  
+                                              <td class="text-center align-middle">
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = @item.Id })
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/Edit", new { id = @item.Id })
+                                                    @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.Id })
+                                              </td>
+                                        </tr>
+                                     }
+                                    
+                                  }
+                                  else
+                                  {
+                                     <tr>
+                                            <td colspan="8" class="text-center">Không có dữ liệu</td>
+                                     </tr>
+                                  }
+                                </tbody>
+                            </table>
+                        </div>
+                         @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })                         
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section Scripts
+{
+       <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+            <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+       <script type="text/javascript">
+                      $('.onoffswitch input[type="checkbox"]').bootstrapToggle({
+                          on: 'Hiện',
+                          off: 'Ẩn',
+                          size: 'mini',
+                          onstyle: "danger",
+                          offstyle: "secondary"
+                      });
+                  </script>
+       <script type="text/javascript">
+       $('.wareHouseAll').click(function (e) {
+           e.preventDefault();
+       
+           const id = [];
+           let url = $(this).attr("formaction");
+           let urlRedirect = $(this).attr('data-url-back');
+           $('.chkItem:checked', $('.table-check-all')).each(function () {
+               id.push(parseInt($(this).val()));
+           });
+           if (id.length === 0) {
+               Swal.fire({title: 'Bạn chưa chọn bản ghi.', type: 'warning'});
+               return;
+           }
+           Swal.fire({
+               title: 'Bạn có chắc chắn cập nhật số lượng và giá trong kho vào hệ thống prugift này?',
+               type: 'warning',
+               showCancelButton: true,
+               confirmButtonText: 'Đồng ý',
+               confirmButtonColor: '#ed5565',
+               cancelButtonText: 'Thoát'
+           }).then((result) => {
+               if (result.value) {
+                   UserInterface.prototype.showLoading();
+                   $.ajax({
+                       type: 'POST',
+                       url: url,
+                       dataType: 'json',
+                       data: {id},
+                       headers: {
+                           RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                       },
+                       success: function (response) {
+                           UserInterface.prototype.hideLoading();
+                           if (response.code == 200) {
+                               window.location.reload();
+                           } else {
+                               UserInterface.prototype.showFlashMessageError(response.content);
+                           }
+                       },
+                       error: function (xhr, textStatus, errorThrown) {
+                            UserInterface.prototype.hideLoading();
+                       }
+                   });
+               } else if (result.dismiss === Swal.DismissReason.cancel) {
+                   return false;
+               }
+           });
+       });
+
+       </script>
+}
+@section Styles
+{
+    <style>
+        .btn-danger:not(:disabled):not(.disabled).active, .btn-danger:not(:disabled):not(.disabled):active, .show > .btn-danger.dropdown-toggle
+        {
+            color: #fff;
+            background-color: #9e1d23; 
+            border-color: #931b20;
+            border-radius: 3px;
+            
+        }
+     
+        
+    </style>
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+
+}

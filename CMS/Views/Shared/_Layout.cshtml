@@ -1,0 +1,51 @@
+﻿@using Microsoft.Extensions.DependencyInjection
+@using Microsoft.Extensions.Configuration
+@using System.Security.Claims
+@using CMS.Extensions.HtmlTag
+@using CMS_Lib.Util
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>@ViewData["Title"] - Quản trị PRUgift</title>
+    <base href="~/" />
+    @await Html.PartialAsync("_Styles.cshtml")
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="hold-transition sidebar-mini layout-navbar-fixed layout-fixed">
+    @if (User?.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <div class="wrapper overlay-wrapper">
+            @* @await Html.PartialAsync("Partial/_Preloader") *@
+            @await Html.PartialAsync("Components/Navbar/_Navbar")
+
+            @await Html.PartialAsync("Components/Sidebar/_Sidebar")
+
+            <div class="content-wrapper">
+                @await Html.PartialAsync("Partial/_CookieConsentPartial")
+                @RenderBody()
+            </div>
+            @await Html.PartialAsync("Components/Footer/_Footer")
+
+            @{
+                var configuration = Context.RequestServices.GetRequiredService<IConfiguration>();
+                var appSetting = configuration.GetSection(CmsConsts.AppSetting);
+                var maxFileSize = appSetting.GetValue<int>(CmsConsts.MaxUploadSize).ToString();
+            }
+            @await Html.PartialAsync("Partial/_Spin")
+            <input type="hidden" value="@maxFileSize" id="maxFileSize" />
+            <input type="hidden" value="@User.FindFirstValue(ClaimTypes.NameIdentifier)" id="userId" />
+            @Html.AntiForgeryToken()
+        </div>
+    }
+    else
+    {
+        @RenderBody()
+    }
+    @await Html.PartialAsync("_Scripts.cshtml")
+    @Html.PageScripts()
+    @await RenderSectionAsync("Scripts", false)
+</body>
+</html>

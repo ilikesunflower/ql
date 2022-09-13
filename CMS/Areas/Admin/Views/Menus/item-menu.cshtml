@@ -1,0 +1,48 @@
+﻿@using CMS.Areas.Admin.ViewModels.Menus
+@model CMS.Areas.Admin.ViewModels.Menus.ItemMenuViewModel
+
+@{
+    List<Menu> listMenuOfParent = Model.ListMenus.Where(item => item.Pid == Model.Pid).ToList();
+}
+@if (listMenuOfParent.Count > 0)
+{
+    @foreach (Menu item in listMenuOfParent)
+    {
+        <div class="col-md-12 menu-item " data-id="@item.Id" data-lvl="@item.Lvl">
+            <div class="row info-menu">
+                <div class="w-45-px text-center align-middle">
+                    <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                </div>
+                <div class="col-md text-left align-middle menu-title @($"menu-level-{item.Lvl}")">
+                    @item.Name
+                </div>
+                <div class="col-md-4  text-left align-middle">
+                    @item.Url
+                </div>
+                <div class="w-150-px text-center">
+                    <div class="switch">
+                        <div class="onoffswitch">
+                            <a asp-controller="Menus" asp-action="ChangeStatus" class="url_@item.Id" style="display: none"></a>
+                            @if (item.Status == 1)
+                            {
+                                <input class="ChangeStatus" data-status="true" checked="checked" data-id="@item.Id" type="checkbox" name="status" id="@item.Id"/>
+                            }
+                            else
+                            {
+                                <input class="ChangeStatus" data-status="false" data-id="@item.Id" type="checkbox" name="status" id="@item.Id"/>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="w-180-px text-center">
+                    @await Html.PartialAsync("Partial/BasicActionTable/View", new {id = item.Id})
+                    @await Html.PartialAsync("Partial/BasicActionTable/Edit", new {id = item.Id})
+                    @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = item.Id})
+                </div>
+            </div>
+            <div class="row list-group-menu" data-id="@item.Id" data-lvl="@item.Lvl">
+                <partial name="item-menu" model='new ItemMenuViewModel {ListMenus = Model.ListMenus, Pid = item.Id}'/>
+            </div>
+        </div>
+    }
+}

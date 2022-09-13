@@ -1,0 +1,138 @@
+﻿@using CMS.Areas.Orders.Const
+@model CMS.Areas.Orders.Models.PreOrder.IndexPreOrderViewModel
+
+@{
+    ViewData["Title"] = "Danh sách đơn hàng Pre Order  | Quản lý đơn hàng";
+    string namePage = "Danh sách Pre Order";
+    string subName1 = "Danh sách Pre Order";
+
+    var listData = Model.ListData;
+}
+
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item active">
+                        <a>@subName1</a>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get">
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Từ ngày" autocomplete="off" name="startDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["startDate"]"/>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">đến</span>
+                                    </div>
+                                    <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <select class="form-control form-control-xl" name="status" asp-for="@listData.RouteValue["status"]">
+                                    @foreach (var item in Model.PreOrderStatuses)
+                                    {
+                                        <option value="@item.Status">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-3">
+                                <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="align-middle text-center" style="width: 45px">STT</th>
+                                    <th class="align-middle text-center">Sản phẩm</th>
+                                    <th class="align-middle text-center">Người đặt hàng</th>
+                                    <th class="align-middle" style="">Địa chỉ giao hàng</th>
+                                    <th class="text-center align-middle">Thời gian đặt </th>
+                                    <th class="text-center align-middle">Trạng thái</th>
+                                    <th class="text-center align-middle"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (Model.ListData.Count > 0)
+                                {
+                                    int index = 1;
+                                    @foreach (var item in listData)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@(index++)</td>
+                                            <td class="">
+                                                <div class="table__product-contain">
+                                                    <div class="table__product-image" style="background-image: url('@item.Product.Image') "></div>
+                                                    <div class="table__product-info">
+                                                        <strong class="d-block">@item.Product.Name</strong>
+                                                        <span>Số lượng: @item.Quantity</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="">
+                                                <span class="d-block">@item.Customer.FullName</span>
+                                                <span>@item.Customer.Phone</span>
+                                            </td>
+                                            <td class="">
+                                                <p class="font-size-14 m-all-0">
+                                                    <label class="m-all-0">Họ tên:</label> @item.PreOrderAddress?.Name -
+                                                    <label class="m-all-0">SĐT</label> @item.PreOrderAddress?.Phone
+                                                </p>
+                                                <p class="font-size-14 m-all-0">
+                                                    <label class="m-all-0">Địa chỉ:</label>
+                                                    <span>@(item.PreOrderAddress?.Address)</span><br/>
+                                                    <span>Tỉnh/TP: @(item.PreOrderAddress?.Province?.Name) - Quận/Huyện: @(item.PreOrderAddress?.District?.Name) - Xã/Phường: @(item.PreOrderAddress?.Commune?.Name)</span>
+                                                </p>
+                                            </td>
+                                            <td class="text-center">@item.PreOrderAt?.ToString("dd-MM-yyyy HH:mm")</td>
+                                            <td class="text-center">@Html.Raw(PreOrderStatus.BindStatus(item.Status ?? -2))</td>
+                                            <td class="text-center">
+                                               @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = item.Id })
+                                               @if (item.Status == 0)
+                                               {
+                                                   @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = item.Id })
+                                               }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Orders/preorder.css"/>
+}

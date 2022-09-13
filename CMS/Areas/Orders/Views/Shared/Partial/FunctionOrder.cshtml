@@ -1,0 +1,22 @@
+﻿@using CMS_Lib.Util
+@using CMS.Areas.Orders.Const
+@model dynamic
+@{
+    var isPermission = Model.GetType().GetProperty("permission");
+    var id = Model.GetType().GetProperty("id").GetValue(Model, null);
+    int? status = (int?) Model.GetType().GetProperty("status").GetValue(Model, null);
+    bool? isEdit = (bool?)Model.GetType().GetProperty("IsEdit").GetValue(Model, null);
+    // var status = Model.GetType().GetProperty("status").GetValue(Model, null);
+    
+    <div class="btn-group border-0">
+        <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown">
+        </button>
+        <div class="dropdown-menu">
+            <a title="Xem" class="dropdown-item" asp-action="Details" asp-route-id="@id"><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span></a>
+            @if ((status == OrderStatusConst.StatusCustomerSuccess || status == OrderStatusConst.StatusWaitCustomerConfirm) && isEdit == true)
+            {
+                <a title="Sửa" class="dropdown-item" asp-action="Edit" asp-route-id="@id"><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Sửa</span></a>
+            }
+        </div>
+    </div>
+}

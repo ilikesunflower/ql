@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  cms:
+    image: ${DOCKER_REGISTRY-}cms
+    build:
+      context: .
+      dockerfile: CMS/Dockerfile
+
+  cms_app_api:
+    image: ${DOCKER_REGISTRY-}cmsappapi
+    build:
+      context: .
+      dockerfile: CMS_App_Api/Dockerfile
+

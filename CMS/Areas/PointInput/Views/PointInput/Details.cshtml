@@ -1,0 +1,179 @@
+﻿@model CMS.Areas.PointInput.Models.PointInputs.DetailsPointViewModel
+
+@{
+    var file = Model.File;
+    var listPoint = Model.ListPoint;
+    string title = "Chi tiết file nhập";
+    string subName = "Quản lý điểm";
+    ViewData["Title"] = $"{title}  | {subName}";
+}
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index">@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@title</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@title</p>
+                        <div class="float-right">
+                            @if (Model.IsSendNotification && file.IsSentNotification == 0)
+                            {
+                                <button type="button" class="btn bg-gradient-primary sendNotification"  asp-action="SendNotification" asp-route-id="@file.Id"><i class="fa-solid fa-bell"></i> Gửi thông báo</button>
+                            }
+                            <a asp-action="DownloadUploadFile" asp-route-id="@file.Id" class="btn bg-gradient-success btn-sl">
+                                <i class="fas fa-download"></i> Tải file
+                            </a>
+                            @await Html.PartialAsync("Partial/BasicAction/Delete", new {id = file.Id})
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-horizontal row">
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-4">Mã phiếu yêu cầu:</label>
+                                    <div class="col-md-6 col-xs-6">
+                                        <span class="control-label">@file.Code</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-4">Tên file:</label>
+                                    <div class="col-md-6 col-xs-6">
+                                        <span class="control-label">@file.FileName</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-group row">
+                                    <label class="col-md-2 col-xs-4">Đơn vị phát hành:</label>
+                                    <div class="col-md-6 col-xs-6">
+                                        <span class="control-label">@file.ReleaseBy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="text-center" style="width: 45px">STT</th>
+                                    <th class="text-center">Khách hàng</th>
+                                    <th class="text-center">Số điểm nạp</th>
+                                    <th class="text-center">Số điểm trừ</th>
+                                    <th class="text-center" style="width:10%">Ngày bắt đầu</th>
+                                    <th class="text-center" style="width:10%">Ngày kết thúc</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (listPoint.Count > 0)
+                                {
+                                    var index = 1;
+                                    @foreach (var item in listPoint)
+                                    {
+                                        <tr>
+
+                                            <td class="text-center align-middle">
+                                                @(index++)
+                                            </td>
+                                            <td class="align-middle">
+                                                @(item.Customer.FullName)
+                                            </td>
+                                            <td class="text-right">
+                                                @(item.AddPoint)
+                                            </td>
+                                            <td class="text-right">
+                                                @(item.MinusPoint)
+                                            </td>
+                                            <td class="">
+                                                @if (item.StartTime != null)
+                                                {
+                                                    @item.StartTime.Value.ToString("dd/MM/yyyy ")
+                                                }
+                                            </td>
+                                            <td class="">
+                                                @if (item.EndTime != null)
+                                                {
+                                                    @item.EndTime.Value.ToString("dd/MM/yyyy ")
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                            @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listPoint})
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@section Scripts
+{
+     <script type="text/javascript">
+            $(".sendNotification").on("click",function (e) {
+                let url = $(this).attr('formaction');
+                Swal.fire({
+                    title: 'Bạn có chắc chắn muốn gửi thông báo đến khách hàng?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đồng ý',
+                    confirmButtonColor: '#ed5565',
+                    cancelButtonText: 'Thoát'
+                }).then((result) => {
+                    if (result.value) {
+                        UserInterface.prototype.showLoading();
+                        $.ajax({
+                            type: 'POST',
+                            url: url,
+                            dataType: 'json',
+                            data: {},
+                            headers: {
+                                RequestVerificationToken: $('input:hidden[name="__RequestVerificationToken"]').val()
+                            },
+                            success: function (response) {
+                                UserInterface.prototype.hideLoading();
+                                if (response.statusCode === 200) {
+                                    location.reload();
+                                } else {
+                                    UserInterface.prototype.showFlashMessageError(response.message);
+                                }
+                            },
+                            error: function (xhr, textStatus, errorThrown) {
+                                UserInterface.prototype.hideLoading();
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        return false;
+                    }
+                });
+            });
+    </script>
+}

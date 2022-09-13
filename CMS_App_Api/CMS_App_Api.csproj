@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <UserSecretsId>f2788be5-6e26-4e7d-b6da-90b06879c966</UserSecretsId>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>8034</NoWarn>
+    <NoWarn>AD0001</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\Users\Data\**" />
+    <Compile Remove="Areas\Users\Views\**" />
+    <Content Remove="Areas\Users\Data\**" />
+    <Content Remove="Areas\Users\Views\**" />
+    <EmbeddedResource Remove="Areas\Users\Data\**" />
+    <EmbeddedResource Remove="Areas\Users\Views\**" />
+    <None Remove="Areas\Users\Data\**" />
+    <None Remove="Areas\Users\Views\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="11.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
+	<PackageReference Include="System.DirectoryServices" Version="6.0.0" />
+	<PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CMS_Access\CMS_Access.csproj" />
+    <ProjectReference Include="..\CMS_EF\CMS_EF.csproj" />
+    <ProjectReference Include="..\CMS_Lib\CMS_Lib.csproj" />
+    <ProjectReference Include="..\CMS_Ship\CMS_Ship.csproj" />
+    <ProjectReference Include="..\CMS_WareHouse\CMS_WareHouse.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Orders\Data\" />
+    <Folder Include="Areas\Orders\Models\" />
+    <Folder Include="Areas\Orders\Views\" />
+    <Folder Include="Helpers\Middleware" />
+  </ItemGroup>
+
+</Project>

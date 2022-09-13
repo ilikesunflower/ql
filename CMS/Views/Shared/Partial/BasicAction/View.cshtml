@@ -1,0 +1,38 @@
+﻿
+@model dynamic
+@{
+    var id = Model.GetType().GetProperty("id").GetValue(Model, null);
+    var isAction = Model.GetType().GetProperty("action");
+    var isPermission = Model.GetType().GetProperty("permission");
+    if (isPermission == null)
+    {
+        if (TempData.ContainsKey("isView") && (bool)TempData["isView"])
+        {
+            if (isAction == null)
+            {
+                <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@id">Xem</a>
+            }
+            else
+            {
+                var action = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a class="btn btn-primary btn-sm" asp-action="@action" asp-route-id="@id">Xem</a>
+            }
+        }
+    }
+    else
+    {
+        bool isView = Model.GetType().GetProperty("permission").GetValue(Model, null);
+        if (isView)
+        {
+            if (isAction == null)
+            {
+                <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@id">Xem</a>
+            }
+            else
+            {
+                var action = Model.GetType().GetProperty("action").GetValue(Model, null);
+                <a class="btn btn-primary btn-sm" asp-action="@action" asp-route-id="@id">Xem</a>
+            }
+        }
+    }
+}

@@ -1,0 +1,123 @@
+﻿@using Castle.Core.Internal
+@using CMS.Areas.Admin.ViewModels.Menus
+@using CMS_Lib.Util
+
+@model CMS.Models.ModelContainner.ModelCollection
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    ViewData["Title"] = "Danh sách Menu | Quản lý Menu";
+    var listData = Model.GetModel<List<Menu>>("ListData");
+    var listMenus = Model.GetModel<List<Menu>>("ListMenu");
+    string txtKeyword = Model.GetModel<string>("txtKeyword");
+    int? pid = Model.GetModel<int?>("pid");
+    string namePage = "Danh sách Menu";
+    string subName = "Quản trị hệ thống";
+    string subName1 = "Quản lý Menu";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                            @await Html.PartialAsync("Partial/BasicAction/Create")
+                            @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Admin", action = "DeleteAll" })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row m-b-15" method="get">
+                            <div class="col-xs-12 col-sm-6">
+                                <input autocomplete="off" name="txtKeyword" placeholder="Nội dung tìm kiếm" class="form-control form-control-sl input-sm" value="@txtKeyword"/>
+                            </div>
+                            <div class="col-xs-12 col-sm-4">
+                                <select class="form-control form-control-sm input-sm select2" name="pid" asp-for="@pid">
+                                    <option value="">Tất cả</option>
+                                    @{
+                                        if (!listMenus.IsNullOrEmpty() && listMenus.Count > 0)
+                                        {
+                                            foreach (var item in listMenus)
+                                            {
+                                                <option value="@item.Id">@CmsFunction.BindNameParenChild(item.Name, item.Lvl)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-danger  btn-block">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="row">
+                            <div class="col-md-12 table-check-all">
+                                <div class="row hear-menu table-thead"> 
+                                    <div class="w-45-px text-center">
+                                        <input type="checkbox" class="i-checks chkAll"/>
+                                    </div>
+                                    <div class="col-md text-left">
+                                        Tên
+                                    </div>
+                                    <div class="col-md-4 text-left">
+                                        Url
+                                    </div>
+                                    <div class="w-150-px text-center">
+                                        Trạng thái
+                                    </div>
+                                    <div class="w-180-px text-center"></div>
+                                </div>
+                                <div id="list-menu" class="row m-0 list-group-menu" data-id="1">
+                                    @if (listData.Count > 0)
+                                    {
+                                        <partial name="item-menu" model='new ItemMenuViewModel {ListMenus = listData, Pid = 1}' />
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            Không có dữ liệu
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/css/Admin/Menu/index.css"/>
+}
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/lib/sortablejs/Sortable.min.js"></script>
+    <script type="text/javascript" src="~/js/Admin/Menu/index.js"></script>
+}

@@ -1,0 +1,48 @@
+﻿@using CMS_Lib.Util
+
+@{
+    ViewData["Title"] = "Thêm mới đơn hàng| Quản lý hóa đơn";
+    string namePage = "Thêm mới đơn hàng";
+    string subName = "Quản lý đơn hàng";
+    string subName1 = "Quản lý đơn hàng";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Orders" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div id="product_app">
+        </div>
+    </div>
+</section>
+
+@section Styles
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css"/>
+    <link rel="stylesheet" href="~/css/Orders/create/app.css"/>
+}
+@section Scripts
+{
+    <script type="text/javascript" src="~/lib/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="~/lib/tinymce/jquery.tinymce.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/dist/js/order/create/bundle.js" asp-append-version="true"></script>
+}

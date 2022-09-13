@@ -1,0 +1,128 @@
+﻿
+@model CMS_EF.Models.Categories.Banner
+
+@{
+    ViewData["Title"] = "Xem chi tiết Banner | Quản lý Banner";
+    string namePage = "Xem chi tiết Banner";
+    string subName = "Quản lý danh mục";
+    string subName1 = "Danh sách Banner";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a >@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Categories" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-md-8 col-lg-9">
+            <div class="card">
+                <div class="card-header ">
+                    <p class="card-title namePageText">@namePage</p>
+                    <div class="float-right">
+                        @await Html.PartialAsync("Partial/BasicAction/Edit", new { id = Model.Id })
+                        @await Html.PartialAsync("Partial/BasicAction/Delete", new { id = Model.Id })
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="col-md-2 col-xs-2">Vị trí</label>
+                            <div class="col-md-10 col-xs-10">
+                                <span class="control-label">@Model.Alias</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-xs-2">Link Url </label>
+                            <div class="col-md-10 col-xs-10">
+                                <span class="control-label">@Model.Link</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-xs-2">Thứ tự</label>
+                            <div class="col-md-10 col-xs-10">
+                                @Model.Ord
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-2 col-xs-2">Trạng thái</label>
+                            <div class="col-md-10 col-xs-10">
+                                <div class="switch">
+                                    <div class="onoffswitch">
+                                        @if (Model.Status)
+                                        {
+                                            <input type="checkbox" checked="" disabled="" />
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" disabled="" />
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-3">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card file-group">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label >Ảnh </label>
+                                <div class="col-lg-12 col-md-12 col-sm-12 ">
+                                    <img src="@Model.Images" class="m-b-10" style="width: 100%" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card file-group">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label >Ảnh Mobile</label>
+                                <div class="col-lg-12 col-md-12 col-sm-12 ">
+                                    <img src="@Model.ImagesMobile" class="m-b-10" style="width: 100%" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+    </div>
+    </div>
+</section>
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript">
+        $('.onoffswitch input[type="checkbox"]').bootstrapToggle({
+            on: 'Hiện',
+            off: 'Ẩn',
+            size: 'lg',
+            onstyle: "danger",
+            offstyle: "secondary"
+        });
+    </script>
+}

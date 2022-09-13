@@ -1,0 +1,121 @@
+﻿@using CMS_Lib.Util
+@using Castle.Core.Internal
+@using CMS_Access.Repositories.Products
+@model CMS.Models.ModelContainner.ModelCollection;
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm thuộc danh mục | Quản lý danh mục sản phẩm";
+    string namePage = "Danh sách sản phẩm thuộc danh mục";
+    string subName = "Quản lý danh mục";
+    string subName1 = "Danh mục sản phẩm";
+    var listData = Model.GetModel<List<ProductCategoryValue>>("ListData");
+    var id = Model.GetModel<int>("Id");
+    var name = Model.GetModel<string>("NameCategory");
+    int index =( Model.GetModel<int>("Page") - 1) * 20 + 1;
+
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Categories" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Create" method="post">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <p class="card-title namePageText">@namePage @name</p>
+                                   
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive tablePaddingTop">
+                                        <table class="table tab-content table-bordered table-check-all table-hover table-bordered-index ">
+                                            <thead class="table-thead">
+                                                <tr>
+                                                 
+                                                    <th class="text-center"  style="width: 45px">STT</th>
+                                                    <th  class="text-center"   style="width: 80px" >Ảnh</th>
+                                                    <th  class=""  >Mã hàng</th>
+                                                    <th  class=""  >Tên</th>
+                                                    <th class="text-center" style="width: 180px"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody  class="list list-row " id="sortable" data-sortable-id="0" aria-dropeffect="move">
+                                            @if (listData.Count > 0)
+                                            {
+                                                @foreach (var item in listData)
+                                                {
+                                                    <tr class="list-item " data-id="@item.ProducCategorytProductId" data-item-sortable-id="@(index -1 )" draggable="true" role="option" aria-grabbed="false">
+                                                     
+                                                        <td class="align-middle text-center">
+                                                            @(index++)
+                                                        </td>
+                                                        <td class="align-middle m-b-sm text-center ">
+                                                            @if (!string.IsNullOrEmpty(item.Image))
+                                                            {
+                                                                <img alt="image" src="@Html.Raw(item.Image)" width="50" height="50">
+                                                            }
+                         
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            @item.Sku 
+                                                        </td>
+                                                        <td class="align-middle ">
+                                                            @item.Name 
+                                                        </td>
+                                                        <td class="text-center align-middle">
+                                                            @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.ProducCategorytProductId, action="DeleteProduct" })
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                    
+                                            }
+                                            else
+                                            {
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                                </tr>
+                                            }                                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })                         
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                </form>
+            </div>
+        </div>
+    </div>
+   
+
+</section>
+@section Styles
+{
+        <link rel="stylesheet" href="~/css/ProductCategory/style.css"/>
+
+}
+@section Scripts
+{
+       <script type="text/javascript" src="~/js/ProductCategory/script.js"></script>
+}

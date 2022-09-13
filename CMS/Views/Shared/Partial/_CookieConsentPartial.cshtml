@@ -1,0 +1,30 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var showBanner = !consentFeature?.CanTrack ?? false;
+    var cookieString = consentFeature?.CreateConsentCookie();
+}
+
+@if (showBanner)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div id="cookieConsent" class="alert alert-success alert-dismissible show" role="alert" style="margin: 15px;">
+                Vui lòng cho phép hệ thống sử dụng cookie của bạn?
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="alert" aria-label="Close" data-cookie-string="@cookieString">
+                    Đồng ý
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        (function() {
+            var button = document.querySelector("#cookieConsent button[data-cookie-string]");
+            button.addEventListener("click",
+                function(event) {
+                    document.cookie = button.dataset.cookieString;
+                },
+                false);
+        })();
+    </script>
+}

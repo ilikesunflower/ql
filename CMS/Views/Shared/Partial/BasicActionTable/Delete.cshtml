@@ -1,0 +1,46 @@
+﻿@model dynamic
+@{
+    var actionProperty = Model.GetType().GetProperty("action");
+    var action = actionProperty != null ? actionProperty.GetValue(Model,null) : "Delete";
+    var isParameters  = Model.GetType().GetProperty("parameters");
+    IDictionary<string, string> parameters = Model.GetType().GetProperty("parameters") == null ? new Dictionary<string, string>() : (Dictionary<string, string>) Model.GetType().GetProperty("parameters").GetValue(Model, null);
+    var isPermission = Model.GetType().GetProperty("permission");
+    if (isParameters == null)
+    {
+        var id = Model.GetType().GetProperty("id").GetValue(Model, null);
+        if (isPermission == null)
+        {
+       
+            if (TempData.ContainsKey("isDelete") && (bool)TempData["isDelete"])
+            {
+                <button title="xóa" type="button" class="btn bg-gradient-danger btn-xs deleteOne btn-s-m mt-1 mb-1" asp-action="@action" asp-route-id="@id"><i class="fal fa-solid fa-trash"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xóa</span></button>
+            }
+        }
+        else
+        {
+            bool isDelete = Model.GetType().GetProperty("permission").GetValue(Model, null);
+            if (isDelete)
+            {
+                <button title="xóa" type="button" class="btn bg-gradient-danger btn-xs deleteOne btn-s-m mt-1 mb-1" asp-action="@action" asp-route-id="@id"><i class="fal fa-solid fa-trash"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xóa</span></button>
+            }
+        }
+    }
+    else
+    {
+        if (isPermission == null)
+        {
+            if (TempData.ContainsKey("isDelete") && (bool)TempData["isDelete"])
+            {
+                <button title="xóa" type="button" class="btn bg-gradient-danger btn-xs deleteOne btn-s-m mt-1 mb-1" asp-action="@action" asp-all-route-data="@parameters"><i class="fal fa-solid fa-trash"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xóa</span></button>
+            }
+        }
+        else
+        {
+            bool isDelete = Model.GetType().GetProperty("permission").GetValue(Model, null);
+            if (isDelete)
+            {
+                <button title="xóa" type="button" class="btn bg-gradient-danger btn-xs deleteOne btn-s-m mt-1 mb-1" asp-action="@action" asp-all-route-data="@parameters"><i class="fal fa-solid fa-trash"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xóa</span></button>
+            }
+        }
+    }
+}

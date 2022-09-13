@@ -1,0 +1,219 @@
+.titleName{
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 41px;
+    color: #1B365D;
+}
+hr{
+    width: 100%;
+}
+.product-variation-title{
+    width: 110px !important;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+}
+
+
+label:not(.form-check-label):not(.custom-file-label) {
+    font-weight: 400;
+}
+
+.product-items .product-item{
+    display:inline-block;
+    margin-bottom:10px
+}
+.product-items .product-item:not(:last-child){
+    margin-right:10px
+}
+.product-items .product-item input[type=radio]{
+    display:none
+}
+.product-items .product-item input:checked+label{
+    border-color: red!important;
+    color: red !important
+}
+.product-items .product-item label{
+    border:1px solid rebeccapurple;
+    border-radius:32px;
+    cursor:pointer;
+    margin-bottom:0;
+    padding: 5px 15px
+}
+.product-helper-danger{
+    color: red;
+    display:block;
+    margin-top:15px
+}
+.w-193px {
+    width: 193px;
+}
+.product-amount{
+    align-items: baseline;
+    display: flex;
+}
+.product-amount-title{
+    width:110px!important
+}
+
+.product-amount-title{
+    -webkit-box-flex:0;
+    flex:0 1 auto;
+    margin-bottom:0;
+    width:95px
+}
+.btn-group{
+    padding: 0;
+    width: 180px;
+}
+.inputQuantity{
+    border: 1px solid #fff;
+    text-align: center;
+}
+.inputQuantity:hover{
+    border: 1px solid #fff;
+}
+.product-form-order{
+    text-align: center;
+}
+.imageCart{
+    width: 40px;
+    height: 40px;
+}
+.textCss{
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    text-align: right;
+    color: #1B365D;
+}
+.buttonNoColor{
+    border: 1px solid white;
+    background: white;
+}
+.styleLastTable{
+    display: grid;
+}
+.styleLastTable>span{
+    padding-bottom: 5px;
+}
+thead{
+    background: #f8f9fa;
+}
+.input-group>.input-group-append>.buttonFont{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius:  4px;
+}
+.borderLi{
+    border: white; 
+}
+.flexB {
+    display: flex;
+}
+.list-group-item+.list-group-item {
+    border-top-width: 1px;
+}
+.groupText>.list-group-item:first-child {
+    border-top-left-radius: 0;
+     border-top-right-radius: 0; 
+}
+
+element.style {
+}
+section#pay-info .pay__active .btn-next {
+    float: right;
+}
+section#pay-info .pay__active .btn {
+    font-size: 16px!important;
+    padding-left: 0;
+    padding-right: 0;
+    width: 235px;
+}
+.btn:not(:disabled):not(.disabled) {
+    cursor: pointer;
+}
+[type=button]:not(:disabled), [type=reset]:not(:disabled), [type=submit]:not(:disabled), button:not(:disabled) {
+    cursor: pointer;
+}
+
+    .btn-defaultt {
+        background: #ed1b2e;
+        border-radius: 50px;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+        padding: 12px 59px;
+    }
+    
+    .borderR , .borderR>input, .borderR>label{
+        background: #f8f9fa; 
+        cursor: pointer;
+    }
+ .borderR input:checked+label{
+    border-color: red!important;
+    color: red !important
+}
+ .field{
+     width: 100%;
+     border: 1px solid #cbcfd2;
+     border-radius: 3px;
+ }
+.textFile{
+    word-break: break-word;
+}
+.modal-coupon__list{
+    list-style: none;
+    padding: 0;
+}
+.modal-coupon__item{
+    padding: 18px 20px;
+}
+.modal-coupon__item-content{
+    align-items: center;
+    cursor: pointer;
+    -webkit-box-align: center;
+    display: flex;
+    gap: 15px;
+    margin-bottom: 0;
+    width: 100%;
+}
+.modal-coupon__list .modal-coupon__item input[type=radio] {
+    display: none;
+}
+ .modal-coupon__list .modal-coupon__item label .radio-icon {
+    border: 1px solid red ;
+    border-radius: 100%;
+    display: inline-block;
+    height: 16px;
+    padding: 3px;
+    width: 16px;
+     
+}
+.modal-coupon__list .modal-coupon__item input[type=radio]:checked+label .radio-icon {
+    border: 1px solid red;
+    background: red;
+}
+
+.modal-coupon__list .modal-coupon__item .modal-coupon__item-content .modal-coupon__item-logo {
+
+    background-image: url('/images/voucher.png');
+    border: 1px solid rgba(27, 54, 93, 0.2);;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    height: 80px;
+    width: 100px;
+}
+.modal-coupon__item-title{
+    display: flex;
+    gap: 15px;
+    margin-bottom: 0;
+}
+.modal-coupon__item-discount{
+    margin: 0;
+}
+
+.modalComment{
+    max-height: 555px;
+
+}

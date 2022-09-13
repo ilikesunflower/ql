@@ -1,0 +1,249 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<UserSecretsId>2</UserSecretsId>
+		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+		<IncludeOpenAPIAnalyzers>true</IncludeOpenAPIAnalyzers>
+		<GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+	</PropertyGroup>
+	<PropertyGroup>
+		<WarningsNotAsErrors>CS8034;$(WarningsNotAsErrors)</WarningsNotAsErrors>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<NoWarn>8034</NoWarn>
+		<NoWarn>AD0001</NoWarn>
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>full</DebugType>
+		<!--<EnvironmentName>Development</EnvironmentName>-->
+	</PropertyGroup>
+	<PropertyGroup>
+		<TypeScriptJSXEmit>react</TypeScriptJSXEmit>
+		<TypeScriptCompileOnSaveEnabled>false</TypeScriptCompileOnSaveEnabled>
+		<TypeScriptCompileBlocked>false</TypeScriptCompileBlocked>
+		<TypeScriptNoEmitOnError>false</TypeScriptNoEmitOnError>
+		<TypeScriptNoImplicitReturns>false</TypeScriptNoImplicitReturns>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+		<PackageReference Include="ClosedXML" Version="0.95.4" />
+		<PackageReference Include="ClosedXML.Extensions.Mvc" Version="0.3.0" />
+		<PackageReference Include="ClosedXML.Report" Version="0.2.4" />
+		<PackageReference Include="DocXCore" Version="1.0.9" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="HtmlSanitizer" Version="7.1.488" />
+		<PackageReference Include="JWT" Version="9.0.0" />
+		<PackageReference Include="LargeXlsx" Version="1.5.0" />
+		<PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.357" />
+		<PackageReference Include="MailKit" Version="3.3.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
+		<PackageReference Include="Npoi.Mapper" Version="3.5.1" />
+		<PackageReference Include="Open.ChannelExtensions" Version="6.0.3" />
+		<PackageReference Include="ReflectionIT.Mvc.Paging" Version="6.0.1" />
+		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
+		<PackageReference Include="SkiaSharp" Version="2.80.3" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
+		<PackageReference Include="System.DirectoryServices" Version="6.0.0" />
+		<PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
+		<PackageReference Include="System.Text.Json" Version="6.0.4" />
+		<PackageReference Include="TemplateEngine.Docx-beta" Version="1.1.7" />
+		<PackageReference Include="Xabe.FFmpeg.Downloader" Version="5.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Areas\Admin\Data\" />
+		<Folder Include="Areas\Admin\Models\" />
+		<Folder Include="Areas\Admin\Views\Shared\Partial\Home\" />
+		<Folder Include="Areas\Categories\Data" />
+		<Folder Include="Areas\Coupons\Data" />
+		<Folder Include="Areas\Customer\Data" />
+		<Folder Include="Areas\Error\Data\" />
+		<Folder Include="Areas\Error\Models\" />
+		<Folder Include="Areas\OrderComment\Data" />
+		<Folder Include="Areas\Orders\Data" />
+		<Folder Include="Areas\Orders\Pages" />
+		<Folder Include="Areas\Orders\Views\Shared" />
+		<Folder Include="Areas\PointInput\Models" />
+		<Folder Include="Areas\Products\Data" />
+		<Folder Include="Areas\Reports\Const" />
+		<Folder Include="Areas\Reports\Pages" />
+		<Folder Include="Areas\Webhook\Data" />
+		<Folder Include="Config\Builder" />
+		<Folder Include="Data\" />
+		<Folder Include="logs\" />
+		<Folder Include="Migrations\" />
+		<Folder Include="ReactApp\dashboard\area" />
+		<Folder Include="ViewComponents" />
+		<Folder Include="wwwroot\css\Admin\Home" />
+		<Folder Include="wwwroot\css\images" />
+		<Folder Include="wwwroot\dist" />
+		<Folder Include="wwwroot\js\Admin\Shared\" />
+		<Folder Include="wwwroot\plugins\" />
+		<Folder Include="wwwroot\Templates\Excels\" />
+		<Folder Include="wwwroot\upload\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\.editorconfig" Link=".editorconfig" />
+		<None Include="wwwroot\css\Orders\create\app.css" />
+		<None Include="wwwroot\css\Orders\edit\app.css" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\.gitignore" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\index.svg" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\jquery.min.js" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\LICENSE" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\qrcode.js" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\qrcode.min.js" />
+		<None Include="wwwroot\js\Plugins\qrcodejs\README.md" />
+		<None Include="wwwroot\js\site.js" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\CMS_Access\CMS_Access.csproj" />
+		<ProjectReference Include="..\CMS_EF\CMS_EF.csproj" />
+		<ProjectReference Include="..\CMS_Lib\CMS_Lib.csproj" />
+		<ProjectReference Include="..\CMS_Ship\CMS_Ship.csproj" />
+		<ProjectReference Include="..\CMS_WareHouse\CMS_WareHouse.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="Views\Shared\Partial\BasicActionTable\Delete.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicActionTable\Edit.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicActionTable\View.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicAction\Create.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicAction\Delete.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicAction\Edit.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicAction\Save.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="Views\Shared\Partial\BasicAction\View.cshtml">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <AdditionalFiles Include="Areas\Customer\Views\_ValidationScriptsPartial.cshtml" />
+	  <AdditionalFiles Include="Areas\Customer\Views\_ViewImports.cshtml" />
+	  <AdditionalFiles Include="Areas\Customer\Views\_ViewStart.cshtml" />
+	  <AdditionalFiles Include="Areas\Products\Views\Product\Create.cshtml" />
+	  <AdditionalFiles Include="Areas\Products\Views\Product\Details.cshtml" />
+	  <AdditionalFiles Include="Areas\Products\Views\Product\Edit.cshtml" />
+	  <AdditionalFiles Include="Areas\Products\Views\Product\Index.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\AccessDenied\Index.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\Page\Index.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\Page\PageNotFound.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\_ValidationScriptsPartial.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\_ViewImports.cshtml" />
+	  <AdditionalFiles Include="Areas\Webhook\Views\_ViewStart.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\Product\Create.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\Product\Details.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\Product\Edit.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\Product\Index.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\ProductCategory\Banner\Create.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\ProductCategory\Banner\Details.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\ProductCategory\Banner\Edit.cshtml" />
+	  <_ContentIncludedByDefault Remove="Areas\Categories\Views\ProductCategory\Banner\Index.cshtml" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-brands-400.a914b1.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-brands-400.aff193.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-regular-400.47074d.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-regular-400.625dca.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-solid-900.422cfe.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-solid-900.64d495.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\fa-v4compatibility.ea8535.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-Bold.a0fe34.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-BoldItalic.de2cc7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-ExtraBold.f3f77b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-ExtraBoldItalic.9964f7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-Italic.dfdc57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-Light.8ed223.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-LightItalic.59e442.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-Medium.65529e.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-MediumItalic.00b028.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-Regular.57cd57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-SemiBold.2b370b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\fonts\OpenSans-SemiBoldItalic.cd7101.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\da-thong-bao-bo-cong-thuong.svg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\icon-zalo.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\img-preview1.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\img-preview3.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\img-preview5.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\news0.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\news1.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\news2.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\news3.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\news4.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\pop_up.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\sp1.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\sp2.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\sp3.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\sp4.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\images\design\viber.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\design\da-thong-bao-bo-cong-thuong.svg" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\design\icon-zalo.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\design\viber.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\icon-zalo.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\img-preview1.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\news1.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\sp3.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\29\image.png" />
+	</ItemGroup>
+	<ProjectExtensions><VisualStudio><UserProperties NpmRestoreOnProjectOpen="True" /></VisualStudio></ProjectExtensions>
+
+</Project>
