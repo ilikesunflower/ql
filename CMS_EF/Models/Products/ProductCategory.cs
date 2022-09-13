@@ -11,6 +11,7 @@ namespace CMS_EF.Models.Products
     {
         public ProductCategory()
         {
+            InversePidNavigation = new HashSet<ProductCategory>();
             ProductCategoryProduct = new HashSet<ProductCategoryProduct>();
         }
 
@@ -28,9 +29,22 @@ namespace CMS_EF.Models.Products
         [StringLength(255)]
         [Unicode(false)]
         public string Font { get; set; }
+        [StringLength(255)]
         public string ImageBanner { get; set; }
+        [StringLength(255)]
         public string ImageBannerMobile { get; set; }
+        public int? Lvl { get; set; }
+        [StringLength(255)]
+        public string Rgt { get; set; }
+        public int? Lft { get; set; }
+        [Column("PId")]
+        public int? Pid { get; set; }
 
+        [ForeignKey("Pid")]
+        [InverseProperty("InversePidNavigation")]
+        public virtual ProductCategory PidNavigation { get; set; }
+        [InverseProperty("PidNavigation")]
+        public virtual ICollection<ProductCategory> InversePidNavigation { get; set; }
         [InverseProperty("Pcategory")]
         public virtual ICollection<ProductCategoryProduct> ProductCategoryProduct { get; set; }
     }

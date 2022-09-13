@@ -362,6 +362,11 @@ namespace CMS_EF.DbContext
             modelBuilder.Entity<ProductCategory>(entity =>
             {
                 entity.Property(e => e.Ord).HasDefaultValueSql("((1000))");
+
+                entity.HasOne(d => d.PidNavigation)
+                    .WithMany(p => p.InversePidNavigation)
+                    .HasForeignKey(d => d.Pid)
+                    .HasConstraintName("FK__ProductCate__PId__0B5CAFEA");
             });
 
             modelBuilder.Entity<ProductCategoryProduct>(entity =>
