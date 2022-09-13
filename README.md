@@ -1,6 +1,6 @@
-﻿5# PruGift Trang quản trị
+﻿5# Daiichi Trang quản trị
 
-> PruGift
+> Daiichi
 
 ##IDE uses
 - Microsoft visual studio 2022
@@ -11,17 +11,17 @@
 - npm v6.14.11
 
 ## Install
-- git clone: http://gitlab.amitech.vn/vets/prugift/cms.git
+- git clone: http://gitlab.amitech.vn/vets/daiichi/cms.git
 - cd CMS
 - npm install --no-optional --no-shrinkwrap --no-package-lock --save
 
 ## Link local test
-- https://192.168.31.223:7500/
-- https://192.168.31.223:7502/
+- https://192.168.31.223:7600/
+- https://192.168.31.223:7602/
 ## Linux
-PruGift-CMS.service
+Daiichi-CMS.service
 
-PruGift-GateWay.service
+Daiichi-GateWay.service
 
 ## auto reload react
 - npm run dev
