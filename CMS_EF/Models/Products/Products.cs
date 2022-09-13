@@ -32,7 +32,7 @@ namespace CMS_EF.Models.Products
         public int? QuantityWh { get; set; }
         public double? Weight { get; set; }
         public int? PriceSale { get; set; }
-        public int? Price { get; set; }
+        // public int? Price { get; set; }
         [Column(TypeName = "ntext")]
         public string Description { get; set; }
         public bool? IsHot { get; set; }

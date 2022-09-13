@@ -378,7 +378,7 @@ namespace CMS.Areas.Products.Controllers
                         Sku = createData.Sku,
                         Name = createData.Name.Trim(),
                         Weight = createData.Weight,
-                        Price = createData.Price,
+                        // Price = createData.Price,
                         PriceSale = createData.PriceSale,
                         Description = createData.Description == null
                             ? null
@@ -677,7 +677,7 @@ namespace CMS.Areas.Products.Controllers
                     product.Sku = editData.Sku;
                     product.Name = editData.Name.Trim();
                     product.Weight = editData.Weight;
-                    product.Price = editData.Price;
+                    // product.Price = editData.Price;
                     product.PriceSale = editData.PriceSale;
                     product.Description = editData.Description == null
                         ? null
@@ -1351,7 +1351,7 @@ namespace CMS.Areas.Products.Controllers
                                 p.Id,
                                 p.Sku,
                                 p.Name,
-                                PriceSale = p.Price,
+                                PriceSale = p.PriceSale,
                                 quantityUse = p.ProductSimilar.Sum(x => x.QuantityUse),
                                 quantityKW = p.ProductSimilar.Sum(x => x.QuantityWh),
                                 productRateCount = Math.Round(p.Rate ?? 0),
