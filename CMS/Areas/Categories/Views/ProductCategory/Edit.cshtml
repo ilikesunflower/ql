@@ -1,4 +1,5 @@
 ﻿@using Castle.Core.Internal
+@using CMS_Lib.Util
 @model CMS.Areas.Categories.Models.ProductCategory.EditModel
 
 @{
@@ -59,13 +60,21 @@
                                                     <span asp-validation-for="Font" class="text-danger"></span>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label class="col-md-3 col-xs-3">Thứ tự </label>
-                                                <div class="col-md-9 col-xs-9">
-                                                    <input type="number" asp-for="Ord" class="form-control form-control-xl"/>
-                                                    <span asp-validation-for="Ord" class="text-danger"></span>
+                                                <div class="form-group row">
+                                                    <label class="col-md-3 col-xs-3">Menu cha</label>
+                                                    <div class="col-md-9 col-xs-9">
+                                                        <select class="form-control   select2" asp-for="Pid">
+                                                            <option value="">#</option>
+                                                            @if (!Model.ListCategories.IsNullOrEmpty())
+                                                            {
+                                                                for (var i = 0; i < Model.ListCategories.Count; i++)
+                                                                {
+                                                                    <option value="@Model.ListCategories[i].Id">@CmsFunction.BindNameParenChild(Model.ListCategories[i].Name, Model.ListCategories[i].Lvl)</option>
+                                                                }
+                                                            }
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
                                         </div>
             
                                     </div>

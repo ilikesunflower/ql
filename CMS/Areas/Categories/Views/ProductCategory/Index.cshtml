@@ -1,14 +1,19 @@
 ﻿@using CMS.Areas.Categories.Const
+@using CMS.Areas.Categories.Models
 @using CMS_EF.Models.Categories
 @using CMS_EF.Models.Products
+@using Castle.Core.Internal
+@using CMS_Lib.Util
 @model CMS.Models.ModelContainner.ModelCollection;
 @{
     ViewData["Title"] = "Danh sách danh mục sản phẩm | Quản lý danh mục sản phẩm";
     string namePage = "Danh sách danh mục sản phẩm";
     string subName = "Quản lý danh mục ";
     string subName1 = "Danh mục sản phẩm";
-    int index =( Model.GetModel<int>("Page") - 1) * 20 + 1;
-    var listData = Model.GetModel<PagingList<ProductCategory>>("ListData");
+    var listData = Model.GetModel<List<ProductCategory>>("ListData");
+    var listCategoryProduct = Model.GetModel<List<ProductCategory>>("ListCategoryProduct");
+    string txtKeyword = Model.GetModel<string>("txtKeyword");
+    int? pid = Model.GetModel<int?>("pid");
 }
 
 <section class="content-header">
@@ -40,80 +45,63 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form class="row" method="get">
-                            <div class="col-xs-12 col-sm-9">
-                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập tiêu đề" value="@listData.RouteValue["txtKeyword"]" />
+                        <form class="row m-b-15" method="get">
+                            <div class="col-xs-12 col-sm-6">
+                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập tiêu đề" value="@txtKeyword" />
                             </div>
-                        
-                            <div class="col-xs-12 col-sm-3">
+                            <div class="col-xs-12 col-sm-4">
+                                <select class="form-control form-control-sm input-sm select2" name="pid" asp-for="@pid">
+                                    <option value="">Tất cả</option>
+                                    @{
+                                        if (!listCategoryProduct.IsNullOrEmpty() && listCategoryProduct.Count > 0)
+                                        {
+                                            foreach (var item in listCategoryProduct)
+                                            {
+                                                <option value="@item.Id">@CmsFunction.BindNameParenChild(item.Name, item.Lvl)</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+
+                            </div>
+                            <div class="col-xs-12 col-sm-2">
                                 <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
                             </div>
                         </form>
-                        <div class="table-responsive tablePaddingTop">
-                            <table class="table tab-content table-bordered table-check-all table-hover table-bordered-index ">
-                                <thead class="table-thead">
-                                    <tr>
-                                        <th class="text-center" style="width: 45px">
-                                            <input type="checkbox" class="i-checks chkAll" />
-                                        </th>
-                                        <th class="text-center"  style="width: 45px">STT</th>
-                                        <th class="text-center">Ảnh</th>
-                                        <th  class=""   >Tên</th>
-                                        <th  class=""  >Tên ngắn</th>
-                                        <th  class="text-center" style="width: 45px" >Icon</th>
-                                        <th class="text-center" style="width: 220px"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                  @if (listData.Count > 0)
-                                  {
-                                      @foreach (var item in listData)
-                                     {
-                                         <tr>
-                                        <td class="text-center align-middle">
-                                            <input type="checkbox" class="i-checks chkItem" value="@item.Id" />
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            @(index++)
-                                        </td>
-                                         <td class="align-middle ">
-                                             <div class="m-b-sm text-center">
-                                                 @if (!string.IsNullOrEmpty(item.ImageBanner))
-                                                     {
-                                                          <img alt="image" src="@Html.Raw(item.ImageBanner)" width="50" height="50">
-                                                     }
-                                             </div>
-                                        </td>                                     
-                                        <td class="align-middle">
-                                            @(item.Name)
-                                        </td>
-                                  
-                                        <td class="align-middle">
-                                             @(item.NonName)
-                                        </td>
-                                        <td class="align-middle text-center">
-                                              @Html.Raw($"<i class=\"{item.Font}\"></i>")
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            @await Html.PartialAsync("Partial/BasicActionTable/View", new { id = @item.Id })
-                                            @await Html.PartialAsync("Partial/BasicActionTable/Edit", new { id = @item.Id })
-                                            @await Html.PartialAsync("Partial/BasicActionTable/Delete", new { id = @item.Id })
-                                            @await Html.PartialAsync("Partial/BasicActionTable/ViewCategoryProduct", new { id = @item.Id, permission = true })
-                                        </td>
-                                    </tr>
-                                     }
-                                  
-                                  }
-                                  else
-                                  {
-                                     <tr>
-                                            <td colspan="6" class="text-center">Không có dữ liệu</td>
-                                     </tr>
-                                  }
-                                </tbody>
-                            </table>
+                        <div class="row">
+                            <div class="col-md-12 table-check-all">
+                                <div class="row hear-category table-thead">
+                                    <div class="w-45-px text-center">
+                                        <input type="checkbox" class="i-checks chkAll"/>
+                                    </div>
+                                    <div class="col-md text-left">
+                                        Tên
+                                    </div>
+                                    <div class="col-md-2 text-left">
+                                        Tên ngắn
+                                    </div>
+                                    <div class="col-md-1 text-left">
+                                        Ảnh
+                                    </div>
+                                    <div class="text-left w-45-px">
+                                        Icon
+                                    </div>
+                                    <div class="w-200-px text-center"></div>
+                                </div>
+                                <div  class="row m-0 list-group-category" data-id="0">
+                                    @if (listData.Count > 0)
+                                    {
+                                        <partial name="item-category" model='new ItemCategoryViewModel() {ListCategory = listData, Pid = null}'/>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-12 text-center">
+                                            Không có dữ liệu
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
-                         @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData }) 
                     </div>
 
                 </div>
@@ -123,35 +111,15 @@
     </div>
 </section>
 
-@section Scripts
-{
-        <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
-        <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
-     <script type="text/javascript">
-                  $('.onoffswitch input[type="checkbox"]').bootstrapToggle({
-                      on: 'Hiện',
-                      off: 'Ẩn',
-                      size: 'mini',
-                      onstyle: "danger",
-                      offstyle: "secondary"
-                  });
-              </script>
-}
-
 @section Styles
 {
-      <style>
-              .btn-danger:not(:disabled):not(.disabled).active, .btn-danger:not(:disabled):not(.disabled):active, .show > .btn-danger.dropdown-toggle
-                    {
-                        color: #fff;
-                        background-color: #9e1d23; 
-                        border-color: #931b20;
-                        border-radius: 3px;
-                        
-                    }
-                 
-        </style>
-  
-     <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
-     
+    <link rel="stylesheet" href="~/css/ProductCategory/category.css"/>
+}
+
+@section Scripts
+{
+    <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/>
+    <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script>
+    <script type="text/javascript" src="~/lib/sortablejs/Sortable.min.js"></script>
+    <script type="text/javascript" src="~/js/ProductCategory/category.js"></script>
 }

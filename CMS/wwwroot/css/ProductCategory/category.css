@@ -1,0 +1,55 @@
+
+.category-item .info-category {
+    cursor: move;
+    padding: 8px 0 8px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.list-group-category .list-group-category {
+    padding-left: 2rem;
+}
+
+.hear-category {
+    /*    color: #495057;
+        background-color: #3498db;*/
+    /*border-color: #ffffff;*/
+    padding: 8px 0 8px 0;
+    margin: 0 !important;
+}
+.w-45-px{
+    width: 45px;
+}
+.w-150-px{
+    width: 150px
+}
+.w-200-px{
+    width: 200px
+}
+.hear-category div {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+}
+.highlight{
+    color: #212529;
+    background-color: rgba(0,0,0,.075);
+}
+.imgProduct{
+    width: 50px;
+    height: 50px;
+}
+.vetical_div{
+    position: relative !important; 
+}
+.vetical_div>.icheckbox_square-green{
+    transform: translateY(-50%);
+    top: 50%;
+}
+.vetical_text{
+    display: flex;
+    align-items: center;
+}
+.function>a ,.function>button{
+    margin-right: 4px;
+}
+

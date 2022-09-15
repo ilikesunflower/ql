@@ -25,6 +25,7 @@ public class EditModel
     public string ImageBannerMobile { get; set; }
     
     [Range(0, 99999999999, ErrorMessage = "Vui lòng nhập thứ tự lớn hơn 0.")]
-    public int? Ord { get; set; }
+    public int? Pid { get; set; }
+    public List<CMS_EF.Models.Products.ProductCategory> ListCategories { get; set; }
 
 }

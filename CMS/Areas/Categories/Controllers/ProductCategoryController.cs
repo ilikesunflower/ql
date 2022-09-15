@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Threading.Tasks;
 using Castle.Core.Internal;
 using CMS.Areas.Categories.Models.ProductCategory;
+using CMS.Areas.Categories.Services;
+using CMS.Areas.Products.Services;
 using CMS.Controllers;
 using CMS.Models.ModelContainner;
 using CMS_Access.Repositories.Categories;
 using CMS_Access.Repositories.Products;
+using CMS_EF.Models;
 using CMS_EF.Models.Products;
 using CMS_Lib.Extensions.Attribute;
 using CMS_Lib.Extensions.Claim;
@@ -28,16 +32,19 @@ public class ProductCategoryController : BaseController
 {
     private readonly ILogger _iLogger;
     private readonly IProductCategoryRepository _iProductCategoryRepository;
+    private readonly IProductCategoryService _iProductCategoryService;
     private readonly IProductCategoryProductRepository _iProductCategoryProductRepository;
-    public ProductCategoryController(ILogger<BannerController> iLogger, IProductCategoryRepository iProductCategoryRepository, IProductCategoryProductRepository iProductCategoryProductRepository)
+    public ProductCategoryController(ILogger<BannerController> iLogger, IProductCategoryRepository iProductCategoryRepository, IProductCategoryProductRepository iProductCategoryProductRepository,
+        IProductCategoryService iProductCategoryService)
     {
         _iLogger = iLogger;
         _iProductCategoryRepository = iProductCategoryRepository;
         _iProductCategoryProductRepository = iProductCategoryProductRepository;
+        _iProductCategoryService = iProductCategoryService;
     }
     // GET
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtKeyword, int? status, int pageindex = 1)
+    public  Task<IActionResult> Index(string txtKeyword, int? status, int? pid)
     {
         
         var query = _iProductCategoryRepository.FindAll();
@@ -45,16 +52,24 @@ public class ProductCategoryController : BaseController
         {
             query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%"));
         }
-
-        var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
-        listData.RouteValue = new RouteValueDictionary()
+        if (pid.HasValue)
         {
-            {"txtKeyword", txtKeyword},
-        };
-        ModelCollection model = new ModelCollection();
-        model.AddModel("ListData", listData);
-        model.AddModel("Page", pageindex);
-        return View(model);
+            var pData = _iProductCategoryRepository.FindById(pid.Value);
+            if (pData != null)
+            {
+                query = query.Where(x =>  x.Rgt.StartsWith(pData.Rgt) );
+            }
+        }
+        List<ProductCategory> listData = query.OrderBy(x => x.Lft).ToList();
+         
+        ModelCollection rs = new ModelCollection();
+        rs.AddModel("txtKeyword", txtKeyword);
+        rs.AddModel("pid", pid);
+        rs.AddModel("ListData", listData);
+        rs.AddModel("ListCategoryProduct",
+            _iProductCategoryRepository.GetListProductCategory());
+        ILoggingService.Infor(_iLogger, "Xem danh sách danh mục sản phẩm");
+        return Task.FromResult<IActionResult>(View(rs));
     }
     
     [HttpGet]
@@ -62,6 +77,7 @@ public class ProductCategoryController : BaseController
     public IActionResult Create()
     {
         var model = new CreateModel();
+        model.ListCategories = _iProductCategoryRepository.GetListProductCategory();
         return View(model);
     }
 
@@ -80,7 +96,7 @@ public class ProductCategoryController : BaseController
                 {
                     Name = createData.Name.Trim(),
                     Font = createData.Font,
-                    Ord = createData.Ord ?? 0,
+                    Pid = createData.Pid ,
                     ImageBanner = createData.ImageBanner,
                     NonName =CmsFunction.RemoveUnicode(createData.Name.Trim()),
                     LastModifiedAt = DateTime.Now,
@@ -95,7 +111,7 @@ public class ProductCategoryController : BaseController
                     return View(createData);
                 }
 
-                var res = _iProductCategoryRepository.Create(productCategory);
+                var res = _iProductCategoryService.InsertProductCategory(productCategory);
 
                 if (res != null)
                 {
@@ -112,7 +128,7 @@ public class ProductCategoryController : BaseController
             }
             ToastMessage(-1, "Thêm mới danh mục sản phẩm lỗi, liên hệ người quản trị");
         }
-
+        createData.ListCategories = _iProductCategoryRepository.GetListProductCategory();
         return View(createData);
     }
     
@@ -129,7 +145,8 @@ public class ProductCategoryController : BaseController
             Font = productCategory.Font,
             ImageBanner = productCategory.ImageBanner,
             ImageBannerMobile = productCategory.ImageBannerMobile,
-            Ord = productCategory.Ord
+            Pid = productCategory.Pid,
+            ListCategories = _iProductCategoryRepository.GetListProductCategory().Where(x => x.Id != id).ToList()
         };
         return View(model);
     }
@@ -152,7 +169,6 @@ public class ProductCategoryController : BaseController
                 producCategory.NonName =CmsFunction.RemoveUnicode(editData.Name.Trim());
                 producCategory.Font = editData.Font;
                 producCategory.ImageBanner = editData.ImageBanner;
-                producCategory.Ord = editData.Ord ?? 0;
                 producCategory.ImageBannerMobile = editData.ImageBannerMobile;
                 var check = _iProductCategoryRepository.FindAll().Where(x => x.NonName ==  producCategory.NonName && x.Id != producCategory.Id )
                     .FirstOrDefault();
@@ -161,8 +177,26 @@ public class ProductCategoryController : BaseController
                     ToastMessage(-1, "Tên danh mục sản phẩm đã tồn tại");
                     return View(editData);
                 }
-                _iProductCategoryRepository.Update(producCategory);
+
+                if (editData.Pid == producCategory.Pid)
+                {
+                    _iProductCategoryRepository.Update(producCategory);
+                }
+                else
+                {
+                    producCategory.Pid = editData.Pid;
+                    var rs = _iProductCategoryService.UpdateProductCategory(producCategory);
+                    if (rs == null)
+                    {
+                        ILoggingService.Error(this._iLogger, "Sửa danh mục sản phẩm lỗi: ");
+                        ToastMessage(-1, "Sửa danh mục sản phẩm lỗi, liên hệ người quản trị");
+                        editData.ListCategories = _iProductCategoryRepository.GetListProductCategory()
+                            .Where(x => x.Id != editData.Id).ToList();
+                        return View(editData);
+                    }
+                }
                 ILoggingService.Error(_iLogger, "Sửa danh mục sản phẩm thành công");
+                ToastMessage(1, "Sửa danh mục sản phẩm thành công");
                 return RedirectToAction(nameof(Details), new { id = editData.Id });
             }
             catch (Exception e)
@@ -171,7 +205,8 @@ public class ProductCategoryController : BaseController
             }
             ToastMessage(-1, "Sửa danh mục sản phẩm lỗi, liên hệ người quản trị");
         }
-
+        editData.ListCategories = _iProductCategoryRepository.GetListProductCategory()
+            .Where(x => x.Id != editData.Id).ToList();
         return View(editData);
     }
     
@@ -179,10 +214,43 @@ public class ProductCategoryController : BaseController
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Details(int id)
     {
-        var productCategory = _iProductCategoryRepository.FindById(id);
-        return View(productCategory);
+        ProductCategory productCategory = _iProductCategoryRepository.FindById(id);
+        DetailModel model = new DetailModel()
+        {
+            ProductCategory = productCategory,
+            Parent = _iProductCategoryRepository.FindAll().Where(x => x.Id == (productCategory.Pid ?? 0))
+                .Select(x => x.Name).FirstOrDefault()
+
+        };
+        return View(model);
     }
-        
+    [HttpPost]
+    // [ValidateAntiForgeryToken]
+    // [Authorize(Policy = "PermissionMVC")]
+    public JsonResult UpdateOrder(UpdateOrderViewModel form)
+    {
+        try
+        {
+            _iProductCategoryService.UpdateOrder(form.Ids,form.Parent);
+            ILoggingService.Infor(_iLogger, "Cập nhật trạng thái danh mục sản phẩm thành công");
+            ToastMessage(1,"Cập nhật vị trí danh mục sản phẩm thành công");
+            return Json(new
+            {
+                msg = "successful",
+                content = "Cập nhật vị trí danh mục sản phẩm thành công"
+            });
+        }
+        catch (Exception e)
+        {
+            ILoggingService.Error(_iLogger, "Cập nhật trạng thái danh mục sản phẩm lỗi", e.ToString(), e);
+            return Json(new
+            {
+                msg = "fail",
+                content = "Cập nhật vị trí danh mục sản phẩm lỗi: " + e
+            });
+        }
+    }
+
     [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult ViewCategoryProduct(int id,  int pageindex = 1)

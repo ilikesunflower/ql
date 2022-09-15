@@ -62,10 +62,18 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label class="col-md-3 col-xs-3">Thứ tự </label>
+                                            <label class="col-md-3 col-xs-3">Menu cha</label>
                                             <div class="col-md-9 col-xs-9">
-                                                <input type="number" asp-for="Ord" class="form-control form-control-xl"/>
-                                                <span asp-validation-for="Ord" class="text-danger"></span>
+                                                <select class="form-control   select2" asp-for="Pid">
+                                                    <option value="">#</option>
+                                                    @if (!Model.ListCategories.IsNullOrEmpty())
+                                                    {
+                                                        for (var i = 0; i < Model.ListCategories.Count; i++)
+                                                        {
+                                                            <option value="@Model.ListCategories[i].Id">@CmsFunction.BindNameParenChild(Model.ListCategories[i].Name, Model.ListCategories[i].Lvl)</option>
+                                                        }
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                     </div>
@@ -78,18 +86,18 @@
                                   <div class="col-md-12">
                                       <div class="card file-group">
                                             <div class="card-header">
-                                                        <h3 class="card-title">
-                                                            <i class="fa fa-picture-o" aria-hidden="true"></i>Ảnh  <span class="text-danger">*</span>
-                                                        </h3>
-                                                        <div class="card-tools">
-                                                            <a class="btn trigger-select-file btn-tool" title="Previous">
-                                                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                                            </a>
-                                                            <a class="btn trigger-remove-file btn-tool" title="Next">
-                                                                <i class="fa fa-times" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
+                                                <h3 class="card-title">
+                                                      <i class="fa fa-picture-o" aria-hidden="true"></i>Ảnh  <span class="text-danger">*</span>
+                                                </h3>
+                                                <div class="card-tools">
+                                                     <a class="btn trigger-select-file btn-tool" title="Previous">
+                                                         <i class="fa fa-upload" aria-hidden="true"></i>
+                                                     </a>
+                                                     <a class="btn trigger-remove-file btn-tool" title="Next">
+                                                         <i class="fa fa-times" aria-hidden="true"></i>
+                                                     </a>
+                                                </div>
+                                            </div>
                                             <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-lg-12">

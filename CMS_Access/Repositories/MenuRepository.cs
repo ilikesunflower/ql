@@ -117,7 +117,7 @@ namespace CMS_Access.Repositories
                     int index =  ApplicationDbContext.Menu.Count(w => w.Pid == menu.Pid && w.Flag == 0);
                     String pRgt = pMenu.Rgt+index ;
                     Menu insertMenu = menu;
-                    insertMenu.Lft = index;
+                    insertMenu.Lft = ApplicationDbContext.Menu.Where(w => w.Pid == menu.Pid && w.Flag == 0).Max(x => x.Lft) + 1;
                     insertMenu.Rgt = pRgt;
                     insertMenu.Lvl = pMenu.Lvl + 1;
                     insertMenu.CreatedAt = DateTime.Now;

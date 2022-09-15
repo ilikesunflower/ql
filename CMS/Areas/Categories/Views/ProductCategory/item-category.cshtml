@@ -1,0 +1,47 @@
+﻿@using CMS.Areas.Categories.Models
+@using CMS_EF.Models.Products
+@model CMS.Areas.Categories.Models.ItemCategoryViewModel
+
+@{
+    List<ProductCategory> listCategoryOfParent = Model.ListCategory.Where(item => item.Pid == Model.Pid).ToList();
+}
+@if (listCategoryOfParent.Count > 0)
+{
+    @foreach (ProductCategory item in listCategoryOfParent)
+    {
+        <div class="col-md-12 category-item " data-id="@item.Id" data-lvl="@item.Lvl">
+            <div class="row info-category">
+                <div class="w-45-px text-center vetical_div ">
+                    <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                </div>
+                <div class="col-md text-left  vetical_text  @($"category-level-{item.Lvl}")  ">
+                    @(item.Name)
+                </div>
+                <div class="col-md-2 text-left vetical_text ">
+                    @(item.NonName)
+                </div>
+                <div class="col-md-1 text-left ">
+                    <div class="imgProduct">
+                        @if (!string.IsNullOrEmpty(item.ImageBanner))
+                        {
+                            <img alt="image" src="@Html.Raw(item.ImageBanner)" width="100%" height="100%">
+                        }
+                    </div>
+                </div>
+          
+                <div class=" text-left w-45-px vetical_text ">
+                       @Html.Raw($"<i class=\"{item.Font}\"></i>")
+                </div>
+                <div class="w-200-px text-center vetical_text  function">
+                    @await Html.PartialAsync("Partial/BasicActionTable/View", new {id = item.Id})
+                    @await Html.PartialAsync("Partial/BasicActionTable/Edit", new {id = item.Id})
+                    @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = item.Id})
+                    @await Html.PartialAsync("Partial/BasicActionTable/ViewCategoryProduct", new {id = item.Id, permission = true})
+                </div>
+            </div>
+            <div class="row list-group-category" data-id="@item.Id" data-lvl="@item.Lvl">
+                <partial name="item-category" model='new ItemCategoryViewModel {ListCategory = Model.ListCategory, Pid = item.Id}'/>
+            </div>
+        </div>
+    }
+}

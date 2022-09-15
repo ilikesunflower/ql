@@ -12,6 +12,7 @@ public interface IProductCategoryRepository : IBaseRepository<ProductCategory>, 
 {
      List<ProductCategory> GetListCategory(int productId);
      IQueryable<ProductCategoryValue> GetListProductOrder(int idCategoryValue);
+     List<ProductCategory> GetListProductCategory();
 
 }
 public class ProductCategoryRepository : BaseRepository<ProductCategory>, IProductCategoryRepository
@@ -53,6 +54,12 @@ public class ProductCategoryRepository : BaseRepository<ProductCategory>, IProdu
             });
         return data;
     }
+
+    public List<ProductCategory> GetListProductCategory()
+    {
+        return  ApplicationDbContext.ProductCategory.Where(x => x.Pid != 0 && x.Flag == 0).OrderBy(x => x.Rgt).ToList();
+    }
+
 }
 
 public class ProductCategoryValue
