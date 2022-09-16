@@ -30,30 +30,38 @@ public class GhnService : IGhnService
     private readonly IHttpContextService _iHttpContextService;
     private readonly IShipGhnRepository _iShipGhnRepository;
     private ShipGhn? _shipGhn;
-    private Dictionary<string, string> headers;
+    private Dictionary<string, string> _headers;
 
     public GhnService(ILogger<GhnService> iLogger,
         IHttpContextService iHttpContextService, IShipGhnRepository iShipGhnRepository)
     {
+        IShipGhnRepository iShipGhnRepository1;
         this._iLogger = iLogger;
         this._iHttpContextService = iHttpContextService;
         this._iShipGhnRepository = iShipGhnRepository;
         this._shipGhn = this._iShipGhnRepository.FindByStatus();
-
-        headers = new Dictionary<string, string>()
+        if (this._shipGhn != null)
         {
-            // {"Content-Type", "application/json"},
-            { "token", this._shipGhn!.Token }
-        };
+            _headers = new Dictionary<string, string>()
+            {
+                // {"Content-Type", "application/json"},
+                { "token", this._shipGhn!.Token }
+            };
+        }
     }
 
     public Account? GetInfo(int id)
     {
         try
         {
+            if (this._shipGhn == null)
+            {
+                return null;
+            }
+
             string url = $"{this._shipGhn?.PrefixApi}/v2/shop/all";
             var response = this._iHttpContextService
-                .GetJsonAsync(new HttpClient(), url, headers).Result;
+                .GetJsonAsync(new HttpClient(), url, _headers).Result;
             response.EnsureSuccessStatusCode();
             if (response.StatusCode == HttpStatusCode.OK)
             {
@@ -89,7 +97,8 @@ public class GhnService : IGhnService
         {
             List<CalculateFee> data = new List<CalculateFee>();
             // var express = CalculateFeeType(TypeShipConst.Express, toDistrictId, toWardCode, weight, insuranceValue, coupon);
-            var standard = CalculateFeeType(TypeShipConst.Standard, toDistrictId, toWardCode, weight, insuranceValue, coupon);
+            var standard = CalculateFeeType(TypeShipConst.Standard, toDistrictId, toWardCode, weight, insuranceValue,
+                coupon);
             // if (express != null)
             // {
             //     data.Add(express);
@@ -115,6 +124,11 @@ public class GhnService : IGhnService
     {
         try
         {
+            if (this._shipGhn == null)
+            {
+                return null;
+            }
+
             string url = $"{this._shipGhn?.PrefixApi}/v2/shipping-order/fee";
             var response = this._iHttpContextService
                 .PostJsonAsync(new HttpClient(), url, new
@@ -125,7 +139,7 @@ public class GhnService : IGhnService
                     to_district_id = toDistrictId,
                     to_ward_code = toWardCode,
                     weight = weight,
-                }, headers).Result;
+                }, _headers).Result;
             if (response.IsSuccessStatusCode)
             {
                 response.EnsureSuccessStatusCode();
@@ -143,7 +157,7 @@ public class GhnService : IGhnService
                             TypeService = typeServiceId,
                         };
                     }
-                }   
+                }
             }
             else
             {
@@ -154,7 +168,7 @@ public class GhnService : IGhnService
         catch (Exception ex)
         {
             // ignored
-            this._iLogger.LogError(ex,"Tính toán phí vận chuyển lỗi");
+            this._iLogger.LogError(ex, "Tính toán phí vận chuyển lỗi");
         }
 
         return null;
@@ -164,6 +178,16 @@ public class GhnService : IGhnService
     {
         try
         {
+            if (this._shipGhn == null)
+            {
+                return new CreateOrderOutPut()
+                {
+                    OrderCode = string.Empty,
+                    ExpectedDeliveryTime = string.Empty,
+                    Err = string.Empty
+                };
+            }
+
             string url = $"{this._shipGhn?.PrefixApi}/v2/shipping-order/create";
             var param = new
             {
@@ -184,7 +208,7 @@ public class GhnService : IGhnService
                 items = createdOrder.ListItem
             };
             var response = this._iHttpContextService
-                .PostJsonAsync(new HttpClient(), url, param, headers).Result;
+                .PostJsonAsync(new HttpClient(), url, param, _headers).Result;
             if (response.IsSuccessStatusCode)
             {
                 response.EnsureSuccessStatusCode();
@@ -204,6 +228,7 @@ public class GhnService : IGhnService
                         };
                         return rs;
                     }
+
                     return null;
                 }
             }
@@ -212,7 +237,7 @@ public class GhnService : IGhnService
                 string res = response.Content.ReadAsStringAsync().Result;
                 var json = JObject.Parse(res);
                 string message = $"{json["message"]}";
-                this._iLogger.LogError( $"Tạo đơn hàng cho GHN lỗi: {createdOrder.OrderCode}: lỗi: {res}");
+                this._iLogger.LogError($"Tạo đơn hàng cho GHN lỗi: {createdOrder.OrderCode}: lỗi: {res}");
                 return new CreateOrderOutPut()
                 {
                     OrderCode = string.Empty,
@@ -231,20 +256,25 @@ public class GhnService : IGhnService
             OrderCode = string.Empty,
             ExpectedDeliveryTime = string.Empty,
             Err = string.Empty
-        };;
+        };
     }
 
     public int CancelOrder(string orderCode)
     {
         try
         {
+            if (this._shipGhn == null)
+            {
+                return 0;
+            }
+
             List<string> lisOrder = new List<string>() { orderCode };
             string url = $"{this._shipGhn!.PrefixApi}/v2/switch-status/cancel";
             var response = this._iHttpContextService
                 .PostJsonAsync(new HttpClient(), url, new
                 {
                     order_codes = lisOrder
-                }, headers).Result;
+                }, _headers).Result;
             if (response.IsSuccessStatusCode)
             {
                 response.EnsureSuccessStatusCode();
@@ -253,7 +283,7 @@ public class GhnService : IGhnService
                     string res = response.Content.ReadAsStringAsync().Result;
                     var json = JObject.Parse(res);
                     return 1;
-                }   
+                }
             }
             else
             {
@@ -264,7 +294,7 @@ public class GhnService : IGhnService
         }
         catch (Exception ex)
         {
-            this._iLogger.LogError(ex,"");
+            this._iLogger.LogError(ex, "");
         }
 
         return 0;

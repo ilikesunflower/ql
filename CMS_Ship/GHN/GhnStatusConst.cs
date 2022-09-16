@@ -3,6 +3,7 @@
 public class GhnStatusConst
 {
     public static string ShipSuccess = "delivered";
+
     public static Dictionary<string, string> ListStatus = new Dictionary<string, string>()
     {
         { "ready_to_pick", "Đơn hàng vận chuyển vừa được tạo" },
