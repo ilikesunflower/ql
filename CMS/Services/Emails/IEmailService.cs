@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using CMS_Lib.DI;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using MimeKit;
+using Newtonsoft.Json;
 
 namespace CMS.Services.Emails;
 
@@ -36,35 +36,44 @@ public class EmailService : IEmailService
 
     public void SendEmailAsync(Message message)
     {
-        var mailMessage = CreateEmailMessage(message);
-         SendAsync(mailMessage, message);
+        try
+        {
+            var mailMessage = CreateEmailMessage(message);
+            SendAsync(mailMessage, message);
+        }
+        catch
+        {
+            // ignored
+        }
     }
 
     private MimeMessage CreateEmailMessage(Message message)
     {
         var emailMessage = new MimeMessage();
-        emailMessage.From.Add(new MailboxAddress("Hệ thống Prugift.vn", _emailConfig.FromEmail));
+        emailMessage.From.Add(new MailboxAddress("Hệ thống Dai-ichi Life Gift Center", _emailConfig.FromEmail));
         emailMessage.To.AddRange(message.To);
         emailMessage.Subject = message.Subject;
         var bodyBuilder = new BodyBuilder { HtmlBody = message.Content };
         emailMessage.Body = bodyBuilder.ToMessageBody();
         return emailMessage;
     }
-
+    
+    
     private void SendAsync(MimeMessage mailMessage, Message message)
     {
         using var client = new SmtpClient();
         try
         {
             client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, SecureSocketOptions.StartTls);
-            // client.AuthenticationMechanisms.Remove("XOAUTH");
+            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+            client.AuthenticationMechanisms.Remove("XOAUTH");
             client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
             client.Send(mailMessage);
             _iLogger.LogInformation($"Gửi email đến {message.To} thành công: {mailMessage.Subject}");
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            this._iLogger.LogError(ex,"Send email err");
+            this._iLogger.LogError(ex, $"Send email err: {JsonConvert.SerializeObject(message)}");
             //log an error message or throw an exception, or both.
         }
         finally
