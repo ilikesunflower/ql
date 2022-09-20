@@ -5,6 +5,7 @@ using CMS_Lib.Util;
 using CMS_Ship.Consts;
 using CMS_Ship.GHN.Webhook.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace CMS_Ship.GHN.Webhook;
 
@@ -19,7 +20,8 @@ public class TrackingService : ITrackingService
     private readonly IOrderPartnerShipLogRepository _iOrderPartnerShipLogRepository;
     private readonly IOrdersRepository _iOrdersRepository;
 
-    public TrackingService(ILogger<TrackingService> iLogger, IOrderPartnerShipLogRepository iOrderPartnerShipLogRepository, IOrdersRepository iOrdersRepository)
+    public TrackingService(ILogger<TrackingService> iLogger,
+        IOrderPartnerShipLogRepository iOrderPartnerShipLogRepository, IOrdersRepository iOrdersRepository)
     {
         _iLogger = iLogger;
         _iOrderPartnerShipLogRepository = iOrderPartnerShipLogRepository;
@@ -30,12 +32,14 @@ public class TrackingService : ITrackingService
     {
         try
         {
-            if (!string.IsNullOrEmpty(o.ClientOrderCode) && !string.IsNullOrEmpty(o.OrderCode) && o.ClientOrderCode.ToUpper().StartsWith(TypeShipConst.PrefixOrder.ToUpper()))
+            if (!string.IsNullOrEmpty(o.ClientOrderCode) && !string.IsNullOrEmpty(o.OrderCode) &&
+                o.ClientOrderCode.ToUpper().Trim().StartsWith(TypeShipConst.PrefixOrder.ToUpper()))
             {
-                string? orderCode = o.ClientOrderCode.ToUpper().Replace(TypeShipConst.PrefixOrder.ToUpper(), "");
+                string? orderCode = o.ClientOrderCode.ToUpper().Trim().Replace(TypeShipConst.PrefixOrder.ToUpper(), "");
                 if (!string.IsNullOrEmpty(orderCode))
                 {
-                    KeyValuePair<string,string>? content = GhnStatusConst.ListStatus.FirstOrDefault(x => x.Key == o.Status);
+                    KeyValuePair<string, string>? content =
+                        GhnStatusConst.ListStatus.FirstOrDefault(x => x.Key == o.Status);
                     if (content.HasValue)
                     {
                         OrderPartnerShipLog rs = new OrderPartnerShipLog()
@@ -60,16 +64,20 @@ public class TrackingService : ITrackingService
                                 {
                                     order.StatusPayment = 1;
                                 }
-                                _iLogger.LogInformation($"Đối tác GHN xác nhận hoàn thành đơn hàng {order.Code}");
+
+                                _iLogger.LogInformation(
+                                    $"Đối tác GHN xác nhận hoàn thành đơn hàng {o.ClientOrderCode} | mã ship {o.OrderCode}");
                                 this._iOrdersRepository.Update(order);
                                 // notification
                                 return order;
-                            }else if (order is { Status: 4 } && order.Status != 5)
+                            }
+                            else if (order is { Status: 4 } && order.Status != 5)
                             {
                                 if (!string.IsNullOrEmpty(o.CODTransferDate))
                                 {
                                     order.StatusPayment = 1;
-                                    _iLogger.LogInformation($"Đối tác GHN xác nhận hoàn thành đơn hàng và gửi COD {order.Code}");
+                                    _iLogger.LogInformation(
+                                        $"Đối tác GHN xác nhận hoàn thành đơn hàng {o.ClientOrderCode} | mã ship {o.OrderCode} và gửi COD {o.CODTransferDate}");
                                     this._iOrdersRepository.Update(order);
                                 }
                             }
@@ -78,12 +86,21 @@ public class TrackingService : ITrackingService
                         return null;
                     }
                 }
+
+                this._iLogger.LogInformation(
+                    $"Tracking đơn hàng {o.ClientOrderCode} | mã ship {o.OrderCode} | status {o.Status}");
+            }
+            else
+            {
+                this._iLogger.LogWarning(
+                    $"Tracking đơn hàng Đơn hàng {o.ClientOrderCode} mã ship {o.OrderCode} không tồn tại");
             }
         }
         catch (Exception ex)
         {
-            this._iLogger.LogError(ex,"GHN tracking");
+            this._iLogger.LogError(ex, $"GHN tracking: {JsonConvert.SerializeObject(o)}");
         }
+
         return null;
     }
 }

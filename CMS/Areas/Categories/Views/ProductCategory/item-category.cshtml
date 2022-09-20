@@ -32,7 +32,7 @@
                 <div class=" text-left w-45-px vetical_text ">
                        @Html.Raw($"<i class=\"{item.Font}\"></i>")
                 </div>
-                <div class="w-200-px text-center vetical_text  function">
+                <div class="w-230-px text-center vetical_text  function">
                     @await Html.PartialAsync("Partial/BasicActionTable/View", new {id = item.Id})
                     @await Html.PartialAsync("Partial/BasicActionTable/Edit", new {id = item.Id})
                     @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = item.Id})

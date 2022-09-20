@@ -21,97 +21,47 @@
     <link rel="stylesheet" href="~/js/Plugins/iCheck/custom.css"/>
 </head>
 
-<body class="page-login">
-<header class="header-login">
-    <div class="row no-gutters">
-        <div class="offset-lg-1 col-lg-10 col-md-12 col-sm-12">
-            <div class="row no-gutters">
-                <div class="col d-block box-img-logo">
-                    <img src="~/images/logo_login.png" width="192" height="65" alt="login"/>
-                </div>
-                <div class="col-auto d-none d-sm-block d-md-block box-info" >
-                    <div class="row no-gutters d-flex flex-row justify-content-center align-items-center">
-                        <div class="col">
-                            <div class="text-white box-info-icon rounded-circle d-flex justify-content-center align-items-center">
-                                <span class="fa-solid fa-headset"></span>
-                            </div>
-                        </div>
-                        <div class="col-auto pl-2">
-                            <span class="box-info-text-1">Hotline</span><br/>
-                            <span class="box-info-text-2">0886 991 247</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-auto d-none d-sm-block d-md-block ml-5 box-info">
-                    <div class="row no-gutters d-flex flex-row justify-content-center align-items-center">
-                        <div class="col">
-                            <div class="text-white box-info-icon rounded-circle d-flex justify-content-center align-items-center">
-                                <span class="fa-solid fa-envelope-open-text"></span>
-                            </div>
-                        </div>
-                        <div class="col-auto pl-2">
-                            <span class="box-info-text-1">Liên hệ</span><br/>
-                            <span class="box-info-text-2">Tư vấn trực tiếp</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<body class="login-page">
+<div class="login-box">
+    <div class="card card-outline card-danger">
+        <div class="card-header text-center">
+            <a href="#" class="h1"><b>Dai-ichi</b>&nbsp;Life</a>
         </div>
+        <div class="card-body">
+            <p class="login-box-msg font-bold">Hệ thống quản trị</p>
+            <form method="post">
+                <div class="form-group">
+                    <input class="form-control" asp-for="Input.UserName" id="username" type="text" placeholder="Nhập tài khoản">
+                    <span asp-validation-for="Input.UserName" class="text-danger font-size-12"></span>
+                </div>
+                <div class="form-group">
+                    <div style="position: relative">
+                        <input class="form-control" asp-for="Input.Password" type="password" placeholder="Nhập mật khẩu">
+                        <span toggle="#Input_Password" class="fa fa-fw fa-eye field-icon toggle-password positionEye"></span>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="text-danger font-size-12"></span>
+                </div>
+                <div class="row">
+                    <div class="checkbox col-6 text-left">
+                        <div class="icheck-primary">
+                            <input asp-for="Input.RememberMe"/>
+                            <label asp-for="Input.RememberMe">
+                                Lưu tài khoản
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        @* <a href="#" class="fontNOR">Quên mật khẩu</a> *@
+                    </div>
+                </div>
+                <div class="social-auth-links text-center mt-2 mb-3">
+                    <button type="submit" class="btn btn-block btn-danger">Đăng nhập</button>
+                </div>
+            </form>
+        </div>
+
     </div>
-</header>
-<main class="row no-gutters pt-5">
-    <form method="post" class="offset-lg-4 col-lg-4 offset-xl-4 col-xl-4 offset-md-3 col-md-6 col-sm-12 p-3">
-        <h6 class="text-center text-uppercase text-bold">Đăng nhập</h6>
-        <h4 class="text-center text-uppercase text-bold mb-4">trang quản trị PruGift</h4>
-        <div class="text-left paddingP">
-            <label for="username" class="input-label-text">Tài khoản</label>
-            <div class="col row inputForm">
-                <div class="col-auto noP">
-                    <button class="btn btn-outline-light text-dark border-0  mr-n5" type="button">
-                        <i class="fa fa-user btn-color-icon"></i>
-                    </button>
-                </div>
-                <div class="col noP ">
-                    <input class="form-control border-default rounded-pill pl-5 " asp-for="Input.UserName" id="username" type="text" placeholder="Nhập tài khoản">
-                </div>
-
-            </div>
-            <span asp-validation-for="Input.UserName" class="text-danger span1"></span>
-        </div>
-        <div class="text-left paddingB ">
-            <label for="password" class="input-label-text">Mật khẩu</label>
-            <div class="col row inputForm">
-                <div class="col-auto noP">
-                    <button class="btn btn-outline-light text-dark border-0  mr-n5" type="button">
-                        <i class="fa fa-lock btn-color-icon"></i>
-                    </button>
-                </div>
-                <div class="col noP ">
-                    <input class="form-control border-default rounded-pill pl-5 pr-5" asp-for="Input.Password" type="password" placeholder="Nhập mật khẩu">
-                </div>
-                <div class="col-auto noP">
-                    <span toggle="#Input_Password" class="fa fa-fw fa-eye field-icon toggle-password positionEye ml-n5"></span><br/>
-                </div>
-
-            </div>
-            <span asp-validation-for="Input.Password" class="text-danger span1"></span>
-        </div>
-        <div class="row paddingP ">
-            <div class="checkbox col-6 text-left">
-                <label asp-for="Input.RememberMe">
-                    <input asp-for="Input.RememberMe"/><span class="textF"> Lưu tài khoản</span>
-                </label>
-                &nbsp;
-            </div>
-            <div class="col-6 text-right">
-                @* <a href="#" class="fontNOR">Quên mật khẩu</a> *@
-            </div>
-        </div>
-        <div class="text-center paddingP">
-            <button type="submit" class="btn  btn-block full-width m-b font-btn ">Đăng nhập</button>
-        </div>
-    </form>
-</main>
+</div>
 </body>
 <script type="text/javascript" src="~/theme/admin-lte/plugins/jquery/jquery.min.js"></script>
 <script type="text/javascript" src="~/theme/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>

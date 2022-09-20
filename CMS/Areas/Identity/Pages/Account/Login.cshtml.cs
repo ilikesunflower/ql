@@ -98,13 +98,13 @@ namespace CMS.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         var user = _signInManager.UserManager.Users.FirstOrDefault(x => x.UserName == Input.UserName && x.Flag == 0);
-                        // if (user != null && user.IsActive != 1)
-                        // {
-                        //     await this._signInManager.SignOutAsync();
-                        //     _logger.LogWarning($"Tài khoản {Input.UserName} chưa được kích hoạt");
-                        //     ModelState.AddModelError("Input.Password", "Tài khoản chưa được kích hoạt");
-                        //     return Page();
-                        // }
+                        if (user != null && user.IsActive != 1)
+                        {
+                            await this._signInManager.SignOutAsync();
+                            _logger.LogWarning($"Tài khoản {Input.UserName} chưa được kích hoạt");
+                            ModelState.AddModelError("Input.Password", "Tài khoản chưa được kích hoạt");
+                            return Page();
+                        }
                         _logger.LogInformation($"Tài khoản {user.UserName} đăng nhập thành công.");
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(user).Result, new AuthenticationProperties { IsPersistent = true });
                         return LocalRedirect(returnUrl);
