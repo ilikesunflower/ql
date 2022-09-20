@@ -7,6 +7,8 @@ import MainView from "./detailProduct/MainView"
 import Coupon from "./modelCoupon/Coupon"
 import {formatNumber} from '../../../common/app';
 import NumberFormat from "react-number-format";
+
+import Customer from "../../components/customer/MainView"
 import Address from "./address/Address"
 import Shipment from "./shipment/Shipment"
 import Payment from "./payment/Payment"
@@ -19,22 +21,12 @@ function MainApp(props) {
             {(state.showModelDetailProduct) && <MainView setCheckDeleteProduct={method.setCheckDeleteProduct} showModelDetailProduct={state.showModelDetailProduct} setShowModelDetailProduct={method.setShowModelDetailProduct} setListProductSelect={method.setListProductSelect} listProductSelect={state.listProductSelect} setListProductPropertiesSelect={method.setListProductSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
             {(state.showModalCoupon) && <Coupon showModalCoupon={state.showModalCoupon} handShowModalCoupon={method.handShowModalCoupon} listCoupon={state.listCoupon} formik={formik} />}
             <Col md={12}>
-                <Card>
-                    <Form >
-                        <Card.Header >
-                            <span className="card-title namePageText2 ">Tạo đơn hàng</span>
-                        </Card.Header>
-                        <Card.Body  className="row">
-                            <Form.Group className="col-md-12 pt-3">
-                                <Form.Label className="form-check-label">Chọn khách hàng  <span className="text-danger">*</span> </Form.Label>
-                                <Select2ComponentNew defaultValue={state.customer} onChange={method.handleChangeSelectCustomer} name="customer" className=" rounded-0 col-md-12 col-sm-12 pr-0" options={state.listCustomer} selectKey={"id"} selectText={"fullName"} />
-                            </Form.Group>
-                       
-                            
-                        </Card.Body>
-                    </Form>
-                </Card>
-               
+               <Customer method={{
+                   setCustomer: method.setCustomer,
+                   setCustomerSelect: method.setCustomerSelect
+               }} state={{
+                   customer: state.customer
+               }} formik={formik}/>
                <Card>
                     <Form >
                             <Card.Header >
@@ -227,7 +219,7 @@ function MainApp(props) {
                                 }
                             </Card.Body>
                         </Form>
-                    </Card>
+               </Card>
               
                 <Address formik={formik} />
                 <div className="row">

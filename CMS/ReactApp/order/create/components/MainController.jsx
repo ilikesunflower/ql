@@ -423,7 +423,10 @@ function MainController(props) {
             applyDiscountCode,
             handleChangeSelectCustomer,
             setCheckDeleteProduct,
-            handShowModalCoupon
+            handShowModalCoupon,
+            setCustomer,
+            setCustomerSelect
+            
         } };
   
 }
