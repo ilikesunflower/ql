@@ -1347,6 +1347,7 @@ namespace CMS.Areas.Products.Controllers
                                 p.ProductProperties,
                                 p.ProductSimilar,
                                 p.Lead,
+                                p.Image,
                                 showPrice = showPrice,
                                 p.Id,
                                 p.Sku,

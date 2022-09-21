@@ -414,7 +414,7 @@ function MainController(props) {
             handleChangeSelect,
             handShowDetailProduct,
             setListProductSelect,
-            setShowModelDetailProduct,
+            setProductCartSelect,
             changeQuantityBuy, 
             clickQuantityBuy,
             deleteProductSelect,

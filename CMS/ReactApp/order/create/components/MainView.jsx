@@ -3,7 +3,7 @@ import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 import Select from 'react-select'
 import MainController from "./MainController";
 import Select2ComponentNew from "../../../components/Select2ComponentNew";
-import MainView from "./detailProduct/MainView"
+import DetailProduct from "../../components/detailProduct/MainView"
 import Coupon from "./modelCoupon/Coupon"
 import {formatNumber} from '../../../common/app';
 import NumberFormat from "react-number-format";
@@ -16,9 +16,10 @@ import BillInfo from "./billInfo/BillInfo"
 import {isPoi} from "../../../common/app"
 function MainApp(props) {
     const {state, method, formik} = MainController();
+    console.log(state.productCartSelect)
     return (
         <Row>
-            {(state.showModelDetailProduct) && <MainView setCheckDeleteProduct={method.setCheckDeleteProduct} showModelDetailProduct={state.showModelDetailProduct} setShowModelDetailProduct={method.setShowModelDetailProduct} setListProductSelect={method.setListProductSelect} listProductSelect={state.listProductSelect} setListProductPropertiesSelect={method.setListProductSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
+            {(state.showModelDetailProduct) && <DetailProduct showModelDetailProduct={state.showModelDetailProduct} productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
             {(state.showModalCoupon) && <Coupon showModalCoupon={state.showModalCoupon} handShowModalCoupon={method.handShowModalCoupon} listCoupon={state.listCoupon} formik={formik} />}
             <Col md={12}>
                <Customer method={{

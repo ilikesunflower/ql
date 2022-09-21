@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {formatNumber} from '../../../common/app';
 import {getListProduct} from "./httpService"
 function MainController(props) {
-    const {} = props;
+    const {setProductSelect, productCartSelect, setProductCartSelect} = props;
     let [listProduct, setListProduct] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function MainController(props) {
     const handleChangeSelect = (event) => {
         setProductSelect(event.value)
     };
-    return {method:{handleChangeSelect }, state: {listProduct, }};
+    return {method:{handleChangeSelect }, state: {listProduct, productCartSelect }};
 }
 
 export default MainController;

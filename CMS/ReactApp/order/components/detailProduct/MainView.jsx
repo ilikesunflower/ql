@@ -1,5 +1,5 @@
 import React from 'react';
-import {formatNumber} from '../../../../common/app';
+import {formatNumber} from '../../../common/app';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 
 import MainController from "./MainController";
@@ -24,7 +24,7 @@ function MainView(props) {
                                         listV.length > 0 && listV.map((itemV, j) => {
                                             return (
                                             <div key={itemV.nonValue} className="product-item" >
-                                                  <input type="radio"   id={"p_"+itemV.id} name={item.id} value={itemV.id} onChange={method.selectProperties} />
+                                                  <input type="radio"   id={"p_"+itemV.id} name={item.id} name_id={item.name} name_value={itemV.value} value={itemV.id} onChange={method.selectProperties} />
                                                  <label  htmlFor={"p_"+itemV.id}>{itemV.value}</label>
                                             </div>
                                             );

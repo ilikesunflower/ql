@@ -3,7 +3,7 @@ import {formatNumber} from '../../../common/app';
 import {getDetailProduct} from "./httpService"
 
 function MainController(props) {
-    const {id, listProductSelect, setListProductSelect, setShowModelDetailProduct, setCheckDeleteProduct} = props;
+    const {id, productCartSelect, setProductCartSelect, handShowDetailProduct} = props;
     const [product, setProduct] = useState({});
     const [quantityKW, setQuantityKW] = useState(0);
     const [price, setPrice] = useState(0);
@@ -16,9 +16,10 @@ function MainController(props) {
         getDetailProduct({id: id}, (rs) => {
             setProduct(rs);
             setQuantityKW(rs.quantityKW);
-            setPrice(rs.priceSale);
+            setPrice(0);
             if ( rs.productProperties.length == 0 && rs.productSimilar.length == 1 ){
                 setProductSimilarSelect(rs.productSimilar[0].id);
+                setPrice(rs.productSimilar[0].price);
             }
         });
     }, []);
@@ -46,30 +47,44 @@ function MainController(props) {
         },
         saveCart: async (e) => {
             if ( method.isValid() ){
-                let check = listProductSelect.findIndex(x => x.productId == id && x.productSimilarId == productSimilarSelect);
+                let check = productCartSelect.findIndex(x => x.productId == id && x.productSimilarId == productSimilarSelect);
                 if (check > -1 ){
                     setErr("Sản phẩm và loại sản phẩm này đã tồn tại");
 
                 }else{
+                    let  listProperties = [];
+                    listProductPropertiesSelect.forEach(x => {
+                        listProperties.push({
+                            propertiesName: x.nameId,
+                            propertiesValueName : x.nameValue
+                        })
+                    })
+                    console.log(product)
                     let param = {
                         productId :  id,
                         productSimilarId :  productSimilarSelect,
-                        quantity :  quantityBuy,
+                        nameProduct: product.name,
+                        image: product.image,
+                        listProperties: listProperties,
+                        quantityWH :  quantityKW,
+                        quantityBy :  quantityBuy,
+                        price: price,
+                        
                     };
-                    setCheckDeleteProduct(false)
-                    let data = [...listProductSelect, param];
-                    setListProductSelect(data);
-                    setShowModelDetailProduct(false);
+                    let data = [...productCartSelect, param];
+                    setProductCartSelect(data);
+                    handShowDetailProduct();
                 }
             }
             },
         selectProperties: async (e) => {
             let listProductSimilar = product?.productSimilar ?? [];
             let listProductProperties= product?.productProperties ?? [];
-            
             let obj = {
                 id: e.currentTarget.name,
-                value: e.currentTarget.value
+                value: e.currentTarget.value,
+                nameId: e.target.attributes.getNamedItem('name_id').value,
+                nameValue:e.target.attributes.getNamedItem('name_value').value
             }
             let checkIndex = listProductPropertiesSelect.findIndex(x => x.id == obj.id);
             if ( checkIndex > -1 ) {
@@ -90,7 +105,7 @@ function MainController(props) {
                 })
                 if ( index > -1 ){
                     let productSimilar = listProductSimilar[index];
-                    setPrice(formatNumber(productSimilar?.price));
+                    setPrice(productSimilar?.price);
                     setQuantityKW(productSimilar?.quantityWh);
                     setProductSimilarSelect(productSimilar?.id);
                 }else{
@@ -111,7 +126,6 @@ function MainController(props) {
             }
         },
         clickQuantityBuy: (type) => {
-            console.log("clickQuantityBuy",quantityKW)
             if ( method.isValid(true) ){
                 if ( type == 1 ){
                     let q = quantityBuy - 1;

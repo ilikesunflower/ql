@@ -4,9 +4,10 @@ import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 
 import NumberFormat from "react-number-format";
 import Select2ComponentNew from "../../../components/Select2ComponentNew";
-
+import MainController from "./MainController";
 function MainView(props) {
-    let {state,method } = props;
+    let {handShowDetailProduct} = props;
+    let {state,method } = MainController(props) ;
     return (
         <Card>
             <Form >
@@ -19,7 +20,7 @@ function MainView(props) {
                         <div className="input-group row  m-0">
                             <Select2ComponentNew defaultValue={state.productSelect} onChange={method.handleChangeSelect} name="productSelect" className=" rounded-0 col-md-10 col-sm-9 " placeholder="Chọn sản phẩm" options={state.listProduct} selectKey={"id"} selectText={"name"} />
                             <span className="input-group-append  col-md-2 col-sm-3   pr-0">
-                                 <button type="button" className="btn btn-default btn-xl buttonFont col-12 " onClick={method.handShowDetailProduct} >
+                                 <button type="button" className="btn btn-default btn-xl buttonFont col-12 " onClick={handShowDetailProduct} >
                                        <i className="far fa-plus" ></i>
                                  </button>
                             </span>
