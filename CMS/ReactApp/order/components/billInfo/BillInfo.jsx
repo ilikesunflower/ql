@@ -3,17 +3,16 @@ import {Card, Form} from "react-bootstrap";
 import {InputField} from "../../../components/formikField"
 
 function BillInfo(props) {
-    let {formik, state, method} = props;
+    let {customerSelect, formik} = props;
     return (
         <>
             <Card>
                 <Card.Header>
-                    <span
-                        className="card-title namePageText2 ">  {state.customerSelect?.type == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn"} </span>
+                    <span className="card-title namePageText2 ">  {customerSelect?.type == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn"} </span>
                 </Card.Header>
                 <Card.Body className="row">
                     {
-                        state.customerSelect?.type == 2 ?
+                        customerSelect?.type == 2 ?
                             <>
                                 <Form.Group className="col-md-6 pt-3">
                                     <Form.Label className="form-check-label">Số PR <span

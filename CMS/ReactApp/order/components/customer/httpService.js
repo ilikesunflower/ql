@@ -14,3 +14,18 @@ export const getListCustomer  = ( callback) => {
         })
 
 }
+
+export const getAddressCustomerDefault  = (param, callback) => {
+    http.get("/Orders/Order/GetAddressCustomerDefault", {params: param})
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content);
+            } else {
+                console.error("GetAddressCustomerDefault:" + response.msg)
+            }
+        })
+        .catch(e => {
+            console.log(e)
+        })
+
+}

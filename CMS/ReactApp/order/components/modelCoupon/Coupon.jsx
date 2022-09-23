@@ -1,7 +1,7 @@
 import React , {useState, useEffect}from 'react';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 
-import {formatNumber, formatDateEndCoupon} from "../../../../common/app"
+import {formatNumber, formatDateEndCoupon} from "../../../common/app"
 
 function Coupon(props) {
     let {formik, showModalCoupon, handShowModalCoupon, listCoupon} = props

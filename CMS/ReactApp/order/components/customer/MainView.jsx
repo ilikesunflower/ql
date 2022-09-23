@@ -1,7 +1,7 @@
 import React , {useEffect, useState}from 'react';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 import Select2ComponentNew from "../../../components/Select2ComponentNew";
-import {getListCustomer} from "./httpService";
+import {getListCustomer, getAddressCustomerDefault} from "./httpService";
 
 function MainView(props) {
     const {method, state , formik } = props;
@@ -11,7 +11,23 @@ function MainView(props) {
             console.log(rs);
             setListCustomer(rs);
         })
+      
     }, [])
+    useEffect(function () {
+        if(state.customer != 0){
+            getAddressCustomerDefault({customerId : state.customer}, function (rs) {
+                formik.setFieldValue("provinceCode", rs?.provinceCode || '');
+                formik.setFieldValue("districtCode", rs?.districtCode || '');
+                formik.setFieldValue("communeCode", rs?.communeCode || '');
+                formik.setFieldValue("address", rs?.address || '');
+                formik.setFieldValue("name", rs?.name || '');
+                formik.setFieldValue("email", rs?.email || '');
+                formik.setFieldValue("phone", rs?.phone || '');
+                formik.setFieldValue("couponDiscount", 0)
+                formik.setFieldValue("couponCode",  '')
+            })
+        }
+    }, [state.customer])
     const handleChangeSelectCustomer = (event) => {
         method.setCustomer(event.value)
         let selecC = listCustomer.find(x => x.id == event.value);

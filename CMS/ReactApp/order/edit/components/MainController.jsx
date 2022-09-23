@@ -165,18 +165,6 @@ function MainController(props) {
                 formik.setFieldValue("prFile", rs?.prFile || null )
                 formik.setFieldValue("totalWeight", rs?.totalWeight || 0 )
                 setPoint(rs?.point)
-                if(Array.isArray(rs.orderProduct) && rs.orderProduct.length > 0){
-                  let productS =    rs.orderProduct.map(x =>  {
-                        return {
-                            productId :  x.productId,
-                            productSimilarId :  x.productSimilarId,
-                            quantity :  x.quantity,
-                            price : x.price
-                        };
-                    })
-                    setListProductSelect(productS);
- 
-                };
                 getCustomer({id: rs?.customerId}, function (rs) {
                     setCustomerSelect(rs) ;
                     if(rs?.type == 2 ){
@@ -187,12 +175,7 @@ function MainController(props) {
                 getListOrderEdit({id: id}, function (rs) {
                     setProductCartSelect(rs);
                 })
-                checkGetPointCustomer({customerId : rs?.customerId},function (response) {
-                    setCustomerPoint(response || 0)
-                })
-                getListCustomerCoupon({customerId : rs?.customerId, orderId :id },function (response) {
-                   setListCoupon(response);
-                })
+           
             })
             getPointOldCustomer({orderId: id}, function (rs) {
                 console.log(rs);

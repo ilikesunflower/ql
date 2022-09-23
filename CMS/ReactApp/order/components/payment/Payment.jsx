@@ -1,9 +1,5 @@
 import React , {useState, useEffect}from 'react';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
-import {InputField, TextareaField} from "../../../../components/formikField"
-import SelectNew from "../../../../components/SelectNew"
-import NumberFormat from "react-number-format";
-import {formatNumber } from "../../../../common/app"
 
 function Payment(props) {
     let {formik, customerSelect} = props
