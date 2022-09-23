@@ -187,9 +187,12 @@ namespace CMS_App_Api.Services.Orders
                     foreach (OrderProduct orderProduct in orders.OrderProduct)
                     {
                         var productSimilar = productSimilars.FirstOrDefault(x => x.Id ==  orderProduct.ProductSimilarId );
-                        productSimilar!.QuantityWh +=  orderProduct.Quantity;
-                        productSimilar!.QuantityUse = Math.Max(0, (productSimilar!.QuantityUse ?? 0) - (orderProduct.Quantity ?? 0));
-                        productSimilarsChange.Add(productSimilar);
+                        if (productSimilar != null)
+                        {
+                            productSimilar!.QuantityWh +=  orderProduct.Quantity;
+                            productSimilar!.QuantityUse = Math.Max(0, (productSimilar!.QuantityUse ?? 0) - (orderProduct.Quantity ?? 0));
+                            productSimilarsChange.Add(productSimilar);   
+                        }
                     }
                     _productServices.ChangeRange(productSimilarsChange);
                 }
