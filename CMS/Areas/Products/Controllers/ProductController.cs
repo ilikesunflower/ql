@@ -11,6 +11,7 @@ using CMS.Areas.Products.Const;
 using CMS_EF.Models.Products;
 using CMS.Areas.Products.Models.Product;
 using CMS.Areas.Products.Services;
+using CMS.Models;
 using CMS.Models.ModelContainner;
 using CMS.Services.Files;
 using CMS.Services.Loggings;
@@ -598,7 +599,7 @@ namespace CMS.Areas.Products.Controllers
                     {
                         ProductSimilar proS = new ProductSimilar()
                         {
-                            Skuwh = createData.CodeStock,
+                            Skuwh = createData.CodeStock == null ? createData.Sku :  createData.CodeStock ,
                             QuantityWh = createData.QuantityStock,
                             ProductId = product.Id,
                             LastModifiedAt = DateTime.Now,
@@ -654,7 +655,6 @@ namespace CMS.Areas.Products.Controllers
         [ClaimRequirement(CmsClaimType.AreaControllerAction, "Products@ProductController@Edit")]
         public IActionResult SaveProductEdit([FromForm] EditProductModel editData)
         {
-            using var transaction = _applicationDbContext.Database.BeginTransaction();
             try
             {
                 if (ModelState.IsValid)
@@ -672,340 +672,32 @@ namespace CMS.Areas.Products.Controllers
                         });
                     }
 
-                    var image = _iFileService.SavingFile(editData.Image, "upload/product");
-                    var product = _iProductRepository.FindById(editData.Id);
-                    product.Sku = editData.Sku;
-                    product.Name = editData.Name.Trim();
-                    product.Weight = editData.Weight;
-                    // product.Price = editData.Price;
-                    product.PriceSale = editData.PriceSale;
-                    product.Description = editData.Description == null
-                        ? null
-                        : HtmlAgilityPackService.DeleteBase64(editData.Description);
-                    product.Specifications = editData.Specifications == null
-                        ? null
-                        : HtmlAgilityPackService.DeleteBase64(editData.Specifications);
-                    product.Lead = editData.Lead == null ? null : HtmlAgilityPackService.DeleteBase64(editData.Lead);
-                    product.ProductPurposeId = editData.ProductPurposeId;
-                    product.Unit = editData.Unit;
-                    if (editData.Image != null)
+                    ResultJson rs = _iProductService.SaveProductEdit(editData, UserInfo.UserId);
+                    if (rs.StatusCode == 200)
                     {
-                        product.Image = image;
-                    }
+                        ToastMessage(1, $"Sửa sản phẩm thành công !");
+                        ILoggingService.Infor(this._iLogger, "Chỉnh sửa sản phẩm thành công", "id:" + editData.Id);
 
-                    product.IsHot = editData.IsHot;
-                    product.IsBestSale = editData.IsBestSale;
-                    product.IsNew = editData.IsNew;
-                    product.IsPromotion = editData.IsPromotion;
-                    
-                    product.ProductSex = editData.ProductSex;
-                    product.ProductAge = editData.ProductAge;
-                    int statusNotApproved = ProductCensorshipConst.NotApproved.Status;
-                    int statusPending = ProductCensorshipConst.Pending.Status;
-                    if (product.Org1Status == statusNotApproved)
-                    {
-                        product.Org1Status = statusPending;
-                    }
-
-                    if (product.Org2Status == statusNotApproved)
-                    {
-                        product.Org2Status = statusPending;
-                    }
-
-                    if (product.Org3Status == statusNotApproved)
-                    {
-                        product.Org3Status = statusPending;
-                    }
-
-                    _iProductRepository.Update(product);
-                    if (editData.ProductCategory != null)
-                    {
-                        var listProductCateOld = _iProductCategoryProductRepository.FindAll()
-                            .Where(x => x.ProductId == editData.Id).Select(x => x.Id).ToList();
-                        _iProductCategoryProductRepository.DeleteAll(listProductCateOld);
-                        foreach (var item in editData.ProductCategory)
+                        return Json(new
                         {
-                            var productCate = new ProductCategoryProduct()
-                            {
-                                ProductId = product.Id,
-                                PcategoryId = item
-                            };
-                            _iProductCategoryProductRepository.Create(productCate);
-                        }
-                    }
-
-                    if (editData.ImageList == null || editData.ImageList.Count == 0)
-                    {
-                        var listIOld = _iProductImageRepository.FindAll().Where(x => x.ProductId == editData.Id)
-                            .ToList();
-                        _iProductImageRepository.DeleteAll(listIOld);
+                            code = 200,
+                            msg = "successful",
+                            id = editData.Id
+                        });
                     }
                     else
                     {
-                        var listIOld = _iProductImageRepository.FindAll().Where(x =>
-                                x.ProductId == editData.Id && !editData.ImageList.Contains(x.Link))
-                            .ToList();
-                        _iProductImageRepository.DeleteAll(listIOld);
+                        ToastMessage(-1, $"Sửa sản phẩm thành lỗi !");
+                        ILoggingService.Error(this._iLogger, "Chỉnh sửa sản phẩm lỗi", "id:" + editData.Id);
+
+                        return Json(new
+                        {
+                            code = 404,
+                            msg = "fail",
+                            content = rs.Err
+                        });
                     }
-
-                    if (editData.Images != null)
-                    {
-                        foreach (var item in editData.Images)
-                        {
-                            var file = _iFileService.SavingFile(item, "upload/product");
-                            var productI = new ProductImage()
-                            {
-                                ProductId = product.Id,
-                                Link = file
-                            };
-                            _iProductImageRepository.Create(productI);
-                        }
-                    }
-
-
-                    if (editData.ListName != null && editData.ListName.Count > 0)
-                    {
-                        if (!editData.CheckEdit)
-                        {
-                            var prS = _iProductSimilarRepository.FindAll().Where(x => x.ProductId == editData.Id)
-                                .ToList();
-                            for (int i = 0; i < editData.ListName.Count; i++)
-                            {
-                                var pr = prS.Where(x => x.Name == editData.ListName[i]).FirstOrDefault();
-                                if (pr != null)
-                                {
-                                    pr.QuantityWh = editData.ListQuantity[i];
-                                    pr.Price = editData.ListPrice[i];
-                                    pr.Skuwh = editData.ListSkuMh[i];
-                                    _iProductSimilarRepository.Update(pr);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            var prsOld = _iProductSimilarRepository.FindAll().Where(x => x.ProductId == editData.Id)
-                                .Select(x => x.Id)
-                                .ToList();
-                            var prSSOld = _iProductSimilarPropertyRepository.FindAll()
-                                .Where(x => prsOld.Contains(x.ProductSimilarId.Value)).Select(x => x.Id).ToList();
-                            var proValue = _iProductPropertiesValueRepository.FindAll()
-                                .Where(x => x.ProductId == editData.Id)
-                                .Select(x => x.Id).ToList();
-                            var propertise = _iProductPropertiesRepository.FindAll()
-                                .Where(x => x.ProductId == editData.Id).Select(x => x.Id).ToList();
-
-                            _iProductSimilarRepository.DeleteAll(prsOld);
-                            _iProductSimilarPropertyRepository.DeleteAll(prSSOld);
-                            _iProductPropertiesValueRepository.DeleteAll(proValue);
-                            _iProductPropertiesRepository.DeleteAll(propertise);
-                            List<int> listP1 = new List<int>();
-                            List<int> listP2 = new List<int>();
-                            List<int> listP3 = new List<int>();
-                            List<int> listPS = new List<int>();
-                            List<ProductSimilar> listS = new List<ProductSimilar>();
-                            if (!string.IsNullOrEmpty(editData.Name1))
-                            {
-                                ProductProperties productProperties = new ProductProperties()
-                                {
-                                    ProductId = product.Id,
-                                    Name = editData.Name1,
-                                    NonName = CmsFunction.RemoveUnicode(editData.Name1),
-                                    LastModifiedAt = DateTime.Now,
-                                    LastModifiedBy = UserInfo.UserId
-                                };
-                                _iProductPropertiesRepository.Create(productProperties);
-                                foreach (var item in editData.Properties1)
-                                {
-                                    ProductPropertieValue productPropertieValue = new ProductPropertieValue()
-                                    {
-                                        ProductId = product.Id,
-                                        ProductPropertiesId = productProperties.Id,
-                                        Value = item,
-                                        NonValue = CmsFunction.RemoveUnicode(item),
-                                        LastModifiedAt = DateTime.Now,
-                                        LastModifiedBy = UserInfo.UserId
-                                    };
-                                    _iProductPropertiesValueRepository.Create(productPropertieValue);
-                                    listP1.Add(productPropertieValue.Id);
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(editData.Name2))
-                            {
-                                ProductProperties productProperties = new ProductProperties()
-                                {
-                                    ProductId = product.Id,
-                                    Name = editData.Name2,
-                                    NonName = CmsFunction.RemoveUnicode(editData.Name2),
-                                    LastModifiedAt = DateTime.Now,
-                                    LastModifiedBy = UserInfo.UserId
-                                };
-                                _iProductPropertiesRepository.Create(productProperties);
-                                foreach (var item in editData.Properties2)
-                                {
-                                    ProductPropertieValue productPropertieValue = new ProductPropertieValue()
-                                    {
-                                        ProductId = product.Id,
-                                        ProductPropertiesId = productProperties.Id,
-                                        Value = item,
-                                        NonValue = CmsFunction.RemoveUnicode(item),
-                                        LastModifiedAt = DateTime.Now,
-                                        LastModifiedBy = UserInfo.UserId
-                                    };
-                                    _iProductPropertiesValueRepository.Create(productPropertieValue);
-                                    listP2.Add(productPropertieValue.Id);
-                                }
-                            }
-
-                            if (!string.IsNullOrEmpty(editData.Name3))
-                            {
-                                ProductProperties productProperties = new ProductProperties()
-                                {
-                                    ProductId = product.Id,
-                                    Name = editData.Name3,
-                                    NonName = CmsFunction.RemoveUnicode(editData.Name3),
-                                    LastModifiedAt = DateTime.Now,
-                                    LastModifiedBy = UserInfo.UserId
-                                };
-                                _iProductPropertiesRepository.Create(productProperties);
-                                foreach (var item in editData.Properties3)
-                                {
-                                    ProductPropertieValue productPropertieValue = new ProductPropertieValue()
-                                    {
-                                        ProductId = product.Id,
-                                        ProductPropertiesId = productProperties.Id,
-                                        Value = item,
-                                        NonValue = CmsFunction.RemoveUnicode(item),
-                                        LastModifiedAt = DateTime.Now,
-                                        LastModifiedBy = UserInfo.UserId
-                                    };
-                                    _iProductPropertiesValueRepository.Create(productPropertieValue);
-                                    listP3.Add(productPropertieValue.Id);
-                                }
-                            }
-
-                            for (int i = 0; i < editData.ListName.Count; i++)
-                            {
-                                ProductSimilar productSimilar = new ProductSimilar()
-                                {
-                                    Name = editData.ListName[i],
-                                    Skuwh =
-                                        editData.ListSkuMh[i] == null ? $"{editData.Sku}{i}" : editData.ListSkuMh[i],
-                                    QuantityWh = editData.ListQuantity[i],
-                                    ProductId = product.Id,
-                                    Price = editData.ListPrice[i],
-                                    LastModifiedAt = DateTime.Now
-                                };
-                                _iProductSimilarRepository.Create(productSimilar);
-                                listS.Add(productSimilar);
-                                listPS.Add(productSimilar.Id);
-                            }
-
-                            List<List<int>> lisTT = new List<List<int>>();
-
-                            foreach (var it1 in listP1)
-                            {
-                                if (listP2.Count == 0)
-                                {
-                                    var check1 = new List<int>() {it1};
-                                    lisTT.Add(check1);
-                                }
-
-                                foreach (var it2 in listP2)
-                                {
-                                    if (listP3.Count == 0)
-                                    {
-                                        var check1 = new List<int>() {it1, it2};
-                                        lisTT.Add(check1);
-                                    }
-
-                                    foreach (var it3 in listP3)
-                                    {
-                                        var check1 = new List<int>() {it1, it2, it3};
-                                        lisTT.Add(check1);
-                                    }
-                                }
-                            }
-
-                            if (listPS.Count != lisTT.Count)
-                            {
-                                return Json(new
-                                {
-                                    code = 404,
-                                    msg = "lỗi nặng",
-                                });
-                            }
-
-                            for (int i = 0; i < lisTT.Count; i++)
-                            {
-                                foreach (var item in lisTT[i])
-                                {
-                                    ProductSimilarProperty productSimilarProperty = new ProductSimilarProperty()
-                                    {
-                                        ProductSimilarId = listPS[i],
-                                        ProductPropertiesValueId = item,
-                                        LastModifiedAt = DateTime.Now,
-                                        LastModifiedBy = UserInfo.UserId
-                                    };
-                                    _iProductSimilarPropertyRepository.Create(productSimilarProperty);
-                                }
-
-                                ProductSimilar val = listS[i];
-                                string stringIdProperties = string.Join(",", lisTT[i]);
-                                val.ProductPropertiesValue = stringIdProperties;
-                                _iProductSimilarRepository.Update(val);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        var prsOld = _iProductSimilarRepository.DeleteSimilarProperTy(editData.Id).Select(x => x.Id)
-                            .ToList();
-                        var prSSOld = _iProductSimilarPropertyRepository.FindAll()
-                            .Where(x => prsOld.Contains(x.ProductSimilarId.Value)).Select(x => x.Id).ToList();
-                        var proValue = _iProductPropertiesValueRepository.FindAll()
-                            .Where(x => x.ProductId == editData.Id)
-                            .Select(x => x.Id).ToList();
-                        var propertise = _iProductPropertiesRepository.FindAll()
-                            .Where(x => x.ProductId == editData.Id).Select(x => x.Id).ToList();
-
-                        _iProductSimilarRepository.DeleteAll(prsOld);
-                        _iProductSimilarPropertyRepository.DeleteAll(prSSOld);
-                        _iProductPropertiesValueRepository.DeleteAll(proValue);
-                        _iProductPropertiesRepository.DeleteAll(propertise);
-                        var prS = _iProductSimilarRepository.FindAll().Where(x => x.ProductId == editData.Id)
-                            .FirstOrDefault();
-                        if (prS != null)
-                        {
-                            prS.Skuwh = editData.CodeStock;
-                            prS.QuantityWh = editData.QuantityStock;
-                            prS.Price = editData.Price;
-                            _iProductSimilarRepository.Update(prS);
-                        }
-                        else
-                        {
-                            ProductSimilar proS = new ProductSimilar()
-                            {
-                                Skuwh = editData.CodeStock,
-                                QuantityWh = editData.QuantityStock,
-                                ProductId = product.Id,
-                                LastModifiedAt = DateTime.Now,
-                                Price = editData.Price
-                            };
-                            _iProductSimilarRepository.Create(proS);
-                        }
-                    }
-
-                    transaction.Commit();
-                    ToastMessage(1, $"Sửa sản phẩm thành công !");
-                    ILoggingService.Infor(this._iLogger, "Chỉnh sửa sản phẩm thành công", "id:" + editData.Id);
-
-                    return Json(new
-                    {
-                        code = 200,
-                        msg = "successful",
-                        id = product.Id
-                    });
+                  
                 }
                 else
                 {
@@ -1023,7 +715,6 @@ namespace CMS.Areas.Products.Controllers
             }
             catch (Exception ex)
             {
-                transaction.Rollback();
                 ToastMessage(-1, $"Sửa sản phẩm thành lỗi !");
                 ILoggingService.Error(this._iLogger, "Chỉnh sửa sản phẩm lỗi", "id:" + editData.Id, ex);
                 return Json(new

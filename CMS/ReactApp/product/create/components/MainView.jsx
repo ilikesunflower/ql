@@ -27,6 +27,8 @@ const optionsSex = [
 const withValueLimit = ({ floatValue }) => floatValue <= 999999999;
 function MainApp(props) {
     const {formik, state, method} = MainController();
+    let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
+    let meta1 = formik.formikProduct.getFieldMeta("codeStock")
     return (
         <Row>
             <Col md={12}>
@@ -115,6 +117,9 @@ function MainApp(props) {
                                                            <Card className="">
                                                                <Card.Header style={{fontSize:"18px"}}>
                                                                    Thông tin bán hàng
+                                                                   {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+                                                                   {meta1.touched && meta1.error ? (<span className="text-danger">{meta1.error}</span>) : null}
+
                                                                </Card.Header>
                                                                <Card.Body>
                                                                    <div className="row  d-flex justify-content-center">
@@ -150,8 +155,8 @@ function MainApp(props) {
                                                                                           
                                                                                        </div>
                                                                                        <div className="row pb-3" >
-                                                                                           <Form.Label className="col-md-2  ">Mã kho hàng</Form.Label>
-                                                                                           <InputField className="form-control-xl form-control col-md-8 "   formik={formik.formikProduct} name="codeStock" />
+                                                                                           <Form.Label className="col-md-2  ">Mã kho hàng <span className="text-danger">*</span></Form.Label>
+                                                                                           <InputField err={false} className="form-control-xl form-control col-md-8  pl-2 "   formik={formik.formikProduct} name="codeStock" />
 
                                                                                        </div>
                                                                                        <div className="row">
@@ -168,6 +173,7 @@ function MainApp(props) {
                                                                                    <Form.Label className="col-12  " style={{fontSize:"18px"}}>Danh sách phân loại hàng </Form.Label>
 
                                                                                    <Col md={12}>
+                                                                                       {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
                                                                                        <div className="table-responsive">
                                                                                            <Table className=" table-bordered " >
                                                                                                <thead>
@@ -361,23 +367,6 @@ const ModalCategory = props => {
 
 const Properties = props => {
     const {hand11, hand1, listProperties, deleteT , addDetailProperties, deleteDetailProperties} = props;
-    // let [listValue, setListValue] = useState([]);
-    // useEffect(() => {
-    //     setListValue(listProperties);
-    // },[listProperties] )
-    // const changeNameValue = function (e, index) {
-    //     let data = [...listValue];
-    //     data[index].name = e.target.value.trim();
-    //     setListValue(data);
-    //    
-    // }
-    // const changeDetail = function (e, index, index1) {
-    //     let data = [...listValue];
-    //     data[index].properties[index1] = e.target.value.trim();
-    //     setListValue(data);
-    //
-    // }
-    //
     return(
         <div className="col-12 pb-3"  >
             {listProperties.map((value , index) => {

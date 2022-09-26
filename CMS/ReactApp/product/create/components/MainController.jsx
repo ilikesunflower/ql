@@ -249,6 +249,7 @@ function MainController(props) {
     const onClickImage = function () {
         $(refImage.current).click();
     }
+
     const formikProduct = useFormik({
         initialValues: {
             sku : '',
@@ -278,7 +279,9 @@ function MainController(props) {
             properties2: [],
             properties3: [],
             quantityStock: 0,
-            codeStock: ''
+            codeStock: '',
+            checkExitSku:''
+            
         },
         validationSchema: Yup.object().shape({
             sku: Yup.string().required("Vui lòng nhập mã hàng").validHtml().maxLength(255),
@@ -292,8 +295,25 @@ function MainController(props) {
             weight: Yup.number().min(1, "Cân nặng phải lớn hơn 1"),
             productCategory: Yup.array().requiredArray("Vui lòng nhập danh mục sản phẩm"),
             quantityStock: Yup.number().lessThan(999999999,"Giá trị tồn kho phải nhỏ hơn 999.999.999"),
+            codeStock: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
+                let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+                return checkList.length > 0 ||   (value != null && value != "");
+            } ),
+            checkExitSku: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
+                let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+                if(checkList.length == 0){
+                    return  true
+                } 
+                let checkSku = listProperProduct.filter(x => x.skuMh == "");
+                return  checkSku.length == 0;
+               
+            } ),
         }),
         onSubmit: (values, {resetForm}) => {
+            let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+            if(checkList.length == 0){
+                setListProperties([]);
+            }
             Swal.fire({
                 title: 'Bạn muốn lưu sản phẩm ?',
                 type: 'warning',
@@ -468,6 +488,7 @@ function MainController(props) {
             setShowDeletePurpose,
             clickElement, 
             deletePurpose
+            
         } };
 }
 export default MainController;

@@ -9,6 +9,9 @@ public class BannerConst
     {
         {1 , "slide"},
         {2 , "popupHome"},
+        {3 , "adsArticle"},
+        {4 , "adsHomeLeft"},
+        {5 , "adsArticle"},
     };
 
     public static string GetNameListStatus(int key)

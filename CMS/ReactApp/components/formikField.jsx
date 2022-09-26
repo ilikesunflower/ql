@@ -215,16 +215,17 @@ export const NumberFormatFieldAfter = function (props) {
     );
 }
 export const InputField = function (props) {
-    let { formik, name, type, className } = props;
+    let { formik, name, type, className , err} = props;
     let meta = formik.getFieldMeta(name);
     let prop = formik.getFieldProps(name);
+    let checkErr = err || true;
     const handChange = function (e) {
         formik.setFieldValue(name, e.target.value.trimStart());
     }
     return (
         <>
             <input type={type || 'text'} {...prop}  onChange={handChange} className={"form-control" + (className || '')}/>
-            {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+            {meta.touched && meta.error  && !checkErr ? (<span className="text-danger" >{meta.error}</span>) : null}
         </>
     );
 }
