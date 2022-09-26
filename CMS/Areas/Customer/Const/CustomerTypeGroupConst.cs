@@ -7,7 +7,9 @@ public class CustomerTypeGroupConst
 {
     public static int Staff = 1;
     public static string StaffText = "Staff";
+    
     public static int PhongBan = 2;
+    
     public static int GA = 3;
     public static string GAText = "GA";
     
