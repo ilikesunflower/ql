@@ -85,7 +85,7 @@ function MainController(props) {
                     sima.forEach((obj, i) => {
                         let val = {
                             name:  obj.name,
-                            skuMh: obj.skuwh,
+                            skuMh: obj.skuwh || '',
                             price: obj.price,
                             quantity: obj.quantityWh
                         }
@@ -106,28 +106,34 @@ function MainController(props) {
 
     }, []);
     useEffect(function () {
+        console.log("change setListProperProduct ", listProperties)
         let data = [];
+        let product = {...listProperProduct};
         let dataC = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0) || [];
+        console.log(dataC, checkEditPro)
+        
         if(checkEditPro){
             if(Array.isArray(dataC) && dataC.length > 0){
                 let count = dataC.length;
                 if(count == 1){
                     let  valueP = fitterTrimArrayString(dataC[0].properties);
-                    valueP.forEach(obj => {
+                    valueP.forEach((obj, index) => {
                         let dataP = {
                             name:  obj,
-                            skuMh: '',
+                            skuMh: product[index]?.skuMh || '',
                             price: 0,
                             quantity: 0
                         }
                         data.push(dataP)
                     })
                 }else if(count > 1){
+                    
                     let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
-                    valueP.forEach(obj => {
+                    console.log(valueP)
+                    valueP.forEach((obj, index) => {
                         let dataP = {
                             name:  obj,
-                            skuMh: '',
+                            skuMh:  product[index]?.skuMh || '',
                             price: 0,
                             quantity: 0
                         }
@@ -252,7 +258,6 @@ function MainController(props) {
     }
     const handFormProperties1 = function (e, index){
         setCheckEditPro(true);
-
         let value =  e.target.value.trim();
         let data =[...listProperties] ;
         let check = data.findIndex(x => x.name == value && x.name != '');
@@ -266,6 +271,7 @@ function MainController(props) {
         }
     }
     const handFormProperties11 = function (e, index, index1){
+        setCheckEditPro(true);
         let value = e.target.value.trim();
         let data = [...listProperties];
         let check = data[index].properties.findIndex(x => x == value);
@@ -278,6 +284,7 @@ function MainController(props) {
             data[index].properties[index1] = value;
             setListProperties(data);
         }
+        console.log(listProperties)
     }
     const deleteDetailProperties = function ( index, index1) {
         setCheckEditPro(true);
@@ -356,7 +363,8 @@ function MainController(props) {
             properties2: [],
             properties3: [],
             quantityStock: 0,
-            codeStock: ''
+            codeStock: '',
+            checkExitSku: ''
         },
         validationSchema: Yup.object().shape({
             sku: Yup.string().required("Vui lòng nhập mã hàng").validHtml().maxLength(255),
@@ -370,7 +378,22 @@ function MainController(props) {
             productAge: Yup.number().min(0, "Vui lòng độ tuổi").lessThan(100,"Độ tuổi phải nhỏ hơn 100"),
             productCategory: Yup.array().requiredArray("Vui lòng nhập danh mục sản phẩm"),
             quantityStock: Yup.number().lessThan(999999999,"Giá trị tồn kho phải nhỏ hơn 999.999.999"),
+            codeStock: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
+                let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+                return checkList.length > 0 ||   (value != null && value != "");
+            } ),
+            checkExitSku: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
+                let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+                console.log("checkList",checkList)
 
+                if(checkList.length == 0){
+                    return  true
+                }
+                let checkSku = listProperProduct.filter(x => x.skuMh == "");
+                console.log("checkSku", checkSku)
+                return  checkSku.length == 0;
+
+            } ),
         }),
         onSubmit: (values, {resetForm}) => {
             Swal.fire({
@@ -405,7 +428,6 @@ function MainController(props) {
                     formData.append("QuantityStock",values.quantityStock);
                     formData.append("CodeStock",values.codeStock);
                     formData.append("CheckEdit",checkEditPro);
-                    formData.append("CheckEdit",checkEditPro);
                     if(Array.isArray(listFileSave) && listFileSave.length > 0){
                         listFileSave.forEach(obj => {
                             formData.append("Images",obj);
@@ -434,7 +456,7 @@ function MainController(props) {
                     }
                     if(Array.isArray(listProperProduct) && listProperProduct.length > 0){
                         listProperProduct.forEach(obj => {
-                            formData.append("ListSkuMh",obj.skuMh);
+                            formData.append("ListSkuMh",obj.skuMh || '');
                             formData.append("ListName",obj.name);
                             formData.append("ListPrice",obj.price);
                             formData.append("ListQuantity",obj.quantity);

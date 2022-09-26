@@ -30,6 +30,8 @@ const withValueLimit = ({ floatValue }) => floatValue <= 999999999;
 
 function MainApp(props) {
     const {formik, state, method} = MainController();
+    let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
+    let meta1 = formik.formikProduct.getFieldMeta("codeStock")
     return (
         <Row>
             <Col md={12}>
@@ -135,6 +137,11 @@ function MainApp(props) {
                                                                    Thông tin bán hàng
                                                                </Card.Header>
                                                                <Card.Body>
+                                                                   <div className="text-center">
+                                                                       {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+                                                                       {meta1.touched && meta1.error ? (<span className="text-danger">{meta1.error}</span>) : null}  
+                                                                   </div>
+
                                                                    <div className="row  d-flex justify-content-center">
                                                                         {
                                                                             (state.listProperties.length > 0) 
@@ -168,8 +175,8 @@ function MainApp(props) {
                                                                                           
                                                                                        </div>
                                                                                        <div className="row pb-3" >
-                                                                                           <Form.Label className="col-md-2  ">Mã kho hàng</Form.Label>
-                                                                                           <InputField className="form-control-xl form-control col-md-8 "   formik={formik.formikProduct} name="codeStock" />
+                                                                                           <Form.Label className="col-md-2  ">Mã kho hàng <span className="text-danger">*</span></Form.Label>
+                                                                                           <InputField err={false} className="form-control-xl form-control col-md-8 "   formik={formik.formikProduct} name="codeStock" />
 
                                                                                        </div>
                                                                                        <div className="row">
@@ -198,10 +205,11 @@ function MainApp(props) {
                                                                                                </thead>
                                                                                                <tbody>
                                                                                                {state.listProperProduct.map((item, i)=> {
+                                                                                                   console.log("view",state.listProperProduct )
                                                                                                    return (
                                                                                                        <tr key={i}>
                                                                                                            <td className="">{item.name}</td>
-                                                                                                           <td><input defaultValue={item.skuMh} type='text'  onBlur={(e) => method.handSkuMh(e, i)}  className="form-control-xl form-control " name="skuMh"/></td>
+                                                                                                           <td><input defaultValue={item.skuMh || ''} type='text'  onBlur={(e) => method.handSkuMh(e, i)}  className="form-control-xl form-control " name="skuMh"/></td>
                                                                                                            <td>
                                                                                                                <NumberFormat  className="form-control form-control-xl  " thousandSeparator={'.'} decimalSeparator={','} name="price" autoComplete="off" {...props}
                                                                                                                               value={!Number.isNaN(Number.parseInt(item.price)) ? Number.parseInt(item.price) : 0} onValueChange={(e) => method.handPrice(e,i)}/>
