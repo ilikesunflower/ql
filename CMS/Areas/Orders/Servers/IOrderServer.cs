@@ -94,7 +94,8 @@ public class OrderServer : IOrderServer
                     };
                     properties.Add(check);
             }
-                rs.Add(new ProductCartModel()
+
+                var pc = new ProductCartModel()
                 {
                     ProductId = item.Product.Id,
                     Image = item.Product.Image,
@@ -102,11 +103,20 @@ public class OrderServer : IOrderServer
                     ProductSimilarId = item.ProductSimilarId!.Value,
                     QuantityWH = similar != null ? similar.QuantityWh : 0,
                     Price = item.Price,
+                    PriceNew = similar != null ? similar.Price : 0,
                     QuantityBy = item.Quantity!.Value,
+                    QuantityByOld = item.Quantity!.Value,
                     ListProperties = properties,
                     Ord = i,
-                    Weight =  item.Weight== null ? 0 :  item.Weight
-                });
+                    Weight = item.Weight == null ? 0 : item.Weight,
+                    WeightNew = similar != null ? item.Product.Weight : 0,
+                    Old = true,
+                };
+                if (pc.Price != pc.PriceNew && pc.Weight != pc.WeightNew)
+                {
+                    pc.Change = true;
+                }
+                rs.Add(pc);
                 i++;
         }
 

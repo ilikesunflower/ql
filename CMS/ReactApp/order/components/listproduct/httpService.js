@@ -62,3 +62,47 @@ export const getListCustomerCouponEdit =  (param, callback) => {
         })
 
 }
+
+export const getListOrderEdit = (param, callback) => {
+    http.get("/Orders/Order/GetListOrderEdit", {params: param})
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content);
+            } else {
+                console.error("ApiDetail:" + response.msg)
+            }
+        })
+        .catch(e => {
+            console.log(e)
+        })
+
+}
+
+export const getPriceProduct  = (param, callback) => {
+    http.get("/Orders/Order/GetPriceProduct", {params: param})
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content)
+            } else {
+                console.error("CheckShipmentCost:" + response.msg)
+            }
+        })
+        .catch(e => {
+            console.log(e)
+        })
+
+}
+export const getPointOldCustomer =  (param, callback) => {
+    http.get("/Orders/Point/PointOldCustomer", {params : param})
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content);
+            } else {
+                console.error("PointOldCustomer:" + response.msg)
+            }
+        })
+        .catch(e => {
+            console.log(e)
+        })
+
+}

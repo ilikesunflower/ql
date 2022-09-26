@@ -9,11 +9,11 @@ import DetailProduct from "../detailProduct/MainView";
 import Coupon from "../modelCoupon/Coupon";
 
 function MainView(props) {
-    let {formik} = props;
+    let {formik, isEdit} = props;
     let {state,method } = MainController(props) ;
     return (
         <>
-            {(state.showModelDetailProduct) && <DetailProduct showModelDetailProduct={state.showModelDetailProduct} productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
+            {(state.showModelDetailProduct) && <DetailProduct formik={formik} showModelDetailProduct={state.showModelDetailProduct} productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
             {(state.showModalCoupon) && <Coupon showModalCoupon={state.showModalCoupon} handShowModalCoupon={method.handShowModalCoupon} listCoupon={state.listCoupon} formik={formik} />}
 
             <Card>
@@ -78,7 +78,7 @@ function MainView(props) {
                                                                     <i className="fa-solid fa-minus"></i>
                                                                 </button>
                                                                 <NumberFormat  className="form-control form-control-xl inputQuantity  " thousandSeparator={'.'} decimalSeparator={','} name="price" autoComplete="off"
-                                                                               value={!Number.isNaN(Number.parseInt(item.quantityBy)) ? Number.parseInt(item.quantityBy) : 0} onValueChange={(e) =>  {
+                                                                               value={!Number.isNaN(Number.parseInt(item.quantityBy)) ? Number.parseInt(item.quantityBy) : 0}  onValueChange={e =>  {
                                                                     method.changeQuantityBuy(e, i)}}/>
                                                                 <button type="button"  className="btn " onClick={(e) => method.clickQuantityBuy(2, i)}>
                                                                     <i className="fa-solid fa-plus"></i>
@@ -112,7 +112,7 @@ function MainView(props) {
                                                     <div className="d-flex justify-content-end">
                                                         <strong>{formatNumber(state.productTotalPrice)} <u>đ</u></strong>
                                                     </div>
-                        
+                                
                                                 </div>
                                             </div>
                                         </div>
@@ -136,7 +136,7 @@ function MainView(props) {
                                                 <div className="col-md-10">
                                                     <div className="styleLastTable justify-content-end">
                                                         <span className="text-right">Sử dụng điểm thưởng</span>
-                                                        <span className="txt-helper">( Bạn đang có {formatNumber(state.customerPoint)} điểm)</span>
+                                                        <span className="txt-helper">( Bạn đang có {formatNumber(isEdit? state.customerPoint + state.customerPointOld :state.customerPoint)} điểm)</span>
                                                         <div className="btn-group ">
                                                             <button type="button" className="btn " onClick={method.applyPointDecrease}>
                                                                 <i className="fa-solid fa-minus"></i>

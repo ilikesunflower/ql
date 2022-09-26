@@ -3,7 +3,7 @@ import {formatNumber} from '../../../common/app';
 import {getDetailProduct} from "./httpService"
 
 function MainController(props) {
-    const {id, productCartSelect, setProductCartSelect, handShowDetailProduct} = props;
+    const {id, productCartSelect, setProductCartSelect, handShowDetailProduct, formik} = props;
     const [product, setProduct] = useState({});
     const [quantityKW, setQuantityKW] = useState(0);
     const [price, setPrice] = useState(0);
@@ -69,11 +69,13 @@ function MainController(props) {
                         quantityWH :  quantityKW,
                         quantityBy :  quantityBuy,
                         price: price,
+                        weight: product.weight || 0
                         
                     };
                     let data = [...productCartSelect, param];
                     setProductCartSelect(data);
                     handShowDetailProduct();
+                    formik.setFieldValue("checkChangeP", true)
                 }
             }
             },

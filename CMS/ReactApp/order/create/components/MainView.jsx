@@ -24,7 +24,7 @@ function MainApp(props) {
                    customer: state.customer
                }} formik={formik}/>
                 <ListProduct  productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}
-                              formik={formik}  customer={state.customer} 
+                              formik={formik}  customer={state.customer}  isEdit={false}
                 />
                 <Address formik={formik} />
                 <div className="row">

@@ -1353,6 +1353,7 @@ namespace CMS.Areas.Products.Controllers
                                 p.Sku,
                                 p.Name,
                                 PriceSale = p.PriceSale,
+                                p.Weight,
                                 quantityUse = p.ProductSimilar.Sum(x => x.QuantityUse),
                                 quantityKW = p.ProductSimilar.Sum(x => x.QuantityWh),
                                 productRateCount = Math.Round(p.Rate ?? 0),
