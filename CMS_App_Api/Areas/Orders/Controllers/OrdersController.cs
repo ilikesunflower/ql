@@ -33,11 +33,12 @@ namespace CMS_App_Api.Areas.Orders.Controllers
             try
             {
                 var order = _orderServices.Create(model);
+                this._iLogger.LogInformation($"Tạo đơn hàng thành công cho khách {order.CustomerId}");
                 return Ok(new OutputObject(MessageCode.Success, order.Code , "Successful").Show());
             }
             catch (Exception ex)
             {
-                _iLogger.LogDebug(ex,"Create Error:"+ex.Message);
+                _iLogger.LogError(ex,$"Tạo đơn hàng cho khách {model.CustomerId} lỗi:");
                 return Ok(new OutputObject(MessageCode.BadRequest, new{}, ex.Message,ex.Message).Show());
             }
         }
@@ -49,11 +50,12 @@ namespace CMS_App_Api.Areas.Orders.Controllers
             try
             {
                 _orderServices.Cancel(code,model.Message);
+                _iLogger.LogInformation($"Hủy đơn hàng {code} thành công");
                 return Ok(new OutputObject(MessageCode.Success, new {} , "Successful").Show());
             }
             catch (Exception ex)
             {
-                _iLogger.LogDebug(ex,"Cancel Error:"+ex.Message);
+                _iLogger.LogError(ex,$"hủy đơn hàng {code} lỗi:"+ex.Message);
                 return Ok(new OutputObject(MessageCode.BadRequest, new{}, ex.Message,ex.Message).Show());
             }
         }
@@ -65,10 +67,12 @@ namespace CMS_App_Api.Areas.Orders.Controllers
             try
             {
                 var order = _orderServices.Edit(model);
+                _iLogger.LogInformation($"sửa đơn hàng {order.Code} thành công");
                 return Ok(new OutputObject(MessageCode.Success, order.Code , "Successful").Show());
             }
             catch (Exception ex)
             {
+                _iLogger.LogError(ex,$"sửa đơn hàng {model.Order.Code} lỗi:"+ex.Message);
                 return Ok(new OutputObject(MessageCode.BadRequest, new{}, ex.Message,ex.Message).Show());
             }
         }
