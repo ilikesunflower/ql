@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using CMS_Lib.DI;
+using CMS.Config.Consts;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
@@ -50,15 +51,15 @@ public class EmailService : IEmailService
     private MimeMessage CreateEmailMessage(Message message)
     {
         var emailMessage = new MimeMessage();
-        emailMessage.From.Add(new MailboxAddress("Hệ thống Dai-ichi Life Gift Center", _emailConfig.FromEmail));
+        emailMessage.From.Add(new MailboxAddress(AppConst.AppName, _emailConfig.FromEmail));
         emailMessage.To.AddRange(message.To);
         emailMessage.Subject = message.Subject;
         var bodyBuilder = new BodyBuilder { HtmlBody = message.Content };
         emailMessage.Body = bodyBuilder.ToMessageBody();
         return emailMessage;
     }
-    
-    
+
+
     private void SendAsync(MimeMessage mailMessage, Message message)
     {
         using var client = new SmtpClient();
@@ -95,7 +96,7 @@ public class Message
     public Message(List<string> to, string subject, string content)
     {
         To = new List<MailboxAddress>();
-        To.AddRange(to.Select(x => new MailboxAddress("Prugift Email", x)));
+        To.AddRange(to.Select(x => new MailboxAddress(AppConst.AppName, x)));
         Subject = subject;
         Content = content;
     }

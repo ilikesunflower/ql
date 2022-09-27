@@ -22,6 +22,7 @@ using CMS_Lib.Extensions.Attribute;
 using CMS_Lib.Extensions.Claim;
 using CMS_Lib.Extensions.HtmlAgilityPack;
 using CMS_Lib.Util;
+using CMS.Config.Consts;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -1104,7 +1105,7 @@ namespace CMS.Areas.Products.Controllers
                     this._iProductSimilarRepository.BulkUpdate(ListProductSimilarUpdate);
                 }
 
-                ToastMessage(1, "Cập nhật số lượng và giá sản phẩm trong kho vào hệ thống prugift thành công");
+                ToastMessage(1, $"Cập nhật số lượng và giá sản phẩm trong kho vào hệ thống {AppConst.AppName} thành công");
                 return Json(new
                 {
                     msg = "successful",

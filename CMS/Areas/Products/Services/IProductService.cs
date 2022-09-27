@@ -13,6 +13,8 @@ using CMS_Lib.Extensions.HtmlAgilityPack;
 using CMS_Lib.Util;
 using CMS_WareHouse.KiotViet;
 using CMS_WareHouse.KiotViet.Models;
+using CMS.Config.Consts;
+using CMS.Services.Emails;
 using Microsoft.Extensions.Logging;
 
 namespace CMS.Areas.Products.Services;
@@ -21,6 +23,9 @@ public interface IProductService : IScoped
 {
     ProductDetail GetWareHouseByCode(string code);
     ResultJson SaveProductEdit(EditProductModel editData, int userId);
+    
+    Message ContentSendEmail(List<string> email, string title, string link);
+
 }
 
 public class ProductService : IProductService
@@ -454,5 +459,33 @@ public class ProductService : IProductService
         }
          
     }
+    
+    #region MyRegion
+
+    public Message ContentSendEmail(List<string> email, string title, string link)
+    {
+        string content = $"<div style='font-size: 15px;'>\n" +
+                         "            <div>\n" +
+                         "                <span style=\"white-space:pre-wrap\">Dear Anh/Chị,</span>\n" +
+                         "            </div>\n" +
+                         "            <div>\n" +
+                         $"                <span style=\"white-space:pre-wrap\">{AppConst.AppName} đã gửi 01 sản phẩm lên hệ thống. Vui lòng truy cập trang quản trị và thực hiện kiểm duyệt.</span>\n" +
+                         "            </div>\n" +
+                         "            <div>\n" +
+                         $"                <span>- Đường dẫn tới trang sản phẩm cần duyệt: <a href=\"{link}\" target=\"_blank\">link tại đây</a> \n" +
+                         "                </span>\n" +
+                         "            </div>\n" +
+                         "            <div>\n" +
+                         $"                <span>- Đường dẫn trang quản trị {AppConst.AppName} <a href=\"{AppConst.Domain}\" target=\"_blank\">link tại đây</a> \n" +
+                         "                </span>\n" +
+                         "            </div>\n" +
+                         "            <div>\n" +
+                         "                <span style=\"white-space:pre-wrap\">Regards</span>\n" +
+                         "            </div>\n" +
+                         "        </div>";
+        return new Message(email, title, content);
+    }
+
+    #endregion
 
 }

@@ -16,6 +16,7 @@ using CMS.Areas.Orders.Const;
 using CMS.Areas.Orders.Models;
 using CMS.Areas.Orders.Servers;
 using CMS.Areas.Orders.Services;
+using CMS.Config.Consts;
 using CMS.Controllers;
 using CMS.Models;
 using CMS.Models.ModelContainner;
@@ -740,7 +741,7 @@ public class OrderController : BaseController
                                 this._iCustomerNotificationService.SendCustomerNotification(order.CustomerId.Value,
                                     new CustomerNotificationObject()
                                     {
-                                        Title = $"PRUgift đã xác nhận đơn hàng {order.Code}",
+                                        Title = $"{AppConst.AppName} đã xác nhận đơn hàng {order.Code}",
                                         Detail = "",
                                         Link = $"/account/purchase/{order.Code}"
                                     });
@@ -888,7 +889,7 @@ public class OrderController : BaseController
                                 {
                                     Title = $"Đơn hàng {order.Code} đã được giao thành công",
                                     Link = $"/account/purchase/{order.Code}",
-                                    Detail = "Cảm ơn Quý Khách hàng đã đồng hành cùng PruGift"
+                                    Detail = $"Cảm ơn Quý Khách hàng đã đồng hành cùng {AppConst.AppName}"
                                 });
                         }
 

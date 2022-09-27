@@ -6,6 +6,7 @@ using CMS_EF.Models.Orders;
 using CMS_Lib.Extensions.Attribute;
 using CMS_Lib.Extensions.Json;
 using CMS_Ship.GHN.Webhook;
+using CMS.Config.Consts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -65,7 +66,7 @@ public class GhnController : Controller
                    {
                        Title = $"Đơn hàng {order.Code} đã được giao thành công",
                        Link = $"/account/purchase/{order.Code}",
-                       Detail = "Cảm ơn Quý Khách hàng đã đồng hành cùng PruGift"
+                       Detail = $"Cảm ơn Quý Khách hàng đã đồng hành cùng {AppConst.AppName}"
                    });
                }
             }
