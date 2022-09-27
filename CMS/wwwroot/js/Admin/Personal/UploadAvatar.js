@@ -21,7 +21,7 @@ $("#file-input").change(function (e) {
 function initCropper(){
     let image = document.getElementById('img-select');
     cropper = new Cropper(image, {
-        aspectRatio: 16 / 9,
+        aspectRatio: 16 / 16,
         viewMode: 1,
         ready: function () {
         },
@@ -54,11 +54,10 @@ $("#btn-upload-avartar").click(function() {
                         $('input:hidden[name="__RequestVerificationToken"]').val()
                 },
                 success: function (response) {
-                    console.log(response);
                     if (response.msg == "successful") {
                         $("#file").empty();
                         $("#file").html('<img alt="image" class="" src="' +
-                            response.detail + '">');
+                            response.detail + '" style="height: 250px;border-radius: 50%;" />');
                         $("#Image").val(response.detail);
                         $("#btn-upload-avartar").addClass("hidden");
                         $("#btn-select-image").removeClass("hidden");
