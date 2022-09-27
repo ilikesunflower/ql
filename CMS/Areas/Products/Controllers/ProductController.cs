@@ -530,7 +530,6 @@ namespace CMS.Areas.Products.Controllers
                                     : createData.ListSkuMh[i],
                                 QuantityWh = createData.ListQuantity[i],
                                 ProductId = product.Id,
-                                ProductPropertiesValue = "sdfsdf",
                                 Price = createData.ListPrice[i],
                                 LastModifiedAt = DateTime.Now
                             };
