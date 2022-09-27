@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using CMS;
+using CMS.Config.Consts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
@@ -27,7 +28,8 @@ builder.WebHost.UseDefaultServiceProvider(o =>
 
 Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().CreateBootstrapLogger();
 Log.Information("Starting up!");
-
+AppConst.Domain = $"{builder.Configuration.GetSection("AppSetting:Domain")}";
+AppConst.DomainFE = $"{builder.Configuration.GetSection("AppSetting:FEDomain")}";
 #region FFmpeg
 try
 {

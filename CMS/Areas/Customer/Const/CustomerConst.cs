@@ -10,13 +10,13 @@ public class CustomerConst
     public static Dictionary<int, string> ListTypeCustomer = new Dictionary<int, string>()
     {
         {1,"sso"},
-        {2,"PRUgift cung cấp"},
+        {2,"Dai-ichi Gift Center quản lý"},
     };
     
     public static Dictionary<int, string> ListTypeCustomerColor = new Dictionary<int, string>()
     {
         {1,"<span class='badge badge-success'>sso</span>"},
-        {2,"<span class='badge badge-primary'>PRUgift cung cấp</span>"},
+        {2,"<span class='badge badge-primary'>Dai-ichi Gift Center quản lý</span>"},
     };
     
     public static Dictionary<int, string> ListStatusCustomer = new Dictionary<int, string>()

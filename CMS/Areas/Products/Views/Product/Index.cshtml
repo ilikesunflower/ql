@@ -2,6 +2,7 @@
 @using CMS_Access.Repositories.Products
 @using CMS_Lib.Util
 @using CMS.Areas.Products.Const
+@using CMS.Config.Consts
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using Microsoft.CodeAnalysis.Options
 @model CMS.Models.ModelContainner.ModelCollection;
@@ -246,7 +247,7 @@
                return;
            }
            Swal.fire({
-               title: 'Bạn có chắc chắn cập nhật số lượng và giá trong kho vào hệ thống prugift này?',
+               title: 'Bạn có chắc chắn cập nhật số lượng và giá trong kho vào hệ thống @(AppConst.AppName) này?',
                type: 'warning',
                showCancelButton: true,
                confirmButtonText: 'Đồng ý',

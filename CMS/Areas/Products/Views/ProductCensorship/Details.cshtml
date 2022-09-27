@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using CMS_Access.Repositories.Products
 @using CMS_Lib.Util
+@using CMS.Config.Consts
 @model CMS.Models.ModelContainner.ModelCollection
 @{
     Layout = null;
@@ -156,7 +157,7 @@
     <div class="container-xl pt-xl-10px">
         <div class="row align-items-center">
             <div class="col-auto box-logo">
-                <img class="header-logo" src="/images/content/logo.png" alt="PruGift">
+                <img class="header-logo" src="/images/content/logo.png" alt="@AppConst.AppName">
             </div>
             <div class="col d-none d-xl-block align-self-end">
                 <div class="row no-gutters">
@@ -267,7 +268,7 @@
 <div id="mobile-menu" class="container-mobile-menu">
     <div class="mobile-menu">
         <div class="mobile-menu-header">
-            <img class="header-logo" src="/images/content/logo.png" alt="PruGift">
+            <img class="header-logo" src="/images/content/logo.png" alt="@AppConst.AppName">
             <button class="mobile-close" data-target="#mobile-menu">
                 <i class="fa-solid fa-xmark"></i>
             </button>

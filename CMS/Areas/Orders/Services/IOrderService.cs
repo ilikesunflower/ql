@@ -20,6 +20,7 @@ using CMS_Ship.GHN;
 using CMS_Ship.GHN.Models;
 using CMS_Ship.VnPost;
 using CMS_WareHouse.KiotViet;
+using CMS.Config.Consts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -82,25 +83,25 @@ public class OrderService : IOrderService
             if (!orders.OrderStatusConfirmAt.HasValue)
             {
                 orders.OrderStatusConfirmAt = t;
-                partnerShipLog.PartnerShipDetails = $"PRUgift đã xác nhận đơn";
+                partnerShipLog.PartnerShipDetails = $"{AppConst.AppName} đã xác nhận đơn";
             }
 
             if (!orders.OrderStatusShipAt.HasValue && status == OrderStatusConst.StatusOrderShip)
             {
                 orders.OrderStatusShipAt = t;
-                partnerShipLog.PartnerShipDetails = $"PRUgift đã gửi đơn đến đối tác vận chuyển";
+                partnerShipLog.PartnerShipDetails = $"{AppConst.AppName} đã gửi đơn đến đối tác vận chuyển";
             }
 
             if (!orders.OrderStatusSuccessAt.HasValue && status == OrderStatusConst.StatusOrderSuccess)
             {
                 orders.OrderStatusSuccessAt = t;
-                partnerShipLog.PartnerShipDetails = $"PRUgift giao hàng thành công";
+                partnerShipLog.PartnerShipDetails = $"{AppConst.AppName} giao hàng thành công";
             }
 
             if (orders.OrderStatusCancelAt.HasValue && status == OrderStatusConst.StatusOrderCancel)
             {
                 orders.OrderStatusCancelAt = t;
-                partnerShipLog.PartnerShipDetails = $"PRUgift đã hủy đơn";
+                partnerShipLog.PartnerShipDetails = $"{AppConst.AppName} đã hủy đơn";
             }
 
             this._iOrderPartnerShipLogRepository.Create(partnerShipLog);
@@ -262,7 +263,7 @@ public class OrderService : IOrderService
                         OrderPartnerShipLog partnerShipLog = new OrderPartnerShipLog()
                         {
                             OrderCode = order.Code,
-                            PartnerShipDetails = $"PRUgift đã hủy đơn",
+                            PartnerShipDetails = $"{AppConst.AppName} đã hủy đơn",
                             PartnerShipCreatedAt = DateTime.Now,
                         };
                         this._iOrderPartnerShipLogRepository.Create(partnerShipLog);
@@ -270,7 +271,7 @@ public class OrderService : IOrderService
                         {
                             this._iCustomerNotificationService.SendCustomerNotification(order.CustomerId.Value, new CustomerNotificationObject()
                             {
-                                Title = $"PRUgift đã hủy đơn hàng {order.Code}",
+                                Title = $"{AppConst.AppName} đã hủy đơn hàng {order.Code}",
                                 Detail = "",
                                 Link = $"/account/purchase/{order.Code}"
                             });

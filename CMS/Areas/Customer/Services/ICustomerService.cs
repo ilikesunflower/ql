@@ -9,6 +9,7 @@ using CMS.Services.Emails;
 using CMS_Access.Repositories.Customers;
 using CMS_Lib.DI;
 using CMS_Lib.Helpers;
+using CMS.Config.Consts;
 using Microsoft.Extensions.Logging;
 
 namespace CMS.Areas.Customer.Services;
@@ -62,8 +63,8 @@ public class CustomerService : ICustomerService
             Password = BCrypt.Net.BCrypt.HashPassword(password)
         };
         var data = this._ICustomerRepository.Create(rs); 
-        SendEmail(new List<string>(){data.Email},"[Prugift.vn] Đăng ký tài khoản thành công",
-            "Tài khoản của bạn đã được kích hoạt trên hệ thống Prugift.vn:",data.UserName,password);
+        SendEmail(new List<string>(){data.Email},$"{AppConst.AppName} Đăng ký tài khoản thành công",
+            $"Tài khoản của bạn đã được kích hoạt trên hệ thống {AppConst.AppName}",data.UserName,password);
         return data;
     }
 
@@ -78,8 +79,8 @@ public class CustomerService : ICustomerService
            this._ICustomerRepository.Update(data);
            if (!string.IsNullOrEmpty(data.Email))
            {
-               SendEmail(new List<string>() { data.Email }, "[Prugift.vn] Mật khẩu của bạn đã được đổi thành công",
-                   "Mật khẩu của bạn đã được đổi trên hệ thống Prugift.vn:", data.UserName, password);
+               SendEmail(new List<string>() { data.Email }, $"{AppConst.AppName} Mật khẩu của bạn đã được đổi thành công",
+                   $"Mật khẩu của bạn đã được đổi trên {AppConst.AppName}:", data.UserName, password);
            }
 
            return true;
@@ -108,11 +109,11 @@ public class CustomerService : ICustomerService
                          "                <span  style=\"white-space:pre-wrap\">Vui lòng sử dụng tài khoản được cung cấp cho các lần đăng nhập tiếp theo.</span>\n" +
                          "            </div>\n" +
                          "            <div>\n" +
-                         "                <span style=\"white-space:pre-wrap\">Truy cập website <a href=\"https://prugift.vn\" target=\"_blank\">prugift.vn tại đây</a> \n" +
+                         $"                <span style=\"white-space:pre-wrap\">Truy cập website <a href=\"{AppConst.DomainFE}\" target=\"_blank\">tại đây</a> \n" +
                          "                </span>\n" +
                          "            </div>\n" +
                          "            <div>\n" +
-                         "                <span  style=\"white-space:pre-wrap\">Mọi thắc mắc và hỗ trợ vui lòng liên hệ hotline: </span>0886 991 247\n" +
+                         $"                <span  style=\"white-space:pre-wrap\">Mọi thắc mắc và hỗ trợ vui lòng liên hệ hotline: </span>{AppConst.Phone}\n" +
                          "            </div>\n" +
                          "            <div><br></div>\n" +
                          "            <div>\n" +

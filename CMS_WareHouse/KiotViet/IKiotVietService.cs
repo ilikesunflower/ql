@@ -279,7 +279,7 @@ public class KiotVietService : IKiotVietService
             {
                 branchId = this._whKiotViet.BranchId,
                 soldById = this._whKiotViet.SoldById,
-                description = $"Tạo đơn từ hệ thống prugift {orders.Code}",
+                description = $"Tạo đơn từ hệ thống Daiichi {orders.Code}",
                 discount = "",
                 discountRatio = "",
                 purchaseDate = "",
@@ -306,7 +306,7 @@ public class KiotVietService : IKiotVietService
             else
             {
                 string res = response.Content.ReadAsStringAsync().Result;
-                this._iLogger.LogError($"CreateOrder: orderId PRUgift: {orders.Id}:  lỗi: {res}");
+                this._iLogger.LogError($"CreateOrder: orderId : {orders.Id}:  lỗi: {res}");
                 return new OrderWareHouse()
                 {
                     Status = -1,

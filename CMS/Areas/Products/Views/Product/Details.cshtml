@@ -2,6 +2,7 @@
 @using CMS_Access.Repositories.Products
 @using CMS_Lib.Util
 @using CMS.Areas.Products.Const
+@using CMS.Config.Consts
 @model CMS.Models.ModelContainner.ModelCollection
 
 @{
@@ -532,7 +533,7 @@
         let url = $(this).attr('formaction');
         let urlRedirect = $(this).attr('data-url-back');
         Swal.fire({
-            title: 'Bạn có chắc chắn muốn đồng bộ số lượng và giá trong kho hàng sang hệ thống prugift không?',
+            title: 'Bạn có chắc chắn muốn đồng bộ số lượng và giá trong kho hàng sang hệ thống @(AppConst.AppName) không?',
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Đồng ý',
