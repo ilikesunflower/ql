@@ -349,6 +349,11 @@ namespace CMS_Lib.Util
                     int prevlen = sb.Length;
                     sb.Append(RemapInternationalCharToAscii1(c));
                     if (prevlen != sb.Length) prevdash = false;
+                    int check = (int)sb[i];
+                    if (check >= 128)
+                    {
+                        sb[i] = char.Parse("-");
+                    }
                 }
 
                 if (i == maxlen) break;
