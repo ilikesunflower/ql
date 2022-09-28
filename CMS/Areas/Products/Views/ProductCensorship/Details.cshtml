@@ -660,7 +660,7 @@
             </div>
             @if (product.ProductImage is {Count: > 0 })
             {
-                foreach (ProductImage productImage in product.ProductImage)
+                foreach (ProductImage productImage in images)
                 {
                     <div class="product-image-item"
                          data-dot="<button style='background-image: url(@(productImage.Link));'></button>">
@@ -671,7 +671,7 @@
         </div>
         <div class="product-preview-slide-dot">
             <div class="product-preview-slide-owl-carousel-dot"></div>
-            @if (product.ProductImage is {Count: > 3 })
+            @if (images is {Count: > 3 })
             {
                 <div class="more-than-4" data-toggle="product-image-preview"data-target="#product-image-preview">
                     Xem thêm 1 hình
@@ -870,9 +870,9 @@
                  data-dot="<button style='background-image: url(@(product.Image));'></button>">
                 <img class="product-image" src="@(product.Image)" alt=""/>
             </div>
-            @if (product.ProductImage is {Count: > 0 })
+            @if (images is {Count: > 0 })
             {
-                foreach (ProductImage productImage in product.ProductImage)
+                foreach (ProductImage productImage in images)
                 {
                     <div class="product-image-item"
                          data-dot="<button style='background-image: url(@(productImage.Link));'></button>">
