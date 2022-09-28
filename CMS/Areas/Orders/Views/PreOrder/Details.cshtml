@@ -89,7 +89,7 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6">
-                @if (preOrder!.Customer!.Type == 2)
+                @if (preOrder!.Customer!.TypeGroup == 2)
                 {
                     <div class="card">
                         <div class="card-header">
@@ -194,7 +194,12 @@
                         <div class="row pt-3">
                             <div class="col-md-10">
                                 <div class="d-flex justify-content-end">
-                                    <strong>Phí giao hàng</strong>
+                                    <strong>Phí giao hàng 
+                                        @if (preOrder?.PriceShipSalePercent != null && preOrder?.PriceShipSalePercent != 0)
+                                        {
+                                            <span>(@CmsFunction.NumberFormatShow(preOrder?.PriceShipNonSale) <u>đ</u> | -@(preOrder?.PriceShipSalePercent) %)</span>
+                                        }
+                                        </strong>
                                 </div>
                             </div>
                             <div class="col-md-2">

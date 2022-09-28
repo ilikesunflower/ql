@@ -28,6 +28,8 @@ namespace CMS_EF.Models.Orders
         public double? CouponDiscount { get; set; }
         public string CouponCode { get; set; }
         public double? PriceShip { get; set; }
+        public double? PriceShipNonSale { get; set; }
+        public double? PriceShipSalePercent { get; set; }
 
         // [StringLength(255)]
         // public string PartnerShipAlias { get; set; }

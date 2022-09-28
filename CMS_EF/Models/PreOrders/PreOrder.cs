@@ -21,6 +21,8 @@ namespace CMS_EF.Models.PreOrders
         public int? ShipPartner { get; set; }
         public int? ShipType { get; set; }
         public double? PriceShip { get; set; }
+        public double? PriceShipNonSale { get; set; }
+        public double? PriceShipSalePercent { get; set; }
         public int? PaymentType { get; set; }
         public int? Status { get; set; }
         public DateTime? PreOrderAt { get; set; }
