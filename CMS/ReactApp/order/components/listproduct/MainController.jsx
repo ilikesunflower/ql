@@ -231,6 +231,9 @@ function MainController(props) {
         let data = [...productCartSelect];
         data.splice(index, 1);
         setProductCartSelect(data)
+        if(isEdit){
+            formik.setFieldValue("checkChangeP", true)
+        }
     }  
     
  //point

@@ -32,7 +32,7 @@ function MainView(props) {
         method.setCustomer(event.value)
         let selecC = listCustomer.find(x => x.id == event.value);
         method.setCustomerSelect(selecC ?? null);
-        if(selecC?.type == 2 ){
+        if(selecC?.typeGroup == 2 ){
             formik.setFieldValue("paymentType",3)
         }else{
             formik.setFieldValue("paymentType",0)
