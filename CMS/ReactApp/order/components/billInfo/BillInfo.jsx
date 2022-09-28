@@ -8,11 +8,11 @@ function BillInfo(props) {
         <>
             <Card>
                 <Card.Header>
-                    <span className="card-title namePageText2 ">  {customerSelect?.type == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn"} </span>
+                    <span className="card-title namePageText2 ">  {customerSelect?.typeGroup == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn"} </span>
                 </Card.Header>
                 <Card.Body className="row">
                     {
-                        customerSelect?.type == 2 ?
+                        customerSelect?.typeGroup == 2 ?
                             <>
                                 <Form.Group className="col-md-6 pt-3">
                                     <Form.Label className="form-check-label">Số PR <span

@@ -54,10 +54,10 @@ function MainController(props) {
             districtCode: Yup.string().required("Vui lòng chọn huyện"),
             communeCode: Yup.string().required( "Vui lòng chọn xã"),
             prCode: Yup.string().min(4, validMessage.min(4)).max(20, validMessage.max(20)).test('required', validMessage.required, (value) => {
-                return (customerSelect?.type == 2 && value != null )|| (customerSelect?.type ==  1);
+                return (customerSelect?.typeGroup == 2 && value != null )|| (customerSelect?.typeGroup !=  2);
             } ),
             prFile: Yup.mixed().test('required', validMessage.required, (value) => {
-                return (customerSelect?.type == 2 && value != null) || (customerSelect?.type ==  1)
+                return (customerSelect?.typeGroup == 2 && value != null) || (customerSelect?.typeGroup !=  2)
             }),
             shipType: Yup.string().when("shipPartner", {
                 is:(field) =>
@@ -118,7 +118,7 @@ function MainController(props) {
                 formik.setFieldValue("totalWeight", rs?.totalWeight || 0 )
                 getCustomer({id: rs?.customerId}, function (rs) {
                     setCustomerSelect(rs) ;
-                    if(rs?.type == 2 ){
+                    if(rs?.typeGroup == 2 ){
                         formik.setFieldValue("paymentType", 3 )
                     }
                     setCustomer(rs?.id || 0)

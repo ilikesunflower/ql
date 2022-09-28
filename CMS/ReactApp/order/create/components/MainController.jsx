@@ -48,10 +48,11 @@ function MainController(props) {
             districtCode: Yup.string().required("Vui lòng chọn huyện"),
             communeCode: Yup.string().required( "Vui lòng chọn xã"),
             prCode: Yup.string().min(4, validMessage.min(4)).max(20, validMessage.max(20)).test('required', validMessage.required, (value) => {
-                return (customerSelect?.type == 2 && value != null )|| (customerSelect?.type ==  1);
+               console.log()
+                return (customerSelect?.typeGroup == 2 && value != null )|| (customerSelect?.typeGroup != 2);
             } ),
             prFile: Yup.mixed().test('required', validMessage.required, (value) => {
-                return (customerSelect?.type == 2 && value != null && value) || (customerSelect?.type ==  1)
+                return (customerSelect?.typeGroup == 2 && value != null && value) || (customerSelect?.typeGroup !=  2)
             }),
             shipType: Yup.string().when("shipPartner", {
                     is: (field) => (field != "0" && field != "3"),

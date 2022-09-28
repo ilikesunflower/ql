@@ -19,12 +19,12 @@ public class ShipConst
             Type = 1,
             ShipmentTypes = ShipmentCost.ShipmentTypes
         },
-        new ShipmentPartner
-        {
-            Name = "VNPost",
-            Type = 2,
-            ShipmentTypes = ShipmentCost.ShipmentTypeEs
-        },
+        // new ShipmentPartner
+        // {
+        //     Name = "VNPost",
+        //     Type = 2,
+        //     ShipmentTypes = ShipmentCost.ShipmentTypeEs
+        // },
         new ShipmentPartner
         {
             Name = "Nhận hàng tại kho",

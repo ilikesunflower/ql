@@ -381,7 +381,7 @@ namespace CMS_Lib.Util
             Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
             string temp = str.Normalize(NormalizationForm.FormD);
             return regex.Replace(temp, String.Empty).Replace(" ","_")
-                .Replace('đ', 'd').Replace('Đ', 'D');
+                .Replace('đ', 'd').Replace('Đ', 'D').Replace("(","-").Replace(")","-").Replace("'","-").Replace("\"","-");
         }
 
         

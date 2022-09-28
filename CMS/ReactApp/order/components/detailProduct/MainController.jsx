@@ -59,7 +59,6 @@ function MainController(props) {
                             propertiesValueName : x.nameValue
                         })
                     })
-                    console.log(product)
                     let param = {
                         productId :  id,
                         productSimilarId :  productSimilarSelect,
