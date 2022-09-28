@@ -193,6 +193,8 @@ public class PreOrderController: BaseController
                 Status = OrderStatusConst.StatusWaitCustomerConfirm,
                 CustomerId = preOrder!.CustomerId,
                 PriceShip = preOrder.PriceShip,
+                PriceShipNonSale = preOrder.PriceShipNonSale,
+                PriceShipSalePercent = preOrder.PriceShipSalePercent,
                 PaymentType = preOrder.PaymentType,
                 ShipPartner = preOrder.ShipPartner,
                 ShipType = preOrder.ShipType,
