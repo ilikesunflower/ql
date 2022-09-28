@@ -15,6 +15,7 @@ using CMS_Lib.DI;
 using CMS_Lib.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.Logging;
 
 namespace CMS_App_Api.Services.Orders
 {
@@ -26,7 +27,7 @@ namespace CMS_App_Api.Services.Orders
     }
     public class OrderServices : IOrderServices
     {
-
+        private readonly ILogger<OrderServices> _iLogger;
         private readonly IOrdersRepository _ordersRepository;
         private readonly IDatabaseTransaction _databaseTransaction;
         private readonly IProductServices _productServices;
@@ -39,10 +40,11 @@ namespace CMS_App_Api.Services.Orders
         private readonly IOrderPartnerShipLogRepository _orderPartnerShipLogRepository;
 
 
-        public OrderServices(IProductServices productServices, ICustomerPointServices customerPointServices, ICustomerCouponServices customerCouponServices, IOrdersRepository ordersRepository, IDatabaseTransaction databaseTransaction, 
+        public OrderServices(ILogger<OrderServices> iLogger,IProductServices productServices, ICustomerPointServices customerPointServices, ICustomerCouponServices customerCouponServices, IOrdersRepository ordersRepository, IDatabaseTransaction databaseTransaction, 
             ICustomerCardServices customerCardServices, IWareHouseService iWareHouseService, IOrderProductRepository iOrderProductRepository,
             IOrdersAddressRepository iOrdersAddressRepository,IOrderPartnerShipLogRepository orderPartnerShipLogRepository )
         {
+            _iLogger = iLogger;
             _productServices = productServices;
             _customerPointServices = customerPointServices;
             _customerCouponServices = customerCouponServices;
@@ -62,6 +64,7 @@ namespace CMS_App_Api.Services.Orders
             List<ProductSimilar> productSimilars = _productServices.GetAllProductSimilarByIds(productSimilarIds);
             if (!orders.OrderProduct.All( orderProduct => productSimilars.Any( similar => similar.Id == orderProduct.ProductSimilarId && similar.QuantityWh >= orderProduct.Quantity ) ))
             {
+                this._iLogger.LogError($"Đơn hàng {orders.Code} - {orders.CustomerId} Số lượng sản phẩm trong kho không đủ! Vui lòng thử lại");
                 throw new Exception("Số lượng sản phẩm trong kho không đủ! Vui lòng thử lại");
             }
             
@@ -73,6 +76,7 @@ namespace CMS_App_Api.Services.Orders
                 var allPoint = customerPoint.Sum(x => x.Point) ?? 0;
                 if ( allPoint < orders.Point)
                 {
+                    this._iLogger.LogError($"Đơn hàng {orders.Code} - {orders.CustomerId} Số lượng điểm của bạn không đủ! Vui lòng thử lại");
                     throw new Exception("Số lượng điểm của bạn không đủ! Vui lòng thử lại");
                 }
             }
@@ -84,6 +88,7 @@ namespace CMS_App_Api.Services.Orders
                 customerCoupon = _customerCouponServices.FindCouponActiveByCustomerId(orders.CustomerId ?? 0,orders.CouponCode);
                 if (customerCoupon == null)
                 {
+                    this._iLogger.LogError($"Đơn hàng {orders.Code} - {orders.CustomerId} Không tìm thấy coupon hoặc đã được sử dụng! Vui lòng thử lại");
                     throw new Exception("Không tìm thấy coupon hoặc đã được sử dụng! Vui lòng thử lại");
                 }
             }
