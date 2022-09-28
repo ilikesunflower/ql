@@ -48,20 +48,20 @@ function MainController(props) {
             districtCode: Yup.string().required("Vui lòng chọn huyện"),
             communeCode: Yup.string().required( "Vui lòng chọn xã"),
             prCode: Yup.string().min(4, validMessage.min(4)).max(20, validMessage.max(20)).test('required', validMessage.required, (value) => {
-                return (customerSelect?.type === 2 && value != null )|| (customerSelect?.type ===  1);
+                return (customerSelect?.type == 2 && value != null )|| (customerSelect?.type ==  1);
             } ),
             prFile: Yup.mixed().test('required', validMessage.required, (value) => {
-                return (customerSelect?.type === 2 && value != null) || (customerSelect?.type ===  1)
+                return (customerSelect?.type == 2 && value != null && value) || (customerSelect?.type ==  1)
             }),
             shipType: Yup.string().when("shipPartner", {
-                    is: (field) => (field != "0" ||field != "3"),
-                    then: Yup.string().required(validMessage.required).test('required',validMessage.required, (value) =>( value != '0'  ||value !== "3"))
+                    is: (field) => (field != "0" && field != "3"),
+                    then: Yup.string().required(validMessage.required).test('required',validMessage.required, (value) =>( value != '0'  && value != "3"))
             }),
         }),
         onSubmit: async (values, {resetForm}) => {
             Swal.fire({
                 title: 'Bạn muốn lưu đơn hàng ?',
-                type: 'warning',
+                type: 'warning',  
                 showCancelButton: true,
                 confirmButtonText: 'Đồng ý',
                 confirmButtonColor: '#ed5565',

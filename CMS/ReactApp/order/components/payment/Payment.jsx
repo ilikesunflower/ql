@@ -16,7 +16,7 @@ function Payment(props) {
                        {customerSelect?.type == 2 
                            ? 
                            <span className="col-12">
-                               Tổng giá trị đơn hàng sẽ được Prudential thanh toán từ ngân sách của phòng ban
+                               Tổng giá trị đơn hàng sẽ được Daiichi thanh toán từ ngân sách của phòng ban
                            </span>
                            :
                            <div className="col-12">

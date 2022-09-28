@@ -21,6 +21,10 @@ using CMS.Controllers;
 using CMS.Models;
 using CMS.Models.ModelContainner;
 using CMS.Services.Files;
+using CMS_Access.Repositories.WareHouse;
+using CMS_EF.Models.WareHouse;
+using CMS_WareHouse.KiotViet;
+using CMS_WareHouse.KiotViet.Consts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -48,6 +52,9 @@ public class OrderController : BaseController
     private readonly IOrdersAddressRepository _iOrdersAddressRepository;
     private readonly IOrderProductRepository _iOrderProductRepository;
     private readonly ICustomerNotificationService _iCustomerNotificationService;
+    private readonly IWhTransactionRepository _iWhTransactionRepository;
+    private readonly IKiotVietService _iKiotVietService;
+
 
     private double IsPoi = PointConst.Coefficient;
 
@@ -58,7 +65,7 @@ public class OrderController : BaseController
         IFileService fileService, IOrdersRepository iOrdersRepository,
         IProductSimilarRepository iProductSimilarRepository, IOrderService iOrderService,
         IOrdersAddressRepository iOrdersAddressRepository, IOrderProductRepository iOrderProductRepository,
-        ICustomerNotificationService iCustomerNotificationService)
+        ICustomerNotificationService iCustomerNotificationService, IWhTransactionRepository iWhTransactionRepository, IKiotVietService iKiotVietService)
     {
         _iLogger = iLogger;
         _iOrderServer = iOrderServer;
@@ -73,6 +80,8 @@ public class OrderController : BaseController
         _iOrdersAddressRepository = iOrdersAddressRepository;
         _iOrderProductRepository = iOrderProductRepository;
         _iCustomerNotificationService = iCustomerNotificationService;
+        _iWhTransactionRepository = iWhTransactionRepository;
+        _iKiotVietService = iKiotVietService;
     }
 
     // GET
@@ -681,6 +690,9 @@ public class OrderController : BaseController
                 (order.Status != OrderStatusConst.StatusOrderCancel);
             model.IsStatusShowAll =
                 model.IsOrderConfirm || model.IsOrderShip || model.IsOrderSuccess || model.IsOrderCancel;
+            model.IsStatusSynchronizedKiot =
+                User.HasClaim(CmsClaimType.AreaControllerAction,
+                    "Orders@OrderController@ChangeOrderSynchronizedKiot".ToUpper()) && (order.OrderIdWh == null);
             model.IsPoi = IsPoi;
             return View(model);
         }
@@ -911,7 +923,79 @@ public class OrderController : BaseController
             return Ok(new OutputObject(500, "", "Đơn hàng không tồn tại").Show());
         }
     }
+  [HttpPost]
+    [Authorize(Policy = "PermissionMVC")]
+    public IActionResult ChangeOrderSynchronizedKiot([FromBody] JObject data)
+    {
+        try
+        {
+            string id = $"{data["id"]}";
+            if (!string.IsNullOrEmpty(id))
+            {
+                var order = this._iOrdersRepository.FindByCode(id);
+                if (order != null)
+                {
+                    if (order.OrderIdWh == null )
+                    {
+                        var o = this._iWhTransactionRepository.FindByOrderIdStatus(order.Id, WhTransactionConst.Create);
+                        var wareHouse =  this._iKiotVietService.CreateOrder(order);
+                        if (wareHouse != null)
+                        {
+                            if (wareHouse.Status == 1)
+                            {
+                                this._iLogger.LogInformation($"Đồng bộ đơn hàng {order.Code} sang kiot việt thành công");
+                                order.OrderIdWh = wareHouse.OrderId;
+                                this._iOrdersRepository.Update(order);
+                                if (o != null)
+                                {
+                                    this._iWhTransactionRepository.Delete(o);
+                                }
+                            }
+                            else 
+                            {
+                                // xử lý lưu db để call lại khi kiot việt lỗi
+                                if (o == null)
+                                {
+                                    WhTransaction whTransaction = new WhTransaction()
+                                    {
+                                        OrderId = order.Id,
+                                        Status = WhTransactionConst.Create,
+                                        CreatedAt = DateTime.Now
+                                    };
+                                    this._iWhTransactionRepository.Create(whTransaction);
+                                }
+                                else
+                                {
+                                    o.CreatedAt = DateTime.Now;
+                                    this._iWhTransactionRepository.Update(o);
+                                }
+                                return Ok(new OutputObject(404, "",
+                                        $"{wareHouse.Msg}")
+                                    .Show());
+                            }
+                        }
+                        ToastMessage(1, "Đồng bộ đơn hàng thành công");
+                         return Ok(new OutputObject(200, "", $"Đồng bộ đơn hàng thành công").Show());
+                    }
+                    else
+                    {
+                        return Ok(new OutputObject(404, "",
+                                $"Đơn hàng đã cập nhật nên bạn không thể tiếp tục cập nhật")
+                            .Show());
+                    }
+                }
+            }
 
+            return Ok(new OutputObject(404, "", "Đơn hàng không tồn tại").Show());
+        }
+        catch (Exception ex)
+        {
+            this._iLogger.LogError(ex, $"Mã order {data}");
+            return Ok(new OutputObject(500, "", "Đơn hàng không tồn tại").Show());
+        }
+    }
+
+    
     [HttpPost]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult ChangeOrderCancel([FromBody] OrderCancelRequest data)

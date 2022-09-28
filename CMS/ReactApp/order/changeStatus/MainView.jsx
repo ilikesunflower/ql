@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {isAllowedNumberIntThan0AndMax, isAllowedNumberThan0} from '../../common/app';
-import {changeOrderConfirm,changeOrderShip,changeOrderSuccess,changeOrderCancel, statusPayment} from './service/httpService';
+import {changeOrderConfirm,changeOrderShip,changeOrderSuccess,changeOrderCancel, statusPayment, changeOrderSynchronized} from './service/httpService';
 import {InputField, TextareaField,NumberFormatField,SelectField} from "../../components/formikField";
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 import {useFormik} from "formik";
@@ -17,6 +17,7 @@ function MainView(props){
     const isOrderShip = group.attr("data-isOrderShip") ?? "";
     const isOrderSuccess = group.attr("data-isOrderSuccess") ?? "";
     const isOrderCancel = group.attr("data-isOrderCancel") ?? "";
+    const isOrderSynchronized = group.attr("data-synchronized") ?? "";
     const priceCOD = parseInt(group.attr("data-sumPrice") ?? "");
     const shipPartner = parseInt(group.attr("data-shipPartner") ?? "");
     const typepayment = parseInt(group.attr("data-typepayment") ?? -1);
@@ -46,7 +47,32 @@ function MainView(props){
             }
         });
     }
-
+    const orderSynchronized = () => {
+        Swal.fire({
+            title: 'Bạn có chắc chắn đồng bộ đơn hàng này?',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            confirmButtonColor: '#ed5565',
+            cancelButtonText: 'Thoát'
+        }).then((result) => {
+            if (result.value) {
+                let param = {
+                    id: orderCode,
+                }
+                changeOrderSynchronized(param, function (rs) {
+                    console.log(rs);
+                    if ( rs.statusCode == 200 ){
+                        window.location.reload();
+                    }else{
+                        toastr.error(rs.message,"Thông báo");
+                    }
+                })
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                return false;
+            }
+        });
+    }
     const formikCodShip = useFormik({
         initialValues: {
             cod : '',
@@ -252,6 +278,8 @@ function MainView(props){
     }
     
     return(<>
+        { isOrderSynchronized == "True" && <button className="btn btn-secondary m-l-r-5" onClick={orderSynchronized}>Đồng bộ Kiot</button>}
+
         { isOrderConfirm == "True" && <button className="btn btn-warning m-l-r-5" onClick={orderConfirm}>Xác nhận đơn</button>}
         { isOrderShip == "True" &&
             <>

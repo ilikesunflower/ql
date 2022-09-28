@@ -54,17 +54,17 @@ function MainController(props) {
             districtCode: Yup.string().required("Vui lòng chọn huyện"),
             communeCode: Yup.string().required( "Vui lòng chọn xã"),
             prCode: Yup.string().min(4, validMessage.min(4)).max(20, validMessage.max(20)).test('required', validMessage.required, (value) => {
-                return (customerSelect?.type === 2 && value != null )|| (customerSelect?.type ===  1);
+                return (customerSelect?.type == 2 && value != null )|| (customerSelect?.type ==  1);
             } ),
             prFile: Yup.mixed().test('required', validMessage.required, (value) => {
-                return (customerSelect?.type === 2 && value != null) || (customerSelect?.type ===  1)
+                return (customerSelect?.type == 2 && value != null) || (customerSelect?.type ==  1)
             }),
             shipType: Yup.string().when("shipPartner", {
                 is:(field) =>
                     {
-                        return  Number.parseInt(field) !== 0 &&  Number.parseInt(field) != 3
+                        return  Number.parseInt(field) != 0 &&  Number.parseInt(field) != 3 
                     },
-                then: Yup.string().required(validMessage.required).test('required',validMessage.required, (value) => (value !== '0' && value !== '3'))
+                then: Yup.string().required(validMessage.required).test('required',validMessage.required, (value) => (value !== '0' && value !== '3' ))
             }),
         }),
         onSubmit: async (values, {resetForm}) => {
@@ -90,6 +90,7 @@ function MainController(props) {
     useEffect(function () {
         if(id != 0){
             getOrderEdit({id: id}, function (rs) {
+                console.log("sdhfjds",  rs?.shipPartner == 2)
                 formik.setFieldValue("customerId", rs?.customerId || 0)
                 formik.setFieldValue("priceShip", rs?.priceShip || 0)
                 formik.setFieldValue("couponCode", rs?.couponCode || '')
@@ -104,7 +105,7 @@ function MainController(props) {
                 formik.setFieldValue("email", rs.orderAddress?.email || '' )
                 formik.setFieldValue("phone", rs.orderAddress?.phone || '' )
                 formik.setFieldValue("note", rs?.note || '' )
-                formik.setFieldValue("shipPartner", rs?.shipPartner || 0 )
+                formik.setFieldValue("shipPartner", (!rs?.shipPartner ||  rs?.shipPartner == 2) ? 0 : rs?.shipPartner )
                 formik.setFieldValue("shipType", rs?.shipType || 0 )
                 formik.setFieldValue("paymentType", rs?.paymentType || 0 )
                 formik.setFieldValue("billCompanyName", rs?.billCompanyName || '' )

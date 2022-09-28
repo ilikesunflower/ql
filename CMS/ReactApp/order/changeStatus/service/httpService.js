@@ -14,7 +14,19 @@ export const changeOrderConfirm = (param, callback) => {
         })
 
 }
+export const changeOrderSynchronized = (param, callback) => {
+    UserInterface.prototype.showLoading();
+    http.post("/Orders/Order/ChangeOrderSynchronizedKiot", param)
+        .then(response => {
+            callback(response);
+            UserInterface.prototype.hideLoading();
+        })
+        .catch(e => {
+            console.log(e)
+            UserInterface.prototype.hideLoading();
+        })
 
+}
 export const statusPayment = (param, callback) => {
     UserInterface.prototype.showLoading();
     http.post("/Orders/Order/StatusPayment", param)

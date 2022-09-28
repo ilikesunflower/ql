@@ -14,6 +14,7 @@ import Payment from "../../components/payment/Payment"
 import BillInfo from "../../components/billInfo/BillInfo"
 function MainApp(props) {
     const {state, method, formik} = MainController();
+    console.log(state.customerSelect)
     return (
         <Row>
             <Col md={12}>

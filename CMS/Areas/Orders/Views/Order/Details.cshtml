@@ -44,7 +44,7 @@
         <p class="card-title namePageText">@namePage</p>
         <div class="float-right">
             <div class="row">
-                <div id="groupStatusBtn" data-typepayment="@Model.Order.PaymentType" data-sumPrice="@total" data-shipPartner="@Model.Order.ShipPartner" data-isStatusShowAll="@Model.IsStatusShowAll" data-codeOrder="@Model.Order!.Code" data-isOrderConfirm="@Model.IsOrderConfirm"
+                <div id="groupStatusBtn" data-synchronized="@Model.IsStatusSynchronizedKiot" data-typepayment="@Model.Order.PaymentType" data-sumPrice="@total" data-shipPartner="@Model.Order.ShipPartner" data-isStatusShowAll="@Model.IsStatusShowAll" data-codeOrder="@Model.Order!.Code" data-isOrderConfirm="@Model.IsOrderConfirm"
                      data-isOrderSuccess="@Model.IsOrderSuccess" data-isOrderShip="@Model.IsOrderShip" data-isOrderCancel="@Model.IsOrderCancel" data-isStatusPayment="@Model.IsStatusPayment">
                 </div>
                 @if (Model.IsEdit)
@@ -81,7 +81,7 @@
                     <div class="row">
                         <label class="col-md-4 col-xs-4">Tên khách hàng</label>
                         <div class="col-md-8 col-xs-8">
-                            <span class="control-label">@(Order.Customer.Type == 2 ?  $"Phòng ban Prudential - {Order.Customer.FullName}" : $"{Order.Customer.UserName} - {Order.Customer.FullName}") - @(Order.Customer.Phone)</span>
+                            <span class="control-label">@(Order.Customer.Type == 2 ?  $"Phòng ban Daiichi - {Order.Customer.FullName}" : $"{Order.Customer.UserName} - {Order.Customer.FullName}") - @(Order.Customer.Phone)</span>
                         </div>
                     </div>
                 </div>

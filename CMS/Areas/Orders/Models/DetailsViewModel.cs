@@ -25,5 +25,7 @@ public class DetailsViewModel
     
     public bool IsStatusShowAll { get; set; }
     public bool IsStatusPayment { get; set; }
+    
+    public bool IsStatusSynchronizedKiot { get; set; }
     public double IsPoi { get; set; }
 }

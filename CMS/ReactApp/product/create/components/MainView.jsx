@@ -117,11 +117,12 @@ function MainApp(props) {
                                                            <Card className="">
                                                                <Card.Header style={{fontSize:"18px"}}>
                                                                    Thông tin bán hàng
-                                                                   {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
-                                                                   {meta1.touched && meta1.error ? (<span className="text-danger">{meta1.error}</span>) : null}
-
                                                                </Card.Header>
                                                                <Card.Body>
+                                                                   <div className="text-center">
+                                                                       {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+                                                                       {meta1.touched && meta1.error ? (<span className="text-danger">{meta1.error}</span>) : null}
+                                                                   </div>
                                                                    <div className="row  d-flex justify-content-center">
                                                                         {
                                                                             (state.listProperties.length > 0) 

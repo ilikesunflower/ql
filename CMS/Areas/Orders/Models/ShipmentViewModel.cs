@@ -26,22 +26,22 @@ public class ShipmentViewModel
                         Cost = calculateFeeDefault?.Total
                     }).ToList()
             },
-            new ShipmentPartner
-            {
-                Name = "VNPost",
-                Type = 2,
-                ShipmentTypes = (from shipmentTypes in ShipmentCost.ShipmentTypeEs
-                    join calculateFee in vnPostCost on shipmentTypes.Type equals calculateFee.TypeService into
-                        calculateFee
-                    from calculateFeeDefault in calculateFee.DefaultIfEmpty()
-                    select new ShipmentType
-                    {
-                        Name = shipmentTypes.Name,
-                        Icon = shipmentTypes.Icon,
-                        Type = shipmentTypes.Type,
-                        Cost = calculateFeeDefault?.Total
-                    }).ToList()
-            },
+            // new ShipmentPartner
+            // {
+            //     Name = "VNPost",
+            //     Type = 2,
+            //     ShipmentTypes = (from shipmentTypes in ShipmentCost.ShipmentTypeEs
+            //         join calculateFee in vnPostCost on shipmentTypes.Type equals calculateFee.TypeService into
+            //             calculateFee
+            //         from calculateFeeDefault in calculateFee.DefaultIfEmpty()
+            //         select new ShipmentType
+            //         {
+            //             Name = shipmentTypes.Name,
+            //             Icon = shipmentTypes.Icon,
+            //             Type = shipmentTypes.Type,
+            //             Cost = calculateFeeDefault?.Total
+            //         }).ToList()
+            // },
             new ShipmentPartner
             {
                 Name = "Nhận hàng tại kho",
