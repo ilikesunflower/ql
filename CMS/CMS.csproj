@@ -109,7 +109,7 @@
 		<Folder Include="ReactApp\dashboard\area" />
 		<Folder Include="ViewComponents" />
 		<Folder Include="wwwroot\css\Admin\Home" />
-		<Folder Include="wwwroot\css\images" />
+		<Folder Include="wwwroot\css\PreviewProduct\js\Admin\Shared" />
 		<Folder Include="wwwroot\dist" />
 		<Folder Include="wwwroot\js\Admin\Shared\" />
 		<Folder Include="wwwroot\plugins\" />
@@ -242,6 +242,25 @@
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\news1.png" />
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\sp3.png" />
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\29\image.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-brands-400.a914b1.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-brands-400.aff193.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-regular-400.47074d.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-regular-400.625dca.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-solid-900.422cfe.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-solid-900.64d495.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-v4compatibility.ea8535.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Bold.a0fe34.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-BoldItalic.de2cc7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-ExtraBold.f3f77b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-ExtraBoldItalic.9964f7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Italic.dfdc57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Light.8ed223.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-LightItalic.59e442.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Medium.65529e.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-MediumItalic.00b028.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Regular.57cd57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-SemiBold.2b370b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-SemiBoldItalic.cd7101.ttf" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties NpmRestoreOnProjectOpen="True" /></VisualStudio></ProjectExtensions>
 
