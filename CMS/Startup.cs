@@ -115,13 +115,13 @@ namespace CMS
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SuppressXFrameOptionsHeader = true;
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.AntiforgeryCookie";
             });
 
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
