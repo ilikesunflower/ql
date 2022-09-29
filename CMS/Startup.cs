@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
@@ -70,8 +71,9 @@ namespace CMS
             services.AddSingleton(Configuration);
             services.Configure<CookiePolicyOptions>(options =>
             {
+                options.HttpOnly = HttpOnlyPolicy.Always;
                 options.CheckConsentNeeded = _ => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Lax;
                 options.ConsentCookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Consent";
             });
             services.AddResponseCompression();
@@ -109,12 +111,17 @@ namespace CMS
 
             services.AddAntiforgery(options =>
             {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.AntiforgeryCookie";
             });
 
             services.AddSession(options =>
             {
                 options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
@@ -129,7 +136,11 @@ namespace CMS
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings  
+                options.CookieManager = new ChunkingCookieManager();
                 options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromDays(appSetting.GetValue<int>("ExpireTimeSpan"));
                 options.LoginPath = appSetting.GetValue<string>("LoginPath");
                 options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
@@ -146,7 +157,8 @@ namespace CMS
                 {
                     options.CookieManager = new ChunkingCookieManager();
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.IsEssential = true;
+                    options.Cookie.SameSite = SameSiteMode.Lax;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
