@@ -38,6 +38,7 @@ namespace CMS.Areas.Identity.Pages.Account
                         IdentityConstants.ApplicationScheme });
         }
 
+        [ValidateAntiForgeryToken]
         public IActionResult OnPost(string returnUrl = null)
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
