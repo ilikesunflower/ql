@@ -74,6 +74,11 @@ namespace CMS
                 options.HttpOnly = HttpOnlyPolicy.Always;
                 options.CheckConsentNeeded = _ => false;
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                options.Secure = CookieSecurePolicy.Always;
+                options.ConsentCookie.IsEssential = true;
+                options.ConsentCookie.HttpOnly = true;
+                options.ConsentCookie.SameSite = SameSiteMode.Lax;
+                options.ConsentCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ConsentCookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Consent";
             });
             services.AddResponseCompression();
@@ -136,7 +141,7 @@ namespace CMS
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings  
-                options.CookieManager = new ChunkingCookieManager();
+                // options.CookieManager = new ChunkingCookieManager();
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SameSite = SameSiteMode.Lax;
@@ -155,7 +160,7 @@ namespace CMS
                 })
                 .AddCookie(options =>
                 {
-                    options.CookieManager = new ChunkingCookieManager();
+                    // options.CookieManager = new ChunkingCookieManager();
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
                     options.Cookie.SameSite = SameSiteMode.Lax;
