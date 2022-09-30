@@ -1,27 +1,22 @@
 ﻿using System;
-using System.Net;
 using System.Reflection;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using CMS_Access.init;
+using CMS_EF.DbContext;
+using CMS_EF.Models.Identity;
+using CMS_Lib;
+using CMS_Lib.DI;
+using CMS_Ship.Extensions;
+using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
+using CMS.Extensions.Url;
 using CMS.Hubs;
 using CMS.Middleware.AuthorizationController;
 using CMS.Middleware.Hubs;
 using CMS.Middleware.Menu;
 using CMS.Services.Uris;
-using CMS_Access.init;
-using CMS_Access.Repositories;
-using CMS_EF.DbContext;
-using CMS_EF.Models.Identity;
-using CMS_Lib;
-using CMS_Lib.DI;
-using CMS_Lib.Util;
-using CMS_Ship.Extensions;
-using CMS_WareHouse.Extensions;
 using Ganss.XSS;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -32,7 +27,6 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.StaticFiles;
@@ -42,14 +36,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using ReflectionIT.Mvc.Paging;
 using Serilog;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using ServiceCollectionExtensions = CMS_Lib.DI.ServiceCollectionExtensions;
-using UrlHelperExtensions = CMS.Extensions.Url.UrlHelperExtensions;
 
 namespace CMS
 {
@@ -134,7 +126,14 @@ namespace CMS
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
 
-            services.AddCors();
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
+                    });
+            });
 
             #endregion
 
