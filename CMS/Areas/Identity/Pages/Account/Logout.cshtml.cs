@@ -26,7 +26,6 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
             HttpContext.Session.Clear();
-            HttpContext.Session.CommitAsync();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });
@@ -37,7 +36,6 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
             HttpContext.Session.Clear();
-            HttpContext.Session.CommitAsync();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });

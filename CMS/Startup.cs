@@ -72,7 +72,7 @@ namespace CMS
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.HttpOnly = HttpOnlyPolicy.Always;
-                options.CheckConsentNeeded = _ => false;
+                options.CheckConsentNeeded = _ => true;
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
                 options.Secure = CookieSecurePolicy.Always;
                 options.ConsentCookie.IsEssential = true;
