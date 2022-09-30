@@ -121,7 +121,7 @@ namespace CMS
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SuppressXFrameOptionsHeader = true;
-                options.HeaderName = "forgery";
+                // options.HeaderName = "forgery";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.forgery";
             });
 
