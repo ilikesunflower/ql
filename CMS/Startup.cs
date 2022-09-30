@@ -72,7 +72,7 @@ namespace CMS
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.HttpOnly = HttpOnlyPolicy.Always;
-                options.CheckConsentNeeded = _ => true;
+                options.CheckConsentNeeded = _ => false;
                 options.MinimumSameSitePolicy = SameSiteMode.Lax;
                 options.Secure = CookieSecurePolicy.Always;
                 options.ConsentCookie.IsEssential = true;
@@ -120,7 +120,9 @@ namespace CMS
                 options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.AntiforgeryCookie";
+                options.SuppressXFrameOptionsHeader = true;
+                options.HeaderName = "forgery";
+                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.forgery";
             });
 
             services.AddSession(options =>
