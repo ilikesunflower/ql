@@ -22,17 +22,11 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             _logger = logger;
         }
-        public IActionResult OnGet(string returnUrl, string msg)
+        public IActionResult OnGet(string returnUrl)
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
-            bool isWsFederation = User.HasClaim(CmsClaimType.UserType, "1");
             HttpContext.Session.Clear();
-            if (!string.IsNullOrEmpty(msg))
-            {
-                string d = WebUtility.UrlDecode(msg);
-                TempData[ResultMessage.IsShowMessage] = "-1";
-                TempData[ResultMessage.ContentMessage] = d;
-            }
+            HttpContext.Session.CommitAsync();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });
@@ -43,6 +37,7 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
             HttpContext.Session.Clear();
+            HttpContext.Session.CommitAsync();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });
