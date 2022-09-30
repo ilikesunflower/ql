@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using CMS_Lib.Helpers;
 using Ganss.XSS;
 
 namespace CMS.Extensions.Validate
@@ -8,14 +10,30 @@ namespace CMS.Extensions.Validate
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var data = value?.ToString();
-            if (data != null && (data.ToLower().Contains("<script>") || data.ToLower().Contains("</script>")))
+            if (CollectionHelper.IsList(value))
             {
-                return new ValidationResult("Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
-            }
-            else if (data != null && ContainsHTML(data.TrimEnd()))
-            {
-                return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
+                foreach (var item in (IEnumerable)value)
+                {
+                    var data = value?.ToString();
+                    if (data != null && (data.ToLower().Contains("<script>") || data.ToLower().Contains("</script>")))
+                    {
+                        return new ValidationResult("Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
+                    }
+                    else if (data != null && ContainsHTML(data.TrimEnd()))
+                    {
+                        return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
+                    }
+                }
+            }else if (value.GetType().ImplementsGenericInterface(typeof(string))) {
+                var data = value?.ToString();
+                if (data != null && (data.ToLower().Contains("<script>") || data.ToLower().Contains("</script>")))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
+                }
+                else if (data != null && ContainsHTML(data.TrimEnd()))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
+                }   
             }
             return null;
         }
