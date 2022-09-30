@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using CMS.Extensions.Validate;
 using CMS_Lib.Util;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace CMS.Areas.Identity.Pages.Account
@@ -24,12 +25,15 @@ namespace CMS.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _iHttpContextAccessor;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, IConfiguration configuration)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger,
+            IConfiguration configuration,IHttpContextAccessor iHttpContextAccessor)
         {
             _signInManager = signInManager;
             _logger = logger;
             this._configuration = configuration;
+            _iHttpContextAccessor = iHttpContextAccessor;
         }
 
         [BindProperty]
@@ -65,11 +69,11 @@ namespace CMS.Areas.Identity.Pages.Account
             }
 
             returnUrl ??= Url.Content("~/");
+            this._iHttpContextAccessor.HttpContext?.Session.Clear();
 
             // Clear the existing external cookie to ensure a clean login process
             if (HttpContext.User.Identity!.IsAuthenticated)
             {
-                HttpContext.Session.Clear();
                 if (HttpContext.User.Identities.Any(i => i.AuthenticationType ==CmsConsts.WsFederationAuth))
                 {
                     await _signInManager.SignOutAsync();

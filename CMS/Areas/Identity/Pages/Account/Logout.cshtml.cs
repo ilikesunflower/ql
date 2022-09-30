@@ -4,6 +4,7 @@ using CMS_Lib.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,15 +18,18 @@ namespace CMS.Areas.Identity.Pages.Account
     public class LogoutModel : PageModel
     {
         private readonly ILogger<LogoutModel> _logger;
+        private readonly IHttpContextAccessor _iHttpContextAccessor;
 
-        public LogoutModel(ILogger<LogoutModel> logger)
+        public LogoutModel(ILogger<LogoutModel> logger,IHttpContextAccessor iHttpContextAccessor)
         {
             _logger = logger;
+            _iHttpContextAccessor = iHttpContextAccessor;
         }
         public IActionResult OnGet(string returnUrl)
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
             HttpContext.Session.Clear();
+            this._iHttpContextAccessor.HttpContext?.Session.Clear();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });
@@ -36,6 +40,7 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
             HttpContext.Session.Clear();
+            this._iHttpContextAccessor.HttpContext?.Session.Clear();
             return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
                     new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
                         IdentityConstants.ApplicationScheme });
