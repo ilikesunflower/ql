@@ -50,11 +50,13 @@ namespace CMS.Areas.Identity.Pages.Account
         {
             [Required(ErrorMessage = "Vui lòng nhập tài khoản")]
             [ValidXss]
+            [ValidFullPath]
             public string UserName { get; set; }
 
             [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
             [DataType(DataType.Password)]
             [ValidXss]
+            [ValidFullPath]
             public string Password { get; set; }
 
             [Display(Name = "Remember me?")]
@@ -96,6 +98,7 @@ namespace CMS.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
+                returnUrl = CmsFunction.IsHtml(returnUrl) ? Url.Content("~/") : returnUrl;
                 try
                 {
                     SignInResult result = null;

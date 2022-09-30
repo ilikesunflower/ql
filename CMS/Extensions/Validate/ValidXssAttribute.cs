@@ -66,4 +66,21 @@ namespace CMS.Extensions.Validate
             return null;
         }
     }
+    
+    public class ValidFullPathAttribute : ValidationAttribute
+    {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if (value != null && value.GetType().ImplementsGenericInterface(typeof(string)))
+            {
+                var data = $"{value}";
+                if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nhập nội dung này, vui lòng nhập lại");
+                }   
+            }
+
+            return null;
+        }
+    }
 }
