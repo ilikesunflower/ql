@@ -58,7 +58,7 @@ namespace CMS.Areas.Admin.Controllers
             try
             {
                 var time = new TimeRange(model.TimeFlow, model.DateStart, model.DateEnd);
-                CharDataModel rs = new CharDataModel();
+                CharDataModel rs;
                 if ("days" == model.TimeFlow)
                 {
                     rs = _iDashBoardService.GetDataSalesDay(time.Start, time.End);
