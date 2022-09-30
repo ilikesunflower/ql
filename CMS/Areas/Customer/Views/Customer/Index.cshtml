@@ -35,11 +35,6 @@
                     <div class="card-header ">
                         <p class="card-title namePageText">@namePage</p>
                         <div class="float-right">
-                            @if (Model.IsImportFile)
-                            {
-                                <input type="file" style="display: none;" id="uploadFileExcel"/>
-                                <button class="btn bg-gradient-info btn-sl uploadFile" asp-area="Customer" asp-action="Import"><i class="fas fa-upload"></i> Nhập từ excel</button>
-                            }
                             @if (Model.IsExportFile)
                             {
                                 @await Html.PartialAsync("Partial/BasicAction/Export", new { area = "Customer", action = "Export", parameters = openWith })
@@ -168,60 +163,6 @@
 
 @section Scripts
 {
-    <script type="text/javascript">
-    $(".uploadFile").click((e) => {
-       $("#uploadFileExcel").click();
-    });
-    $("#uploadFileExcel").change(function (e) {
-        const url = $(".uploadFile").attr("formaction");
-        const files = $('#uploadFileExcel')[0].files[0];
-        if (files != null) {
-            const formData = new FormData();
-            formData.append('file', files);
-            Swal.fire({
-                    title: 'Bạn có chắc chắn muốn nhập dữ liệu này?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đồng ý',
-                    confirmButtonColor: '#ed5565',
-                    cancelButtonText: 'Thoát'
-                }).then((result) => {
-                    if (result.value) {
-                        UserInterface.prototype.showLoading();
-                        $.ajax({
-                                    type: 'POST',
-                                    url: url,
-                                    dataType: 'json',
-                                    data: formData,
-                                    cache: false,
-                                    processData: false,
-                                    contentType: false,
-                                    headers: {
-                                        RequestVerificationToken:
-                                            $('input:hidden[name="__RequestVerificationToken"]').val()
-                                    },
-                                    success: function (response) {
-                                        UserInterface.prototype.hideLoading();
-                                        if (response.statusCode == 200) {
-                                           window.location.reload();
-                                        } else {
-                                            toastr.error(response.message, "Thông báo");
-                                        }
-                                    },
-                                    error: function (xhr, textStatus, errorThrown) {
-                                        UserInterface.prototype.hideLoading();
-                                    }
-                                }).always(function () {
-                                    UserInterface.prototype.hideLoading();
-                                });                   
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        return false;
-                    }
-                });
-        }
-    });
-
-    </script>
 }
 
 
