@@ -71,6 +71,7 @@ namespace CMS.Areas.Identity.Pages.Account
             }
 
             returnUrl ??= Url.Content("~/");
+            returnUrl = CmsFunction.IsHtml(returnUrl) ? Url.Content("~/") : returnUrl;
             this._iHttpContextAccessor.HttpContext?.Session.Clear();
 
             // Clear the existing external cookie to ensure a clean login process
