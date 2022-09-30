@@ -53,12 +53,16 @@ public class CreateProductModel
     
     public int QuantityStock { get; set; }
     
+    [ValidXss]
     public string CodeStock { get; set; }
     
+    [ValidXss]
     public string Name1 { get; set; }
     
+    [ValidXss]
     public string Name2 { get; set; }
     
+    [ValidXss]
     public string Name3 { get; set; }
     
     public  List<string>  Properties1 { get; set; }

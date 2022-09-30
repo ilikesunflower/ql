@@ -9,6 +9,7 @@ public class CensorshipModel
     public int ProductId { set; get; }  
     
     [Required(ErrorMessage = "BackUrl lỗi")]
+    [ValidXss]
     public string BackUrl { set; get; }
     
     [ValidXss]

@@ -24,7 +24,8 @@ namespace CMS.Extensions.Validate
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
     }
-
+    
+    
     public class ValidScriptAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
