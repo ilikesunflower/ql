@@ -11,7 +11,7 @@ namespace CMS.DataTypes
         public DateTime Start { get; set; } = DateTime.Now;
         public DateTime End { get; set;} = DateTime.Now;
 
-        public string Format { get; }
+        private string Format { get; }
         
         public TimeRange(string timeFlow, string fromDate, string toDate)
         {

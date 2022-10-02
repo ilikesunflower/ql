@@ -53,7 +53,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartDataSales([FromBody] SalesFilterViewModel model)
+        public JsonResult GetChartDataSales([FromBody] SalesFilterViewModel model)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartDataSaleGroup([FromBody] SaleGroupViewModel model)
+        public JsonResult GetChartDataSaleGroup([FromBody] SaleGroupViewModel model)
         {
             try
             {
@@ -115,7 +115,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartToProduct([FromBody] ToProductViewModel model)
+        public JsonResult GetChartToProduct([FromBody] ToProductViewModel model)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartArea([FromBody] SaleGroupViewModel model)
+        public JsonResult GetChartArea([FromBody] SaleGroupViewModel model)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetToRating([FromBody] SaleGroupViewModel model)
+        public JsonResult GetToRating([FromBody] SaleGroupViewModel model)
         {
             try
             {
