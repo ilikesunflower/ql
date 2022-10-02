@@ -214,7 +214,7 @@ namespace CMS
             });
             services.AddControllersWithViews(options =>
                 {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>();
                     options.EnableEndpointRouting = false;
                 })
@@ -306,9 +306,9 @@ namespace CMS
                 }
             });
             app.UseResponseCaching();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-                { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
-            );
+            // app.UseForwardedHeaders(new ForwardedHeadersOptions
+            //     { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
+            // );
             var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
             UrlHelperExtensions.Configure(httpContextAccessor);
             app.UseMiddleware<MenuMiddleware>();
