@@ -73,7 +73,6 @@ namespace CMS.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
             returnUrl = CmsFunction.IsHtml(returnUrl) ? Url.Content("~/") : returnUrl;
             this._iHttpContextAccessor.HttpContext?.Session.Clear();
-
             // Clear the existing external cookie to ensure a clean login process
             if (HttpContext.User.Identity!.IsAuthenticated)
             {
@@ -109,12 +108,13 @@ namespace CMS.Areas.Identity.Pages.Account
                         var user = _signInManager.UserManager.Users.FirstOrDefault(x => x.UserName == Input.UserName && x.Flag == 0);
                         if (user != null && user.IsActive != 1)
                         {
+                            HttpContext.Session.Clear();
                             await this._signInManager.SignOutAsync();
                             _logger.LogWarning($"Tài khoản {Input.UserName} chưa được kích hoạt");
                             ModelState.AddModelError("Input.Password", "Tài khoản chưa được kích hoạt");
                             return Page();
                         }
-                        _logger.LogInformation($"Tài khoản {user.UserName} đăng nhập thành công.");
+                        _logger.LogInformation($"Tài khoản {user!.UserName} đăng nhập thành công.");
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(user).Result, new AuthenticationProperties { IsPersistent = true });
                         return LocalRedirect(returnUrl);
                     }
