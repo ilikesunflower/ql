@@ -133,6 +133,8 @@ namespace CMS
                     policy =>
                     {
                         policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
                     });
             });
 
@@ -254,7 +256,12 @@ namespace CMS
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-
+            app.UseRouting();
+            app.UseCors();
+            app.UseCookiePolicy();
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
             var mimeTypeProvider = new FileExtensionContentTypeProvider();
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
@@ -297,12 +304,6 @@ namespace CMS
                     }
                 }
             });
-            app.UseRouting();
-            app.UseCors();
-            app.UseCookiePolicy();
-            app.UseSession();
-            app.UseAuthentication();
-            app.UseAuthorization();
             app.UseResponseCaching();
             app.UseForwardedHeaders(new ForwardedHeadersOptions
                 { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
