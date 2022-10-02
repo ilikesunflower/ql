@@ -559,6 +559,20 @@ namespace CMS_Lib.Util
 
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
+        public static bool IsBackUrl(string checkString)
+        {
+            if (string.IsNullOrEmpty(checkString))
+            {
+                return false;
+            }
+
+            if (checkString.StartsWith("javascript:"))
+            {
+                return true;
+            }
+            return Regex.IsMatch(checkString, "<(.|\n)*?>");
+        }
+
 
         public static string ConvertDateTimeToQuarterString(DateTime date)
         {

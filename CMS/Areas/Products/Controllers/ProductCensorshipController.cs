@@ -400,7 +400,7 @@ public class ProductCensorshipController : BaseController
         model.AddModel("isCensorshipContent", User.HasClaim(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Content".ToUpper()));
         model.AddModel("isCensorshipImage", User.HasClaim(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Image".ToUpper()));
         
-        model.AddModel("backUrl",CmsFunction.IsHtml(backUrl) ? "#" : backUrl);
+        model.AddModel("backUrl",CmsFunction.IsBackUrl(backUrl) ? "#" : backUrl);
         
         return View(model);
     }

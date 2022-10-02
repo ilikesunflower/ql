@@ -71,7 +71,7 @@ namespace CMS.Areas.Identity.Pages.Account
             }
 
             returnUrl ??= Url.Content("~/");
-            returnUrl = CmsFunction.IsHtml(returnUrl) ? Url.Content("~/") : returnUrl;
+            returnUrl = CmsFunction.IsBackUrl(returnUrl) ? Url.Content("~/") : returnUrl;
             this._iHttpContextAccessor.HttpContext?.Session.Clear();
             // Clear the existing external cookie to ensure a clean login process
             if (HttpContext.User.Identity!.IsAuthenticated)
@@ -98,7 +98,7 @@ namespace CMS.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                returnUrl = CmsFunction.IsHtml(returnUrl) ? Url.Content("~/") : returnUrl;
+                returnUrl = CmsFunction.IsBackUrl(returnUrl) ? Url.Content("~/") : returnUrl;
                 try
                 {
                     SignInResult result = null;
