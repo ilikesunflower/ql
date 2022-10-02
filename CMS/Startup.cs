@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using CMS_Access.init;
 using CMS_EF.DbContext;
 using CMS_EF.Models.Identity;
@@ -145,10 +146,10 @@ namespace CMS
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings  
-                // options.CookieManager = new ChunkingCookieManager();
+                options.CookieManager = new ChunkingCookieManager();
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
-                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ExpireTimeSpan = TimeSpan.FromDays(appSetting.GetValue<int>("ExpireTimeSpan"));
                 options.LoginPath = appSetting.GetValue<string>("LoginPath");
@@ -164,10 +165,10 @@ namespace CMS
                 })
                 .AddCookie(options =>
                 {
-                    // options.CookieManager = new ChunkingCookieManager();
+                    options.CookieManager = new ChunkingCookieManager();
                     options.Cookie.HttpOnly = true;
                     options.Cookie.IsEssential = true;
-                    options.Cookie.SameSite = SameSiteMode.Lax;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
