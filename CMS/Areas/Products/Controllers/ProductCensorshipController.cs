@@ -399,8 +399,9 @@ public class ProductCensorshipController : BaseController
         model.AddModel("isCensorshipPrice", User.HasClaim(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Price".ToUpper()));
         model.AddModel("isCensorshipContent", User.HasClaim(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Content".ToUpper()));
         model.AddModel("isCensorshipImage", User.HasClaim(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Image".ToUpper()));
-        
-        model.AddModel("backUrl",CmsFunction.IsBackUrl(backUrl) ? "#" : backUrl);
+        backUrl = CmsFunction.IsBackUrl(backUrl) ? "#" : backUrl;
+        backUrl = Url.IsLocalUrl(backUrl) ? backUrl : "#";
+        model.AddModel("backUrl",backUrl);
         
         return View(model);
     }
