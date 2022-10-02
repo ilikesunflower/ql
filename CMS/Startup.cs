@@ -66,11 +66,11 @@ namespace CMS
             {
                 options.HttpOnly = HttpOnlyPolicy.Always;
                 options.CheckConsentNeeded = _ => false;
-                options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
                 options.Secure = CookieSecurePolicy.Always;
                 options.ConsentCookie.IsEssential = true;
                 options.ConsentCookie.HttpOnly = true;
-                options.ConsentCookie.SameSite = SameSiteMode.Lax;
+                options.ConsentCookie.SameSite = SameSiteMode.Strict;
                 options.ConsentCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ConsentCookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Consent";
             });
@@ -110,7 +110,7 @@ namespace CMS
             services.AddAntiforgery(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SuppressXFrameOptionsHeader = true;
@@ -123,7 +123,7 @@ namespace CMS
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
 
