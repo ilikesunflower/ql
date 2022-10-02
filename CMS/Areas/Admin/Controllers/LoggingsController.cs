@@ -38,11 +38,11 @@ namespace CMS.Areas.Admin.Controllers
 
         // GET: Admin/Loggings
         [Authorize(Policy = "PermissionMVC")]
-        public async Task<IActionResult> Index(string txtKeyword, int? userId, int? type, string startTime,
+        public async Task<IActionResult> Index(string txtSearch, int? userId, int? type, string startTime,
             string endTime, int pageindex = 1)
         {
             var q = _iLoggingRepository.FindAll().AsNoTracking().Where(x => x.Flag == 0);
-            if (!txtKeyword.IsNullOrEmpty()) q = q.Where(p => EF.Functions.Like(p.Action, "%" + txtKeyword.Trim() + "%") || p.UserFullName == txtKeyword.Trim());
+            if (!txtSearch.IsNullOrEmpty()) q = q.Where(p => EF.Functions.Like(p.Action, "%" + txtSearch.Trim() + "%") || p.UserFullName == txtSearch.Trim());
             if (userId.HasValue) q = q.Where(x => x.UserId == userId.Value);
             if (type.HasValue) q = q.Where(x => x.LogLevel == type.Value);
             if (!string.IsNullOrEmpty(startTime))
@@ -61,7 +61,7 @@ namespace CMS.Areas.Admin.Controllers
             var model = await PagingList<Logging>.CreateAsync(q.OrderByDescending(x => x.CreatedAt), PageSize, pageindex);
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"userId", userId},
                 {"type", type},
                 {"startTime", startTime},

@@ -30,12 +30,12 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [NoActiveMenu]
-        public async Task<IActionResult> UsersNotification(string txtKeyword, string senderName, int? isUnread, int pageindex = 1)
+        public async Task<IActionResult> UsersNotification(string txtSearch, string senderName, int? isUnread, int pageindex = 1)
         {
             var query = this._iNotificationRepository.FindAllByReceiveId(UserInfo.UserId);
-            if (!string.IsNullOrEmpty(txtKeyword))
+            if (!string.IsNullOrEmpty(txtSearch))
             {
-                query = query.Where(x => (x.Title.Contains(txtKeyword) || x.Detail.Contains(txtKeyword)));
+                query = query.Where(x => (x.Title.Contains(txtSearch) || x.Detail.Contains(txtSearch)));
             }
 
             if (!string.IsNullOrEmpty(senderName))
@@ -49,7 +49,7 @@ namespace CMS.Areas.Admin.Controllers
             var model = await PagingList<NotificationUserExtend>.CreateAsync(query.OrderByDescending(x => x.Id), PageSize, pageindex);
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"senderName", senderName},
                 {"isUnread", isUnread}
             };

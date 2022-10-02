@@ -50,12 +50,12 @@ public class PointInputController : BaseController
 
 
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtKeyword, string startDate, string endDate, int pageindex = 1)
+    public IActionResult Index(string txtSearch, string startDate, string endDate, int pageindex = 1)
     {
         var query = _historyFileChargePointRepository.FindAll();
-        if (!string.IsNullOrEmpty(txtKeyword))
+        if (!string.IsNullOrEmpty(txtSearch))
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -75,7 +75,7 @@ public class PointInputController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.CreatedAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"startDate", startDate},
             {"endDate", endDate}
         };

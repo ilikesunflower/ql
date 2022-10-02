@@ -38,17 +38,17 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [Obsolete]
-        public async Task<IActionResult> Index(string txtKeyword, int pageindex = 1)
+        public async Task<IActionResult> Index(string txtSearch, int pageindex = 1)
         {
             var query = _context.ApplicationControllers.Where(x => x.Flag == 0).AsNoTracking();
-            if (!string.IsNullOrWhiteSpace(txtKeyword))
-                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtKeyword.Trim() + "%") || p.Title.Contains(txtKeyword.Trim()));
+            if (!string.IsNullOrWhiteSpace(txtSearch))
+                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtSearch.Trim() + "%") || p.Title.Contains(txtSearch.Trim()));
 
             var model = await PagingList<ApplicationController>.CreateAsync(query.OrderByDescending(x => x.CreatedAt), PageSize, pageindex);
 
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword}
+                {"txtSearch", txtSearch}
             };
             var rs = new IndexControllerViewModel
             {
@@ -197,19 +197,19 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [Obsolete]
-        public async Task<IActionResult> IndexAction(int? controllerId, string txtKeyword, int page = 1)
+        public async Task<IActionResult> IndexAction(int? controllerId, string txtSearch, int page = 1)
         {
             if (controllerId == null) return NotFound();
             var query = _context.ApplicationActions.Where(x => x.Flag == 0 && x.Controller.Id == controllerId)
                 .AsNoTracking();
-            if (!string.IsNullOrWhiteSpace(txtKeyword))
-                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtKeyword + "%"));
+            if (!string.IsNullOrWhiteSpace(txtSearch))
+                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtSearch + "%"));
 
             var model = await PagingList<ApplicationAction>.CreateAsync(query.OrderByDescending(x => x.CreatedAt), PageSize, page);
             model.RouteValue = new RouteValueDictionary
             {
                 {"controllerId", controllerId},
-                {"txtKeyword", txtKeyword}
+                {"txtSearch", txtSearch}
             };
             var applicationController = _context.ApplicationControllers.FirstOrDefault(x => x.Id == (int)controllerId);
             if (applicationController == null)

@@ -6,7 +6,7 @@
     string namePage = "Danh sách tài khoản khách hàng";
     string subName = "Quản lý tài khoản khách hàng";
     Dictionary<string, string> openWith = new Dictionary<string, string>();
-    openWith.Add("txtKeyword", Model.ListData.RouteValue?["txtKeyword"]?.ToString());
+    openWith.Add("txtSearch", Model.ListData.RouteValue?["txtSearch"]?.ToString());
     openWith.Add("TypeGroup", Model.ListData.RouteValue?["TypeGroup"]?.ToString());
     openWith.Add("Type", Model.ListData.RouteValue?["Type"]?.ToString());
     openWith.Add("status", Model.ListData.RouteValue?["status"]?.ToString());
@@ -46,7 +46,7 @@
                     <div class="card-body">
                         <form class="row" method="get">
                             <div class="col-xs-12 col-sm-4">
-                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập tài khoản hoặc họ tên" value="@Model.ListData.RouteValue["txtKeyword"]" />
+                                <input autocomplete="off" name="txtSearch" class="form-control form-control-xl" placeholder="Nhập tài khoản hoặc họ tên" value="@Model.ListData.RouteValue["txtSearch"]" />
                             </div>
                             <div class="col-xs-12 col-sm-2">
                                 <select class="form-control select2 " style="width: 100%;" name="Type" asp-for="@Model.ListData.RouteValue["Type"]">

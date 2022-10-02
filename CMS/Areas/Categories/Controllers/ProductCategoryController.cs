@@ -44,13 +44,13 @@ public class ProductCategoryController : BaseController
     }
     // GET
     [Authorize(Policy = "PermissionMVC")]
-    public  Task<IActionResult> Index(string txtKeyword, int? status, int? pid)
+    public  Task<IActionResult> Index(string txtSearch, int? status, int? pid)
     {
         
         var query = _iProductCategoryRepository.FindAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%"));
         }
         if (pid.HasValue)
         {
@@ -63,7 +63,7 @@ public class ProductCategoryController : BaseController
         List<ProductCategory> listData = query.OrderBy(x => x.Lft).ToList();
          
         ModelCollection rs = new ModelCollection();
-        rs.AddModel("txtKeyword", txtKeyword);
+        rs.AddModel("txtSearch", txtSearch);
         rs.AddModel("pid", pid);
         rs.AddModel("ListData", listData);
         rs.AddModel("ListCategoryProduct",

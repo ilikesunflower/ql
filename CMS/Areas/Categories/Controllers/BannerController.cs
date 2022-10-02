@@ -34,12 +34,12 @@ namespace CMS.Areas.Categories.Controllers
         }
 
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult Index(int txtKeyword, int? status, int pageindex = 1)
+        public IActionResult Index(int txtSearch, int? status, int pageindex = 1)
         {
             var query = _iBannerRepository.FindAll();
-            if (txtKeyword != null && txtKeyword != 0)
+            if (txtSearch != null && txtSearch != 0)
             {
-                query = query.Where(x => x.Alias == BannerConst.GetNameListStatus(txtKeyword));
+                query = query.Where(x => x.Alias == BannerConst.GetNameListStatus(txtSearch));
             }
             if (status != null && status != 0)
             {
@@ -57,7 +57,7 @@ namespace CMS.Areas.Categories.Controllers
             var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
             listData.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"status", status}
         };
             ModelCollection model = new ModelCollection();

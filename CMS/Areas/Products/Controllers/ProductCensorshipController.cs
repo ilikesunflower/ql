@@ -42,14 +42,14 @@ public class ProductCensorshipController : BaseController
 
     [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Price(string txtKeyword, int? status, int pageindex = 1)
+    public IActionResult Price(string txtSearch, int? status, int pageindex = 1)
     {
         var query = _iProductRepository.FindAll();
-        if (!string.IsNullOrEmpty(txtKeyword))
+        if (!string.IsNullOrEmpty(txtSearch))
         {
             query = query.Where(x =>
-                EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%") ||
-                EF.Functions.Like(x.Sku, "%" + txtKeyword.Trim() + "%"));
+                EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
         }
 
         if (status != null)
@@ -60,7 +60,7 @@ public class ProductCensorshipController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"status", status}
         };
         var model = new ModelCollection();
@@ -153,14 +153,14 @@ public class ProductCensorshipController : BaseController
     
     [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Content(string txtKeyword, int? status, int pageindex = 1)
+    public IActionResult Content(string txtSearch, int? status, int pageindex = 1)
     {
         var query = _iProductRepository.FindAll();
-        if (!string.IsNullOrEmpty(txtKeyword))
+        if (!string.IsNullOrEmpty(txtSearch))
         {
             query = query.Where(x =>
-                EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%") ||
-                EF.Functions.Like(x.Sku, "%" + txtKeyword.Trim() + "%"));
+                EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
         }
 
         if (status != null)
@@ -171,7 +171,7 @@ public class ProductCensorshipController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"status", status}
         };
         var model = new ModelCollection();
@@ -264,14 +264,14 @@ public class ProductCensorshipController : BaseController
     
     [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Image(string txtKeyword, int? status, int pageindex = 1)
+    public IActionResult Image(string txtSearch, int? status, int pageindex = 1)
     {
         var query = _iProductRepository.FindAll();
-        if (!string.IsNullOrEmpty(txtKeyword))
+        if (!string.IsNullOrEmpty(txtSearch))
         {
             query = query.Where(x =>
-                EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%") ||
-                EF.Functions.Like(x.Sku, "%" + txtKeyword.Trim() + "%"));
+                EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
         }
 
         if (status != null)
@@ -282,7 +282,7 @@ public class ProductCensorshipController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"status", status}
         };
         var model = new ModelCollection();

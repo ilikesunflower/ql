@@ -38,12 +38,12 @@ namespace CMS.Areas.Admin.Controllers
 
         // GET: Admin/Menus
         [Authorize(Policy = "PermissionMVC")]
-        public Task<IActionResult> Index(string txtKeyword, int? pid)
+        public Task<IActionResult> Index(string txtSearch, int? pid)
         {
             var query = _iMenuRepository.FindAll();
-            if (!string.IsNullOrEmpty(txtKeyword))
+            if (!string.IsNullOrEmpty(txtSearch))
             {
-                query = query.Where(x => x.Name.Contains(txtKeyword.Trim()));
+                query = query.Where(x => x.Name.Contains(txtSearch.Trim()));
             }
             if (pid.HasValue)
             {
@@ -56,7 +56,7 @@ namespace CMS.Areas.Admin.Controllers
             List<Menu> listData = query.OrderBy(x => x.Lft).ToList();
          
             ModelCollection rs = new ModelCollection();
-            rs.AddModel("txtKeyword", txtKeyword);
+            rs.AddModel("txtSearch", txtSearch);
             rs.AddModel("pid", pid);
             rs.AddModel("ListData", listData);
             rs.AddModel("ListMenu", _iMenuRepository.GetDisplayMenu());

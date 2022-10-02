@@ -86,16 +86,16 @@ public class OrderController : BaseController
 
     // GET
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtKeyword, string startDate, string endDate, int? status, int? payment,
+    public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int? payment,
         int? ship, int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -132,7 +132,7 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "status", status },
@@ -152,16 +152,16 @@ public class OrderController : BaseController
 
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
-    public IActionResult IndexOrderCustomerSuccess(string txtKeyword, string startDate, string endDate, int? payment,
+    public IActionResult IndexOrderCustomerSuccess(string txtSearch, string startDate, string endDate, int? payment,
         int? ship, int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -196,7 +196,7 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "payment", payment },
@@ -215,16 +215,16 @@ public class OrderController : BaseController
 
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
-    public IActionResult IndexOrderCustomerShip(string txtKeyword, string startDate, string endDate, int? payment,
+    public IActionResult IndexOrderCustomerShip(string txtSearch, string startDate, string endDate, int? payment,
         int? ship, int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -257,7 +257,7 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "payment", payment },
@@ -276,16 +276,16 @@ public class OrderController : BaseController
 
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
-    public IActionResult IndexOrderSuccess(string txtKeyword, string startDate, string endDate, int? payment, int? ship,
+    public IActionResult IndexOrderSuccess(string txtSearch, string startDate, string endDate, int? payment, int? ship,
         int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -318,7 +318,7 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "status", OrderStatusConst.StatusOrderSuccess },
@@ -338,16 +338,16 @@ public class OrderController : BaseController
 
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
-    public IActionResult IndexOrderCancel(string txtKeyword, string startDate, string endDate, int? payment, int? ship,
+    public IActionResult IndexOrderCancel(string txtSearch, string startDate, string endDate, int? payment, int? ship,
         int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%") ||
-                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
         }
 
         if (!string.IsNullOrEmpty(startDate))
@@ -380,7 +380,7 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "payment", payment },

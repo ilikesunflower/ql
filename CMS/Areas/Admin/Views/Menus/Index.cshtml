@@ -12,7 +12,7 @@
     ViewData["Title"] = "Danh sách Menu | Quản lý Menu";
     var listData = Model.GetModel<List<Menu>>("ListData");
     var listMenus = Model.GetModel<List<Menu>>("ListMenu");
-    string txtKeyword = Model.GetModel<string>("txtKeyword");
+    string txtSearch = Model.GetModel<string>("txtSearch");
     int? pid = Model.GetModel<int?>("pid");
     string namePage = "Danh sách Menu";
     string subName = "Quản trị hệ thống";
@@ -50,7 +50,7 @@
                     <div class="card-body">
                         <form class="row m-b-15" method="get">
                             <div class="col-xs-12 col-sm-6">
-                                <input autocomplete="off" name="txtKeyword" placeholder="Nội dung tìm kiếm" class="form-control form-control-sl input-sm" value="@txtKeyword"/>
+                                <input autocomplete="off" name="txtSearch" placeholder="Nội dung tìm kiếm" class="form-control form-control-sl input-sm" value="@txtSearch"/>
                             </div>
                             <div class="col-xs-12 col-sm-4">
                                 <select class="form-control form-control-sm input-sm select2" name="pid" asp-for="@pid">

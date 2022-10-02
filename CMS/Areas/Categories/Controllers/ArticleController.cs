@@ -44,13 +44,13 @@ public class ArticleController : BaseController
 
     // GET
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtKeyword, string startDate, int? type, string endDate, int? status,
+    public IActionResult Index(string txtSearch, string startDate, int? type, string endDate, int? status,
         int pageindex = 1)
     {
         var query = _iArticleRepository.FindAll();
-        if (!txtKeyword.IsNullOrEmpty())
+        if (!txtSearch.IsNullOrEmpty())
         {
-            query = query.Where(x => EF.Functions.Like(x.Title, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(x => EF.Functions.Like(x.Title, "%" + txtSearch.Trim() + "%"));
         }
 
         if (type.HasValue)
@@ -88,7 +88,7 @@ public class ArticleController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtKeyword", txtKeyword },
+            { "txtSearch", txtSearch },
             { "startDate", startDate },
             { "endDate", endDate },
             { "type", type },

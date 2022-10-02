@@ -12,7 +12,7 @@
     string subName1 = "Danh mục sản phẩm";
     var listData = Model.GetModel<List<ProductCategory>>("ListData");
     var listCategoryProduct = Model.GetModel<List<ProductCategory>>("ListCategoryProduct");
-    string txtKeyword = Model.GetModel<string>("txtKeyword");
+    string txtSearch = Model.GetModel<string>("txtSearch");
     int? pid = Model.GetModel<int?>("pid");
 }
 
@@ -47,7 +47,7 @@
                     <div class="card-body">
                         <form class="row m-b-15" method="get">
                             <div class="col-xs-12 col-sm-6">
-                                <input autocomplete="off" name="txtKeyword" class="form-control form-control-xl" placeholder="Nhập tiêu đề" value="@txtKeyword" />
+                                <input autocomplete="off" name="txtSearch" class="form-control form-control-xl" placeholder="Nhập tiêu đề" value="@txtSearch" />
                             </div>
                             <div class="col-xs-12 col-sm-4">
                                 <select class="form-control form-control-sm input-sm select2" name="pid" asp-for="@pid">

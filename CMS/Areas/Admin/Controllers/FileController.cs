@@ -62,12 +62,12 @@ namespace CMS.Areas.Admin.Controllers
 
         // GET: File
         [Obsolete]
-        public async Task<ActionResult> Index(string txtKeyword, string startTime, string endTime, int? type, int pageindex = 1)
+        public async Task<ActionResult> Index(string txtSearch, string startTime, string endTime, int? type, int pageindex = 1)
         {
             var query = _iFilesRepository.FindAll();
-            if (!string.IsNullOrEmpty(txtKeyword))
+            if (!string.IsNullOrEmpty(txtSearch))
             {
-                query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%"));
+                query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%"));
             }
 
             if (type.HasValue)
@@ -94,7 +94,7 @@ namespace CMS.Areas.Admin.Controllers
 
             data.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"startTime", startTime},
                 {"endTime", endTime},
                 {"type", type}
