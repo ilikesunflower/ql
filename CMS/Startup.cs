@@ -10,7 +10,6 @@ using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
-using CMS.Extensions.Url;
 using CMS.Hubs;
 using CMS.Middleware.AuthorizationController;
 using CMS.Middleware.Hubs;
@@ -26,6 +25,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.StaticFiles;
@@ -41,6 +41,7 @@ using ReflectionIT.Mvc.Paging;
 using Serilog;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using ServiceCollectionExtensions = CMS_Lib.DI.ServiceCollectionExtensions;
+using UrlHelperExtensions = CMS.Extensions.Url.UrlHelperExtensions;
 
 namespace CMS
 {
@@ -126,7 +127,13 @@ namespace CMS
                 options.Cookie.Path = "/";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
+            
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.TempDataCookie";
+            });
 
+            
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(
