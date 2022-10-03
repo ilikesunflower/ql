@@ -570,6 +570,11 @@ namespace CMS_Lib.Util
             {
                 return true;
             }
+
+            if (checkString.StartsWith("../"))
+            {
+                return true;
+            }
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
 
