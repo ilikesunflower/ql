@@ -577,11 +577,11 @@ public class OrderController : BaseController
                 CouponCode = model.CouponCode,
                 Price = orderProduct.Sum(x => (x.Price ?? 0) * x.Quantity),
                 CouponDiscount = model.CouponDiscount,
-                Point = model.Point,
+                // Point = model.Point,
                 PrCode = model.PrCode,
                 PrFile = model.PrFile,
                 Status = 0,
-                PointDiscount = (double)(model.Point * IsPoi),
+                // PointDiscount = (double)(model.Point * IsPoi),
                 TotalWeight = model.TotalWeight!.Value,
                 BillCompanyName =
                     customer.Type == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName,
@@ -1295,9 +1295,9 @@ public class OrderController : BaseController
             order.CouponDiscount = model.CouponDiscount;
             order.Price = orderCreate.Sum(x => (x.Price ?? 0) * x.Quantity) +
                           orderUpdate.Sum(x => (x.Price ?? 0) * x.Quantity);
-            order.Point = model.Point;
+            // order.Point = model.Point;
             order.PrCode = model.PrCode;
-            order.PointDiscount = model.Point * IsPoi;
+            // order.PointDiscount = model.Point * IsPoi;
             order.PrFile = !string.IsNullOrEmpty(prFileUrl) ? prFileUrl : order.PrFile;
             order.BillCompanyName =
                 customer.Type == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName;
@@ -1307,7 +1307,7 @@ public class OrderController : BaseController
             modelApi.Order = order;
             modelApi.OrderAddress = newAddress;
             modelApi.IsChangeProduct = isChangProduct;
-            modelApi.IsChangePoi = model.CheckChangePoi;
+            // modelApi.IsChangePoi = model.CheckChangePoi;
             ResultJson resultJson = _iOrderServer.EditOrders(modelApi);
             if (resultJson.StatusCode == 400)
             {

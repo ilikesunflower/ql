@@ -235,20 +235,20 @@ namespace CMS_App_Api.Services.Orders
             //lay gia tri order cu - lay ra poi cu
             var orderOld = _ordersRepository.FindAll().Where( x => x.Id == order.Id).Include(x => x.OrderPoint.Where(x => x.Flag == 0)).FirstOrDefault();
         
-                List<CustomerPoint> customerPoint = new List<CustomerPoint>();
-                if (data.IsChangePoi)
-                {
-                    //check số lượng
-                    customerPoint = _customerPointServices.FindByCustomerId(order.CustomerId.Value);
-                    var pointNew = customerPoint.Sum(x => x.Point) ?? 0;
-                    var listOrderPoi = _customerPointServices.FindByIdAndOrderId(order.Id);
-                    var pointOld = listOrderPoi.Sum(x => x.Point) ?? 0;
-                    var sumPoint = pointNew + pointOld;
-                    if (data.Order.Point > sumPoint)
-                    {
-                        throw new Exception("Số lượng điểm của bạn không đủ! Vui lòng thử lại");
-                    }
-                }
+                // List<CustomerPoint> customerPoint = new List<CustomerPoint>();
+                // if (data.IsChangePoi)
+                // {
+                //     //check số lượng
+                //     customerPoint = _customerPointServices.FindByCustomerId(order.CustomerId.Value);
+                //     var pointNew = customerPoint.Sum(x => x.Point) ?? 0;
+                //     var listOrderPoi = _customerPointServices.FindByIdAndOrderId(order.Id);
+                //     var pointOld = listOrderPoi.Sum(x => x.Point) ?? 0;
+                //     var sumPoint = pointNew + pointOld;
+                //     if (data.Order.Point > sumPoint)
+                //     {
+                //         throw new Exception("Số lượng điểm của bạn không đủ! Vui lòng thử lại");
+                //     }
+                // }
            
            //update CustomerPoi vaf tao log
 
@@ -282,14 +282,14 @@ namespace CMS_App_Api.Services.Orders
                         _customerCouponServices.Use(customerCoupon, order);
                     }
                 }
-                if (data.IsChangePoi)
-                {
-                  _customerPointServices.RevertEdit(orderOld);
-                  if (order.Point > 0 && customerPoint.Count > 0)
-                  {
-                      _customerPointServices.Use(customerPoint, order );
-                  }
-                }
+                // if (data.IsChangePoi)
+                // {
+                //   _customerPointServices.RevertEdit(orderOld);
+                //   if (order.Point > 0 && customerPoint.Count > 0)
+                //   {
+                //       _customerPointServices.Use(customerPoint, order );
+                //   }
+                // }
                 //update address
                 var newAddress = data.OrderAddress;
 
