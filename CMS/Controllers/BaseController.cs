@@ -21,6 +21,7 @@ namespace CMS.Controllers
 {
     [Authorize]
     // [AutoValidateAntiforgeryToken]
+    [ValidateAntiForgeryToken]
     [IgnoreAntiforgeryToken]
     public abstract class BaseController : Controller
     {
