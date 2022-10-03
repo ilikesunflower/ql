@@ -26,6 +26,9 @@ namespace CMS.Extensions.Validate
                         {
                             return new ValidationResult(
                                 "Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
+                        }else if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
                     }
                 }
@@ -42,6 +45,9 @@ namespace CMS.Extensions.Validate
                 else if (!string.IsNullOrEmpty(data) && CmsFunction.IsHtml(data.TrimEnd()))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
+                }else if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
             }
 
