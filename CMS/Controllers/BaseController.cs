@@ -20,7 +20,8 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CMS.Controllers
 {
     [Authorize]
-    [AutoValidateAntiforgeryToken]
+    // [AutoValidateAntiforgeryToken]
+    [IgnoreAntiforgeryToken]
     public abstract class BaseController : Controller
     {
         protected int PageSize { get; set; }

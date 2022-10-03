@@ -43,6 +43,7 @@ namespace CMS.Areas.Identity.Pages.Account
             public bool RememberMachine { get; set; }
         }
 
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> OnGetAsync(bool rememberMe, string returnUrl = null)
         {
             // Ensure the user has gone through the username & password screen first

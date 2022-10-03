@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Net;
-using CMS_Lib.Util;
+﻿using System;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -9,11 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CMS.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
     [Authorize]
     public class LogoutModel : PageModel
     {
@@ -25,25 +21,47 @@ namespace CMS.Areas.Identity.Pages.Account
             _logger = logger;
             _iHttpContextAccessor = iHttpContextAccessor;
         }
+        [IgnoreAntiforgeryToken]
         public IActionResult OnGet(string returnUrl)
         {
-            this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
-            HttpContext.Session.Clear();
-            this._iHttpContextAccessor.HttpContext?.Session.Clear();
-            return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
-                    new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
-                        IdentityConstants.ApplicationScheme });
+            try
+            {
+                HttpContext.Session.Clear();
+                if (User.Identity!.IsAuthenticated)
+                {
+                    this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
+                    return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
+                        new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
+                            IdentityConstants.ApplicationScheme });   
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+            return Redirect("/Identity/Account/Login");
         }
 
         [AutoValidateAntiforgeryToken]
         public IActionResult OnPost(string returnUrl = null)
         {
-            this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
-            HttpContext.Session.Clear();
-            this._iHttpContextAccessor.HttpContext?.Session.Clear();
-            return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
-                    new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
-                        IdentityConstants.ApplicationScheme });
+            try
+            {
+                HttpContext.Session.Clear();
+                if (User.Identity!.IsAuthenticated)
+                {
+                    this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
+                    return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
+                        new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
+                            IdentityConstants.ApplicationScheme });   
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return Redirect("/Identity/Account/Login");
         }
     }
 }

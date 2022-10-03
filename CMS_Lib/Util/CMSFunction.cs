@@ -575,6 +575,7 @@ namespace CMS_Lib.Util
             {
                 return true;
             }
+            
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
 

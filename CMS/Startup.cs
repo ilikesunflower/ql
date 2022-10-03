@@ -85,14 +85,8 @@ namespace CMS
                 options.ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
                 options.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning));
             });
-            // services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
-            //     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
-                {
-                    o.Stores.MaxLengthForKeys = 128;
-                })
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
+                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -119,6 +113,7 @@ namespace CMS
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.SuppressXFrameOptionsHeader = true;
                 // options.HeaderName = "forgery";
+                options.Cookie.Path = "/";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.forgery";
             });
 
@@ -128,6 +123,7 @@ namespace CMS
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Path = "/";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
 
@@ -159,6 +155,7 @@ namespace CMS
                 options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
                 options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");
                 options.SlidingExpiration = true;
+                options.Cookie.Path = "/";
                 // options.Cookie.Domain = appSetting.GetValue<string>("CookieDomain");
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
             });
@@ -178,6 +175,7 @@ namespace CMS
                     options.LoginPath = appSetting.GetValue<string>("LoginPath");
                     options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
                     options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");
+                    options.Cookie.Path = "/";
                     options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
                 });
 
