@@ -10,7 +10,6 @@ import ListProduct from "../../components/listproduct/MainView";
 function MainApp(props) {
     
     const {state, method, formik} = MainController(props);
-    console.log("formik", formik.values)
     return (
         <Row>
           <Col md={12}>

@@ -131,33 +131,33 @@ function MainView(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="col-12">
-                                            <div className="row mt-3">
-                                                <div className="col-md-10">
-                                                    <div className="styleLastTable justify-content-end">
-                                                        <span className="text-right">Sử dụng điểm thưởng</span>
-                                                        <span className="txt-helper">( Bạn đang có {formatNumber(isEdit? state.customerPoint + state.customerPointOld :state.customerPoint)} điểm)</span>
-                                                        <div className="btn-group ">
-                                                            <button type="button" className="btn " onClick={method.applyPointDecrease}>
-                                                                <i className="fa-solid fa-minus"></i>
-                                                            </button>
-                                                            <NumberFormat  className="form-control form-control-xl inputQuantity  " thousandSeparator={'.'} decimalSeparator={','} name="price" autoComplete="off"
-                                                                           value={!Number.isNaN(Number.parseInt(formik.values.point)) ? Number.parseInt(formik.values.point) : 0} onValueChange={method.applyPoint}/>
-                                                            <button type="button"  className="btn " onClick={method.applyPointIncrease}>
-                                                                <i className="fa-solid fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                        {/*<div className="col-12">*/}
+                                        {/*    <div className="row mt-3">*/}
+                                        {/*        <div className="col-md-10">*/}
+                                        {/*            <div className="styleLastTable justify-content-end">*/}
+                                        {/*                <span className="text-right">Sử dụng điểm thưởng</span>*/}
+                                        {/*                <span className="txt-helper">( Bạn đang có {formatNumber(isEdit? state.customerPoint + state.customerPointOld :state.customerPoint)} điểm)</span>*/}
+                                        {/*                <div className="btn-group ">*/}
+                                        {/*                    <button type="button" className="btn " onClick={method.applyPointDecrease}>*/}
+                                        {/*                        <i className="fa-solid fa-minus"></i>*/}
+                                        {/*                    </button>*/}
+                                        {/*                    <NumberFormat  className="form-control form-control-xl inputQuantity  " thousandSeparator={'.'} decimalSeparator={','} name="price" autoComplete="off"*/}
+                                        {/*                                   value={!Number.isNaN(Number.parseInt(formik.values.point)) ? Number.parseInt(formik.values.point) : 0} onValueChange={method.applyPoint}/>*/}
+                                        {/*                    <button type="button"  className="btn " onClick={method.applyPointIncrease}>*/}
+                                        {/*                        <i className="fa-solid fa-plus"></i>*/}
+                                        {/*                    </button>*/}
+                                        {/*                </div>*/}
+                                        {/*            </div>*/}
                                         
-                                                </div>
-                                                <div className="col-md-2">
-                                                    <div className="d-flex justify-content-end">
-                                                        <strong>-{formatNumber(formik.values?.point * isPoi)} <u>đ</u></strong>
-                                                    </div>
+                                        {/*        </div>*/}
+                                        {/*        <div className="col-md-2">*/}
+                                        {/*            <div className="d-flex justify-content-end">*/}
+                                        {/*                <strong>-{formatNumber(formik.values?.point * isPoi)} <u>đ</u></strong>*/}
+                                        {/*            </div>*/}
                                         
-                                                </div>
-                                            </div>
-                                        </div>
+                                        {/*        </div>*/}
+                                        {/*    </div>*/}
+                                        {/*</div>*/}
                                         <div className="col-12">
                                             <div className="row mt-3">
                                                 <div className="col-md-10">

@@ -8,7 +8,6 @@ function MainView(props) {
     let [listCustomer, setListCustomer] = useState([]);
     useEffect(() => {
         getListCustomer(function (rs) {
-            console.log(rs);
             setListCustomer(rs);
         })
       

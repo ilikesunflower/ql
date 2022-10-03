@@ -26,7 +26,6 @@ function MainController(props) {
           
             })
             getPointOldCustomer({orderId: orderId}, function (rs) {
-                console.log(rs);
                 setCustomerPointOld(rs);
             })
         }
@@ -58,7 +57,6 @@ function MainController(props) {
                 }) 
             }else{
                 getListCustomerCoupon({customerId : customer}, function (response) {
-                    console.log("getListCustomerCoupon", response)
                     setListCoupon(response);
                 })
             }
@@ -183,7 +181,6 @@ function MainController(props) {
                             data[index].price = check?.priceNew || 0;
                             data[index].weight = check?.weightNew || 0;
                             if ( quantity > (quantityWH + quantityBuy) ){
-                                console.log("lớn hơn",quantityWH + quantityBuy, quantity )
                                 data[index].quantityBy = quantityWH + quantityBuy;
                             }else if ( quantity >= 1 && quantity <= (quantityWH + quantityBuy)){
                                 data[index].quantityBy = quantity;
@@ -202,7 +199,6 @@ function MainController(props) {
                     let quantityWH = check.quantityWH;
 
                     if ( quantity > (quantityWH + quantityBuy) ){
-                        console.log("lớn hơn",quantityWH + quantityBuy, quantity )
                         data[index].quantityBy = quantityWH + quantityBuy;
                     }else if ( quantity >= 1 && quantity <= (quantityWH + quantityBuy)){
                         data[index].quantityBy = quantity;
@@ -237,186 +233,186 @@ function MainController(props) {
     }  
     
  //point
-    const applyPointIncrease = () => {
-        if(isEdit){
-            if( !formik.values.checkChangePoi ){
-                Swal.fire({
-                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đồng ý',
-                    confirmButtonColor: '#ed5565',
-                    cancelButtonText: 'Thoát'
-                }).then((result) => {
-                    if (result.value) {
-                        let point1 = formik.values.point;
-                        let value = point1+1;
-                        formik.setFieldValue("checkChangePoi", true)
-                        if (value > (customerPoint + customerPointOld)){
-                            formik.setFieldValue("point", customerPoint + customerPointOld)
-                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                            return
-                        }
-                        if(value < 0){
-                            formik.setFieldValue("point", 0)
-                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                            return
-                        }
-                        formik.setFieldValue("point", value)
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        return false;
-                    }
-                })
-            }else{
-                let point1 = formik.values.point;
-                let value = point1+1;
-                formik.setFieldValue("checkChangePoi", true)
-                if (value > (customerPoint + customerPointOld)){
-                    formik.setFieldValue("point", customerPoint + customerPointOld)
-                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                    return
-                }
-                if(value < 0){
-                    formik.setFieldValue("point", 0)
-                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                    return
-                }
-                formik.setFieldValue("point", value)
-            }
-
-        }else {
-            let point = formik.values.point;
-            let value = point+1;
-            if (value > customerPoint){
-                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
-                return
-            }
-            if(value < 0){
-                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                return
-            }
-            formik.setFieldValue("point", value)   
-        }
-    }
-    const applyPointDecrease = () => {
-        if(isEdit){
-            if( !formik.values.checkChangePoi ) {
-                Swal.fire({
-                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đồng ý',
-                    confirmButtonColor: '#ed5565',
-                    cancelButtonText: 'Thoát'
-                }).then((result) => {
-                    if (result.value) {
-                        let point1 = formik.values.point;
-                        let value = point1 - 1;
-                        formik.setFieldValue("checkChangePoi", true)
-                        if (value > (customerPoint + customerPointOld)) {
-                            formik.setFieldValue("point", customerPoint + customerPointOld)
-                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                            return
-                        }
-                        if (value < 0) {
-                            formik.setFieldValue("point", 0)
-                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                            return
-                        }
-                        formik.setFieldValue("point", value)
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        return false;
-                    }
-                })
-            }else{
-                let point1 = formik.values.point;
-                let value = point1 - 1;
-                formik.setFieldValue("checkChangePoi", true)
-                if (value > (customerPoint + customerPointOld)) {
-                    formik.setFieldValue("point", customerPoint + customerPointOld)
-                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                    return
-                }
-                if (value < 0) {
-                    formik.setFieldValue("point", 0)
-                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                    return
-                }
-                formik.setFieldValue("point", value)
-            }
-
-        }else{
-            let point = formik.values.point;
-            let value = point-1;
-            if (value > customerPoint){
-                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
-                return
-            }
-            if(value < 0){
-                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                return
-            }
-            formik.setFieldValue("point", value)
-        }
-    }
-    const applyPoint = (event) => {
-        if(isEdit){
-            if( !formik.values.checkChangePoi ){
-                Swal.fire({
-                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Đồng ý',
-                    confirmButtonColor: '#ed5565',
-                    cancelButtonText: 'Thoát'
-                }).then((result) => {
-                    if (result.value) {
-                        let value = parseInt(event.floatValue)
-                        formik.setFieldValue("checkChangePoi", true)
-                        if (value > (customerPoint + customerPointOld)){
-                            formik.setFieldValue("point", customerPoint + customerPointOld)
-                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                            return
-                        }
-                        if(value < 0){
-                            formik.setFieldValue("point", 0)
-                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                            return
-                        }
-                        formik.setFieldValue("point", value)
-
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        return false;
-                    }
-                })
-            }else{
-                let value = parseInt(event.floatValue)
-                formik.setFieldValue("checkChangePoi", true)
-                if (value > (customerPoint + customerPointOld)){
-                    formik.setFieldValue("point", customerPoint + customerPointOld)
-                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
-                    return
-                }
-                if(value < 0){
-                    formik.setFieldValue("point", 0)
-                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                    return
-                }
-                formik.setFieldValue("point", value)
-            }
-        }else{
-            let value = parseInt(event.floatValue)
-            if (value > customerPoint){
-                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
-                return
-            }
-            if(value < 0){
-                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
-                return
-            }
-            formik.setFieldValue("point", value)
-        }
-    }
+ //    const applyPointIncrease = () => {
+ //        if(isEdit){
+ //            if( !formik.values.checkChangePoi ){
+ //                Swal.fire({
+ //                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
+ //                    type: 'warning',
+ //                    showCancelButton: true,
+ //                    confirmButtonText: 'Đồng ý',
+ //                    confirmButtonColor: '#ed5565',
+ //                    cancelButtonText: 'Thoát'
+ //                }).then((result) => {
+ //                    if (result.value) {
+ //                        let point1 = formik.values.point;
+ //                        let value = point1+1;
+ //                        formik.setFieldValue("checkChangePoi", true)
+ //                        if (value > (customerPoint + customerPointOld)){
+ //                            formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                            return
+ //                        }
+ //                        if(value < 0){
+ //                            formik.setFieldValue("point", 0)
+ //                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                            return
+ //                        }
+ //                        formik.setFieldValue("point", value)
+ //                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+ //                        return false;
+ //                    }
+ //                })
+ //            }else{
+ //                let point1 = formik.values.point;
+ //                let value = point1+1;
+ //                formik.setFieldValue("checkChangePoi", true)
+ //                if (value > (customerPoint + customerPointOld)){
+ //                    formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                    return
+ //                }
+ //                if(value < 0){
+ //                    formik.setFieldValue("point", 0)
+ //                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                    return
+ //                }
+ //                formik.setFieldValue("point", value)
+ //            }
+ //
+ //        }else {
+ //            let point = formik.values.point;
+ //            let value = point+1;
+ //            if (value > customerPoint){
+ //                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
+ //                return
+ //            }
+ //            if(value < 0){
+ //                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                return
+ //            }
+ //            formik.setFieldValue("point", value)   
+ //        }
+ //    }
+ //    const applyPointDecrease = () => {
+ //        if(isEdit){
+ //            if( !formik.values.checkChangePoi ) {
+ //                Swal.fire({
+ //                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
+ //                    type: 'warning',
+ //                    showCancelButton: true,
+ //                    confirmButtonText: 'Đồng ý',
+ //                    confirmButtonColor: '#ed5565',
+ //                    cancelButtonText: 'Thoát'
+ //                }).then((result) => {
+ //                    if (result.value) {
+ //                        let point1 = formik.values.point;
+ //                        let value = point1 - 1;
+ //                        formik.setFieldValue("checkChangePoi", true)
+ //                        if (value > (customerPoint + customerPointOld)) {
+ //                            formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                            return
+ //                        }
+ //                        if (value < 0) {
+ //                            formik.setFieldValue("point", 0)
+ //                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                            return
+ //                        }
+ //                        formik.setFieldValue("point", value)
+ //                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+ //                        return false;
+ //                    }
+ //                })
+ //            }else{
+ //                let point1 = formik.values.point;
+ //                let value = point1 - 1;
+ //                formik.setFieldValue("checkChangePoi", true)
+ //                if (value > (customerPoint + customerPointOld)) {
+ //                    formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                    return
+ //                }
+ //                if (value < 0) {
+ //                    formik.setFieldValue("point", 0)
+ //                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                    return
+ //                }
+ //                formik.setFieldValue("point", value)
+ //            }
+ //
+ //        }else{
+ //            let point = formik.values.point;
+ //            let value = point-1;
+ //            if (value > customerPoint){
+ //                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
+ //                return
+ //            }
+ //            if(value < 0){
+ //                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                return
+ //            }
+ //            formik.setFieldValue("point", value)
+ //        }
+ //    }
+ //    const applyPoint = (event) => {
+ //        if(isEdit){
+ //            if( !formik.values.checkChangePoi ){
+ //                Swal.fire({
+ //                    title: 'Số điểm của bạn có thể bị thay đổi bạn có chắc chắn sửa  ?',
+ //                    type: 'warning',
+ //                    showCancelButton: true,
+ //                    confirmButtonText: 'Đồng ý',
+ //                    confirmButtonColor: '#ed5565',
+ //                    cancelButtonText: 'Thoát'
+ //                }).then((result) => {
+ //                    if (result.value) {
+ //                        let value = parseInt(event.floatValue)
+ //                        formik.setFieldValue("checkChangePoi", true)
+ //                        if (value > (customerPoint + customerPointOld)){
+ //                            formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                            toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                            return
+ //                        }
+ //                        if(value < 0){
+ //                            formik.setFieldValue("point", 0)
+ //                            toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                            return
+ //                        }
+ //                        formik.setFieldValue("point", value)
+ //
+ //                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+ //                        return false;
+ //                    }
+ //                })
+ //            }else{
+ //                let value = parseInt(event.floatValue)
+ //                formik.setFieldValue("checkChangePoi", true)
+ //                if (value > (customerPoint + customerPointOld)){
+ //                    formik.setFieldValue("point", customerPoint + customerPointOld)
+ //                    toastr.error(`Bạn chỉ có ${customerPoint + customerPointOld} không thể nhập nhiều hơn`)
+ //                    return
+ //                }
+ //                if(value < 0){
+ //                    formik.setFieldValue("point", 0)
+ //                    toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                    return
+ //                }
+ //                formik.setFieldValue("point", value)
+ //            }
+ //        }else{
+ //            let value = parseInt(event.floatValue)
+ //            if (value > customerPoint){
+ //                toastr.error(`Bạn đang có ${customerPoint} điểm, không thể nhập nhiều hơn`)
+ //                return
+ //            }
+ //            if(value < 0){
+ //                toastr.error(`Bạn không thể nhập số nhỏ hơn 0`)
+ //                return
+ //            }
+ //            formik.setFieldValue("point", value)
+ //        }
+ //    }
     
     //coupon
     const handShowModalCoupon = () => {
@@ -435,7 +431,7 @@ function MainController(props) {
         formik.setFieldValue("total", total);
     },[productTotalPrice,formik.values?.priceShip,formik.values?.point,formik.values?.couponDiscount])
     return {method:{handleChangeSelect, handShowDetailProduct, setProductCartSelect, clickQuantityBuy, changeQuantityBuy, deleteProductSelect
-        , applyPointIncrease, applyPointDecrease, applyPoint, handShowModalCoupon}, state: {customerPointOld, productTotalPrice, showModalCoupon, listCoupon, listProduct, productCartSelect, customerPoint, productSelect , showModelDetailProduct}};
+        , handShowModalCoupon}, state: {customerPointOld, productTotalPrice, showModalCoupon, listCoupon, listProduct, productCartSelect, customerPoint, productSelect , showModelDetailProduct}};
 }
 
 export default MainController;
