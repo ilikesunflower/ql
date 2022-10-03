@@ -220,7 +220,7 @@ namespace CMS
                     options.EnableEndpointRouting = false;
                 })
                 .AddRazorRuntimeCompilation()
-                .AddSessionStateTempDataProvider()
+                // .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -228,7 +228,7 @@ namespace CMS
                 });
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation()
-                .AddSessionStateTempDataProvider()
+                // .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
