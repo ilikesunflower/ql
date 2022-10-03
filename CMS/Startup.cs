@@ -157,7 +157,7 @@ namespace CMS
                 options.Cookie.IsEssential = true;
                 options.Cookie.SameSite = SameSiteMode.Strict;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.ExpireTimeSpan = TimeSpan.FromDays(appSetting.GetValue<int>("ExpireTimeSpan"));
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
                 options.LoginPath = appSetting.GetValue<string>("LoginPath");
                 options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
                 options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");

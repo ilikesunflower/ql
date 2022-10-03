@@ -9,6 +9,7 @@ using CMS.Extensions.Validate;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -124,6 +125,7 @@ namespace CMS.Areas.Identity.Pages.Account
                             }
 
                             _logger.LogInformation($"Tài khoản {user!.UserName} đăng nhập thành công.");
+                            HttpContext.Session.SetString("User",user!.UserName);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                 _signInManager.CreateUserPrincipalAsync(user).Result,
                                 new AuthenticationProperties { IsPersistent = true });
