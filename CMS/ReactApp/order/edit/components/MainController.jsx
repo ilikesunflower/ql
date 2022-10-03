@@ -90,7 +90,6 @@ function MainController(props) {
     useEffect(function () {
         if(id != 0){
             getOrderEdit({id: id}, function (rs) {
-                console.log("sdhfjds",  rs?.shipPartner == 2)
                 formik.setFieldValue("customerId", rs?.customerId || 0)
                 formik.setFieldValue("priceShip", rs?.priceShip || 0)
                 formik.setFieldValue("couponCode", rs?.couponCode || '')
@@ -136,7 +135,6 @@ function MainController(props) {
                 formData.append(key,formik.values[key]);
             }
         }
-        console.log(productCartSelect)
         productCartSelect.forEach( (product, i ) => {
             formData.append(`products[${i}][productSimilarId]`,product.productSimilarId);
             formData.append(`products[${i}][quantity]`,product.quantityBy);

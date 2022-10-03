@@ -26,7 +26,6 @@ function MainController(props) {
           
             })
             getPointOldCustomer({orderId: orderId}, function (rs) {
-                console.log(rs);
                 setCustomerPointOld(rs);
             })
         }
@@ -58,7 +57,6 @@ function MainController(props) {
                 }) 
             }else{
                 getListCustomerCoupon({customerId : customer}, function (response) {
-                    console.log("getListCustomerCoupon", response)
                     setListCoupon(response);
                 })
             }
@@ -183,7 +181,6 @@ function MainController(props) {
                             data[index].price = check?.priceNew || 0;
                             data[index].weight = check?.weightNew || 0;
                             if ( quantity > (quantityWH + quantityBuy) ){
-                                console.log("lớn hơn",quantityWH + quantityBuy, quantity )
                                 data[index].quantityBy = quantityWH + quantityBuy;
                             }else if ( quantity >= 1 && quantity <= (quantityWH + quantityBuy)){
                                 data[index].quantityBy = quantity;
@@ -202,7 +199,6 @@ function MainController(props) {
                     let quantityWH = check.quantityWH;
 
                     if ( quantity > (quantityWH + quantityBuy) ){
-                        console.log("lớn hơn",quantityWH + quantityBuy, quantity )
                         data[index].quantityBy = quantityWH + quantityBuy;
                     }else if ( quantity >= 1 && quantity <= (quantityWH + quantityBuy)){
                         data[index].quantityBy = quantity;
