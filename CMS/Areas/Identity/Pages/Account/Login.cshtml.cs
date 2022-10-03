@@ -128,7 +128,7 @@ namespace CMS.Areas.Identity.Pages.Account
                             HttpContext.Session.SetString("User",user!.UserName);
                             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                 _signInManager.CreateUserPrincipalAsync(user).Result,
-                                new AuthenticationProperties { IsPersistent = true });
+                                new AuthenticationProperties { IsPersistent = Input.RememberMe });
                             return LocalRedirect(returnUrl);
                         }
 
