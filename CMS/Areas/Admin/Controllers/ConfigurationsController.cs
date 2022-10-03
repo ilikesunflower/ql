@@ -33,19 +33,19 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [Authorize(Policy = "PermissionMVC")]
-        public async Task<IActionResult> Index(string txtKeyword, int pageindex = 1)
+        public async Task<IActionResult> Index(string txtSearch, int pageindex = 1)
         {
             var query = _iConfigurationRepository.FindAll();
-            if (!string.IsNullOrWhiteSpace(txtKeyword))
+            if (!string.IsNullOrWhiteSpace(txtSearch))
             {
-                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtKeyword.Trim() + "%") 
-                                         || EF.Functions.Like(p.Val, "%" + txtKeyword.Trim() + "%"));
+                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtSearch.Trim() + "%") 
+                                         || EF.Functions.Like(p.Val, "%" + txtSearch.Trim() + "%"));
             }
 
             var model = await PagingList<Configuration>.CreateAsync(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
             };
             var modelCollection = new ModelCollection();
             modelCollection.AddModel("ListData", model);

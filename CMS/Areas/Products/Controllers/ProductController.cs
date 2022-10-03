@@ -81,14 +81,14 @@ namespace CMS.Areas.Products.Controllers
 
         // GET
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult Index(string txtKeyword, int? status, int? statusTT, int pageindex = 1)
+        public IActionResult Index(string txtSearch, int? status, int? statusTT, int pageindex = 1)
         {
             var query = _iProductRepository.GetProductAllIndex();
-            if (!string.IsNullOrEmpty(txtKeyword))
+            if (!string.IsNullOrEmpty(txtSearch))
             {
                 query = query.Where(x =>
-                    EF.Functions.Like(x.Name, "%" + txtKeyword.Trim() + "%") ||
-                    EF.Functions.Like(x.Sku, "%" + txtKeyword.Trim() + "%"));
+                    EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                    EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
             }
 
             if (statusTT != null && statusTT != 0)
@@ -126,7 +126,7 @@ namespace CMS.Areas.Products.Controllers
             var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
             listData.RouteValue = new RouteValueDictionary()
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"status", status},
                 {"statusTT", statusTT},
             };

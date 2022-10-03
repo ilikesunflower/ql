@@ -381,7 +381,7 @@ namespace CMS_Lib.Util
             Regex regex = new Regex("\\p{IsCombiningDiacriticalMarks}+");
             string temp = str.Normalize(NormalizationForm.FormD);
             return regex.Replace(temp, String.Empty).Replace(" ","_")
-                .Replace('đ', 'd').Replace('Đ', 'D');
+                .Replace('đ', 'd').Replace('Đ', 'D').Replace("(","-").Replace(")","-").Replace("'","-").Replace("\"","-");
         }
 
         
@@ -559,6 +559,26 @@ namespace CMS_Lib.Util
 
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
+        public static bool IsBackUrl(string checkString)
+        {
+            if (string.IsNullOrEmpty(checkString))
+            {
+                return false;
+            }
+
+            if (checkString.StartsWith("javascript:"))
+            {
+                return true;
+            }
+
+            if (checkString.StartsWith("../"))
+            {
+                return true;
+            }
+            
+            return Regex.IsMatch(checkString, "<(.|\n)*?>");
+        }
+
 
         public static string ConvertDateTimeToQuarterString(DateTime date)
         {

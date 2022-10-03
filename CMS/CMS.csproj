@@ -29,37 +29,34 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
 		<PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
-		<PackageReference Include="ClosedXML" Version="0.95.4" />
-		<PackageReference Include="ClosedXML.Extensions.Mvc" Version="0.3.0" />
-		<PackageReference Include="ClosedXML.Report" Version="0.2.4" />
 		<PackageReference Include="DocXCore" Version="1.0.9" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
-		<PackageReference Include="HtmlSanitizer" Version="7.1.488" />
-		<PackageReference Include="JWT" Version="9.0.0" />
-		<PackageReference Include="LargeXlsx" Version="1.5.0" />
-		<PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.357" />
-		<PackageReference Include="MailKit" Version="3.3.0" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
+		<PackageReference Include="HtmlSanitizer" Version="7.1.542" />
+		<PackageReference Include="JWT" Version="9.0.3" />
+		<PackageReference Include="LargeXlsx" Version="1.6.3" />
+		<PackageReference Include="LigerShark.WebOptimizer.Core" Version="3.0.372" />
+		<PackageReference Include="MailKit" Version="3.4.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.4" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.WsFederation" Version="6.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.9" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.4" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.4">
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.4" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.4">
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.9">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
@@ -70,17 +67,17 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-		<PackageReference Include="Npoi.Mapper" Version="3.5.1" />
-		<PackageReference Include="Open.ChannelExtensions" Version="6.0.3" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
+		<PackageReference Include="Npoi.Mapper" Version="4.1.0" />
+		<PackageReference Include="Open.ChannelExtensions" Version="6.2.1" />
 		<PackageReference Include="ReflectionIT.Mvc.Paging" Version="6.0.1" />
-		<PackageReference Include="Serilog.AspNetCore" Version="5.0.0" />
-		<PackageReference Include="SkiaSharp" Version="2.80.3" />
-		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
+		<PackageReference Include="Serilog.AspNetCore" Version="6.0.1" />
+		<PackageReference Include="SkiaSharp" Version="2.88.2" />
+		<PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.88.2" />
 		<PackageReference Include="System.DirectoryServices" Version="6.0.0" />
 		<PackageReference Include="System.DirectoryServices.Protocols" Version="6.0.1" />
-		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.19.0" />
-		<PackageReference Include="System.Text.Json" Version="6.0.4" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.23.1" />
+		<PackageReference Include="System.Text.Json" Version="6.0.6" />
 		<PackageReference Include="TemplateEngine.Docx-beta" Version="1.1.7" />
 		<PackageReference Include="Xabe.FFmpeg.Downloader" Version="5.2.0" />
 	</ItemGroup>
@@ -109,7 +106,7 @@
 		<Folder Include="ReactApp\dashboard\area" />
 		<Folder Include="ViewComponents" />
 		<Folder Include="wwwroot\css\Admin\Home" />
-		<Folder Include="wwwroot\css\images" />
+		<Folder Include="wwwroot\css\PreviewProduct\js\Admin\Shared" />
 		<Folder Include="wwwroot\dist" />
 		<Folder Include="wwwroot\js\Admin\Shared\" />
 		<Folder Include="wwwroot\plugins\" />
@@ -242,6 +239,25 @@
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\news1.png" />
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\08\sp3.png" />
 	  <_ContentIncludedByDefault Remove="wwwroot\upload\avatar\1\2022\08\29\image.png" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-brands-400.a914b1.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-brands-400.aff193.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-regular-400.47074d.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-regular-400.625dca.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-solid-900.422cfe.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-solid-900.64d495.woff2" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\fa-v4compatibility.ea8535.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Bold.a0fe34.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-BoldItalic.de2cc7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-ExtraBold.f3f77b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-ExtraBoldItalic.9964f7.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Italic.dfdc57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Light.8ed223.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-LightItalic.59e442.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Medium.65529e.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-MediumItalic.00b028.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-Regular.57cd57.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-SemiBold.2b370b.ttf" />
+	  <_ContentIncludedByDefault Remove="wwwroot\css\fonts\OpenSans-SemiBoldItalic.cd7101.ttf" />
 	</ItemGroup>
 	<ProjectExtensions><VisualStudio><UserProperties NpmRestoreOnProjectOpen="True" /></VisualStudio></ProjectExtensions>
 

@@ -48,19 +48,19 @@ public class CouponController : BaseController
     // GET
     [Authorize(Policy = "PermissionMVC")]
 
-    public IActionResult Index(string txtKeyword, string startDate, string endDate, int pageindex = 1)
+    public IActionResult Index(string txtSearch, string startDate, string endDate, int pageindex = 1)
     {
         try
         {
             var query = _iHistoryFileCouponRepository.FindAll();
-            if (!txtKeyword.IsNullOrEmpty())
+            if (!txtSearch.IsNullOrEmpty())
             {
                 query = query.Where(x =>
-                    EF.Functions.Like(x.FileName, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.FileName, "%" + txtSearch.Trim() + "%")
                     ||
-                    EF.Functions.Like(x.OrgName, "%" + txtKeyword.Trim() + "%")  
+                    EF.Functions.Like(x.OrgName, "%" + txtSearch.Trim() + "%")  
                     ||
-                    EF.Functions.Like(x.Code, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%")
                 );
 
             }
@@ -81,7 +81,7 @@ public class CouponController : BaseController
             var listData = PagingList.Create(query.OrderByDescending(x => x.CreatedAt), PageSize, pageindex);
             listData.RouteValue = new RouteValueDictionary()
             {
-                { "txtKeyword", txtKeyword },
+                { "txtSearch", txtSearch },
                 { "startDate", startDate },
                 { "endDate", endDate },
             };

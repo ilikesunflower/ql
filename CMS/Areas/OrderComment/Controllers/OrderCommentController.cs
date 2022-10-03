@@ -34,23 +34,23 @@ public class OrderCommentController : BaseController
     }
     
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtKeyword, string startDate, string endDate, int? status, int pageindex = 1)
+    public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int pageindex = 1)
     {
         try
         {
             var query = _iOrderCommentRepository.GetAllProductComment();
-            if (!txtKeyword.IsNullOrEmpty())
+            if (!txtSearch.IsNullOrEmpty())
             {
                 query = query.Where(x =>
-                    EF.Functions.Like(x.Customer.FullName, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%")
                     || 
-                    EF.Functions.Like(x.Customer.UserName, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Customer.UserName, "%" + txtSearch.Trim() + "%")
                     ||
-                    EF.Functions.Like(x.Comment, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Comment, "%" + txtSearch.Trim() + "%")
                     ||
-                    EF.Functions.Like(x.Product.Name, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Product.Name, "%" + txtSearch.Trim() + "%")
                     ||
-                    EF.Functions.Like(x.Orders.Code, "%" + txtKeyword.Trim() + "%")
+                    EF.Functions.Like(x.Orders.Code, "%" + txtSearch.Trim() + "%")
                 );
             }
             if (!string.IsNullOrEmpty(startDate))
@@ -88,7 +88,7 @@ public class OrderCommentController : BaseController
             }).ToList();
             listData.RouteValue = new RouteValueDictionary()
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"startDate", startDate},
                 {"endDate", endDate},
                 {"status", status}

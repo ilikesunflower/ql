@@ -40,15 +40,15 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [Authorize(Policy = "PermissionMVC")]
-        public async Task<IActionResult> Index(string txtKeyword, int pageindex = 1)
+        public async Task<IActionResult> Index(string txtSearch, int pageindex = 1)
         {
             var query = _iApplicationRoleRepository.FindAll();
-            if (!string.IsNullOrWhiteSpace(txtKeyword))
-                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtKeyword.Trim() + "%"));
+            if (!string.IsNullOrWhiteSpace(txtSearch))
+                query = query.Where(p => EF.Functions.Like(p.Name, "%" + txtSearch.Trim() + "%"));
             var model = await PagingList<ApplicationRole>.CreateAsync(query.OrderByDescending(x => x.Id), PageSize, pageindex);
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword}
+                {"txtSearch", txtSearch}
             };
             var rs = new IndexApplicationRoleViewModel
             {

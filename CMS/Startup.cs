@@ -1,8 +1,12 @@
 ﻿using System;
-using System.Net;
 using System.Reflection;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using CMS_Access.init;
+using CMS_EF.DbContext;
+using CMS_EF.Models.Identity;
+using CMS_Lib;
+using CMS_Lib.DI;
+using CMS_Ship.Extensions;
+using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
@@ -11,25 +15,15 @@ using CMS.Middleware.AuthorizationController;
 using CMS.Middleware.Hubs;
 using CMS.Middleware.Menu;
 using CMS.Services.Uris;
-using CMS_Access.init;
-using CMS_Access.Repositories;
-using CMS_EF.DbContext;
-using CMS_EF.Models.Identity;
-using CMS_Lib;
-using CMS_Lib.DI;
-using CMS_Lib.Util;
-using CMS_Ship.Extensions;
-using CMS_WareHouse.Extensions;
 using Ganss.XSS;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -41,7 +35,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using ReflectionIT.Mvc.Paging;
@@ -70,8 +63,14 @@ namespace CMS
             services.AddSingleton(Configuration);
             services.Configure<CookiePolicyOptions>(options =>
             {
+                options.HttpOnly = HttpOnlyPolicy.Always;
                 options.CheckConsentNeeded = _ => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+                options.Secure = CookieSecurePolicy.Always;
+                options.ConsentCookie.IsEssential = true;
+                options.ConsentCookie.HttpOnly = true;
+                options.ConsentCookie.SameSite = SameSiteMode.Strict;
+                options.ConsentCookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.ConsentCookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Consent";
             });
             services.AddResponseCompression();
@@ -85,10 +84,10 @@ namespace CMS
                     opt => { opt.MigrationsAssembly("CMS"); });
                 // options.EnableSensitiveDataLogging();
                 options.ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
+                options.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning));
             });
             services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -109,7 +108,14 @@ namespace CMS
 
             services.AddAntiforgery(options =>
             {
-                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.AntiforgeryCookie";
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.IsEssential = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.SuppressXFrameOptionsHeader = true;
+                // options.HeaderName = "forgery";
+                options.Cookie.Path = "/";
+                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.forgery";
             });
 
             services.AddSession(options =>
@@ -117,10 +123,27 @@ namespace CMS
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Path = "/";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
+            
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.TempDataCookie";
+            });
 
-            services.AddCors();
+            
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
+                        policy.AllowAnyHeader();
+                        policy.AllowAnyMethod();
+                    });
+            });
 
             #endregion
 
@@ -129,12 +152,17 @@ namespace CMS
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings  
+                options.CookieManager = new ChunkingCookieManager();
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromDays(appSetting.GetValue<int>("ExpireTimeSpan"));
+                options.Cookie.IsEssential = true;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
                 options.LoginPath = appSetting.GetValue<string>("LoginPath");
                 options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
                 options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");
                 options.SlidingExpiration = true;
+                options.Cookie.Path = "/";
                 // options.Cookie.Domain = appSetting.GetValue<string>("CookieDomain");
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
             });
@@ -146,13 +174,15 @@ namespace CMS
                 {
                     options.CookieManager = new ChunkingCookieManager();
                     options.Cookie.HttpOnly = true;
-                    options.Cookie.SameSite = SameSiteMode.None;
+                    options.Cookie.IsEssential = true;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     options.SlidingExpiration = true;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
                     options.LoginPath = appSetting.GetValue<string>("LoginPath");
                     options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
                     options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");
+                    options.Cookie.Path = "/";
                     options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
                 });
 
@@ -192,12 +222,12 @@ namespace CMS
             });
             services.AddControllersWithViews(options =>
                 {
-                   // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                     options.ModelBinderProviders.RemoveType<DateTimeModelBinderProvider>();
                     options.EnableEndpointRouting = false;
                 })
                 .AddRazorRuntimeCompilation()
-                .AddSessionStateTempDataProvider()
+                // .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -205,7 +235,7 @@ namespace CMS
                 });
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation()
-                .AddSessionStateTempDataProvider()
+                // .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -235,7 +265,12 @@ namespace CMS
                 app.UseHsts();
                 app.UseHttpsRedirection();
             }
-
+            app.UseRouting();
+            app.UseCors();
+            app.UseCookiePolicy();
+            app.UseSession();
+            app.UseAuthentication();
+            app.UseAuthorization();
             var mimeTypeProvider = new FileExtensionContentTypeProvider();
             app.UseResponseCompression();
             app.UseStaticFiles(new StaticFileOptions
@@ -278,16 +313,10 @@ namespace CMS
                     }
                 }
             });
-            app.UseRouting();
-            app.UseCors();
-            app.UseCookiePolicy();
-            app.UseSession();
-            app.UseAuthentication();
-            app.UseAuthorization();
             app.UseResponseCaching();
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-                { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
-            );
+            // app.UseForwardedHeaders(new ForwardedHeadersOptions
+            //     { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
+            // );
             var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
             UrlHelperExtensions.Configure(httpContextAccessor);
             app.UseMiddleware<MenuMiddleware>();

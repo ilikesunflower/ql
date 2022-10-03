@@ -1,6 +1,6 @@
 ﻿@using CMS_Lib.Util
 @{
-    <script src="js/shared/toastrConfig.js"></script>
+    <script src="~/js/shared/toastrConfig.js"></script>
     <script>
         @if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))
         {

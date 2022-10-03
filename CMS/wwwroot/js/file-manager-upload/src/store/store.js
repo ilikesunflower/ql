@@ -5,7 +5,7 @@ export const state = (dataSetUp)=>{
         dataSetUp:dataSetUp,
         fileFilter : {
             PageSize: 24,
-            Keyword: "",
+            txtSearch: "",
             Type: dataSetUp.type || "",
             CreateAt:""
         },
@@ -56,7 +56,7 @@ export const mutations = {
         state.FileBeingUploaded[index][field] = data;
     },
     setKeyword(state , keyword){
-        state.fileFilter.Keyword  = keyword
+        state.fileFilter.txtSearch  = keyword
     },
     setType(state , Type){
         state.fileFilter.Type  = Type

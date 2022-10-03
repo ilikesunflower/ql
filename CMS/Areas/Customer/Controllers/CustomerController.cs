@@ -48,13 +48,13 @@ public class CustomerController : BaseController
     }
     
     // GET
-    public async Task<IActionResult> Index(string txtKeyword, int? Type, int? status, int? TypeGroup, int pageindex = 1)
+    public async Task<IActionResult> Index(string txtSearch, int? Type, int? status, int? TypeGroup, int pageindex = 1)
     {
         IndexViewModel rs = new IndexViewModel();
         var query = this._iCustomerService.GetAll();
-        if (!string.IsNullOrEmpty(txtKeyword))
+        if (!string.IsNullOrEmpty(txtSearch))
         {
-            query = query.Where(p => EF.Functions.Like(p.UserName, "%" + txtKeyword.Trim() + "%") ||  EF.Functions.Like(p.FullName, "%" + txtKeyword.Trim() + "%"));
+            query = query.Where(p => EF.Functions.Like(p.UserName, "%" + txtSearch.Trim() + "%") ||  EF.Functions.Like(p.FullName, "%" + txtSearch.Trim() + "%"));
         }
 
         if (Type.HasValue)
@@ -73,7 +73,7 @@ public class CustomerController : BaseController
         var model = await PagingList<CMS_EF.Models.Customers.Customer>.CreateAsync(query.OrderByDescending(x => x.Id), PageSize, pageindex);
         model.RouteValue = new RouteValueDictionary()
         {
-            {"txtKeyword", txtKeyword},
+            {"txtSearch", txtSearch},
             {"Type", Type},
             {"TypeGroup", TypeGroup},
             {"status", status},
@@ -270,9 +270,9 @@ public class CustomerController : BaseController
             try
             {
                 var list = this._iCustomerRepository.FindAll();
-                if (data.ContainsKey("txtKeyword") && !string.IsNullOrEmpty(data["txtKeyword"]))
-                    list = list.Where(p => EF.Functions.Like(p.UserName, "%" + data["txtKeyword"].Trim() + "%") 
-                                           || EF.Functions.Like(p.FullName, "%" + data["txtKeyword"].Trim() + "%"));
+                if (data.ContainsKey("txtSearch") && !string.IsNullOrEmpty(data["txtSearch"]))
+                    list = list.Where(p => EF.Functions.Like(p.UserName, "%" + data["txtSearch"].Trim() + "%") 
+                                           || EF.Functions.Like(p.FullName, "%" + data["txtSearch"].Trim() + "%"));
                 if (data.ContainsKey("TypeGroup") && !string.IsNullOrEmpty(data["TypeGroup"]) )
                 {
                     int? TypeGroup = CmsFunction.ConvertToInt($"{data["TypeGroup"]}");

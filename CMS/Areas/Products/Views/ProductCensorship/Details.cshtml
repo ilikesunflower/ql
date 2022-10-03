@@ -17,691 +17,1055 @@
     string backUrl = Model.GetModel<string>("backUrl");
 }
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"><title>@product.Name - Xem trước</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="icon" href="/favicon.ico">
-    <link href="/css/PreviewProduct/app.css" rel="stylesheet">
-    <link href="/css/PreviewProduct/product.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@product.Name</title>
+    <link rel="icon" type="image/x-icon" href="/images/PreviewProduct/favicon.ico">
+    <link rel="stylesheet" href="/css/PreviewProduct/vendor.min.css">
+    <link rel="stylesheet" href="/css/PreviewProduct/app.min.css">
+    <link rel="stylesheet" href="/css/PreviewProduct/product.min.css">
     <link href="/css/ProductCensorship/Details.css" rel="stylesheet">
 </head>
 <body>
 <header>
-<section id="header">
-    <div id="tool-bar-preview" class="container-fluid bg-like-footer">
+    <div class="container">
         <div class="row">
-            <div class="col-12 col-md-2">
-                <h4 class="h4 mb-0 text-white">Xem trước</h4>
+            <div class="col-logo">
+                <a href="#">
+                    <img class="logo" src="/images/PreviewProduct/logo.svg" alt="dai-ichi-life">
+                </a>
             </div>
-            <div class="col-12 col-md-10 text-right">
-                @if (isCensorshipPrice && (product.Org1Status == ProductCensorshipConst.Pending.Status || product.Org1Status == null))
-                {
-                    <button id="ApprovedPrice" data-id="@product.Id" type="button" class="btn btn-sm mr-10px font-weight-bold btn-success radius-5">
-                        Duyệt giá, mã SP
-                    </button>
-                }
-                @if (isCensorshipPrice && product.Org1Status != ProductCensorshipConst.NotApproved.Status)
-                {
-                    <button data-toggle="modal" data-target="#NotApprovedPrice" type="button" class="btn mr-10px font-weight-bold btn-sm bg-red text-white radius-5">
-                        Xem lại giá, mã SP
-                    </button>
-                    <div class="modal fade text-left" id="NotApprovedPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <form asp-action="NotApprovedPrice" method="post">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại giá, mã SP</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input type="hidden" name="productId" value="@product.Id"/>
-                                            <input type="hidden" name="backUrl" value="@backUrl"/>
-                                            <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
-                                            <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn btn-danger">Gửi</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                }
-                @if (isCensorshipContent && (product.Org2Status == ProductCensorshipConst.Pending.Status || product.Org2Status == null))
-                {
-                    <button id="ApprovedContent" data-id="@product.Id" type="button" class="btn mr-10px font-weight-bold  btn-sm btn-success radius-5">
-                        Duyệt nội dung SP
-                    </button>
-                }
-                @if (isCensorshipContent && product.Org2Status != ProductCensorshipConst.NotApproved.Status)
-                {
-                    <button type="button" class="btn btn-sm bg-red font-weight-bold mr-10px text-white radius-5" data-target="#NotApprovedContent" data-toggle="modal">
-                        Xem lại nội dung SP
-                    </button>
-                    <div class="modal fade text-left" id="NotApprovedContent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <form asp-action="NotApprovedContent" method="post">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại nội dung SP</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input type="hidden" name="productId" value="@product.Id"/>
-                                            <input type="hidden" name="backUrl" value="@backUrl"/>
-                                            <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
-                                            <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn btn-danger">Gửi</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                }
-                @if (isCensorshipImage && (product.Org3Status == ProductCensorshipConst.Pending.Status || product.Org3Status == null))
-                {
-                    <button id="ApprovedImage" data-id="@product.Id" type="button" class="btn btn-sm btn-success mr-10px font-weight-bold  radius-5">
-                        Duyệt hình ảnh, màu sắc, thương hiệu
-                    </button>
-                }
-                @if (isCensorshipImage && product.Org3Status != ProductCensorshipConst.NotApproved.Status)
-                {
-                    <button type="button" class="btn btn-sm bg-red radius-5 font-weight-bold mr-10px text-white" data-target="#NotApprovedImage" data-toggle="modal">
-                        Xem lại hình ảnh, màu sắc, thương hiệu
-                    </button>
-                    <div class="modal fade text-left" id="NotApprovedImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <form asp-action="NotApprovedImage" method="post">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại hình ảnh, màu sắc, thương hiệu</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <input type="hidden" name="productId" value="@product.Id"/>
-                                            <input type="hidden" name="backUrl" value="@backUrl"/>
-                                            <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
-                                            <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
-                                        <button type="submit" class="btn btn-danger">Gửi</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                }
-                <a class="btn btn-sm btn-light radius-5 font-weight-bold " href="@backUrl">Quay lại</a>
-            </div>
-        </div>
-    </div>
-    <div class="container-xl pt-xl-10px">
-        <div class="row align-items-center">
-            <div class="col-auto box-logo">
-                <img class="header-logo" src="/images/content/logo.png" alt="@AppConst.AppName">
-            </div>
-            <div class="col d-none d-xl-block align-self-end">
-                <div class="row no-gutters">
-                    <div class="ml-auto">
-                        <a href="#" class="header-username">
-                            <i class="fa-solid fa-user"></i><span class="pl-2 font-italic"> Preview Product</span>
-                        </a><span class="p-xl-3">|</span>
-                        <a href="#" class="header-logout">
-                            <i class="fa-solid fa-arrow-right-to-bracket"></i><span class="pl-2 font-italic">Thoát</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="row no-gutters p-10px"></div>
-                <div class="row no-gutters align-items-baseline">
-                    <div class="col row no-gutters pl-5 pr-5">
-                        <div class="col">
-                            <input class="form-control pr-20px pl-20px border-default rounded-pill pr-5 h-100" type="search" placeholder="Tìm kiếm sản phẩm">
-                        </div>
-                        <div class="col-auto">
-                            <button class="btn btn-search text-dark border-0 rounded-pill ml-n5" type="button">
-                                <i class="fa fa-search btn-color-default"></i>
+            <div class="col col-search">
+                <form method="get" class="form-search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Nhập tên sản phẩm để tìm kiếm...">
+                        <div class="input-group-prepend">
+                            <button type="button" class="btn btn-red-heavy">
+                                <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="col-auto pr-5">
-                        <a href="#">
-                            <div data-count="20" class="row order-list no-gutters d-flex flex-row justify-content-center align-items-center">
-                                <div class="col">
-                                    <div class="text-white header-bg-cart header-box-cart rounded-circle d-flex justify-content-center align-items-center">
-                                        <span class="fa-solid fa-clock-rotate-left"></span>
-                                    </div>
-                                </div>
-                                <div class="col-auto pl-2">
-                                    <span class="header-text-color-cart">Quản lý đơn hàng</span>
-                                </div>
-                            </div>
+                </form>
+            </div>
+            <div class="col-customer-tool-bar">
+                <div class="hotline-combobox">
+                    <div class="hotline-combobox__icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="hotline-combobox__info">
+                        <div class="hotline-combobox__title">
+                            <p>Hotline</p>
+                        </div>
+                        <div class="hotline-combobox__content">
+                            <p>
+                                <strong>0857 456 996 - 0902 624 996</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="customer-tool-bar">
+                    <a class="customer-tool-bar__notification popup-count-number toggle-show"
+                       data-target="#notification-box" data-count="+99" href="#">
+                        <i class="fas fa-bell"></i>
+
+                    </a>
+                    <div class="customer-tool-bar__login">
+                        <a class="customer-tool-bar__info" href="#">
+                            <i class="fas fa-user"></i>
+                            <p class="customer-name">
+                                Nguyễn Huỳnh Minh Anh<br>
+                                <strong class="customer-point">
+                                    (1200
+                                    điểm)
+                                </strong>
+                            </p>
                         </a>
                     </div>
-                    <div class="col-auto">
-                        <a href="#">
-                            <div data-count="1" class="row cart-list no-gutters d-flex flex-row justify-content-center align-items-center">
-                                <div class="col">
-                                    <div class="text-white header-bg-cart header-box-cart rounded-circle d-flex justify-content-center align-items-center">
-                                        <span class="fa-solid fa-cart-shopping d-none d-md-inline-block"></span>
-                                    </div>
-                                </div>
-                                <div class="col-auto pl-2">
-                                    <span class="header-text-color-cart">Giỏ hàng</span>
-                                </div>
-                            </div>
-                        </a>
+                    |
+                    <div class="customer-tool-bar__register">
+                        <a href="#">Thoát</a>
+                    </div>
+                </div>
+                <div id="notification-box" class="notification-box popup-box">
+                    <div class="notification-box__header">
+                        <h3>Thông báo</h3>
+                    </div>
+                    <div class="notification-box__body">
+                        <ul class="notification-items">
+                            <li class="notification-item">
+                                <a href="#">
+                                    <small class="notification-item__time">19/08/2022 11:39</small>
+                                    <h3 class="notification-item__title">Đặt hàng thành công</h3>
+                                    <p class="notification-item__content">Mã đơn hàng của bạn: xxxxxxxxxxx</p>
+                                </a>
+                            </li>
+                            <li class="notification-item">
+                                <a href="#">
+                                    <small class="notification-item__time">16/08/2022 06:23</small>
+                                    <h3 class="notification-item__title">Khuyến mãi tưng bừng - Chào mừng ra mắt</h3>
+                                    <p class="notification-item__content">
+                                        Nhân dịp ra mắt hệ thống quà tặng, từ ngày
+                                        05/09/2022 Daiichi Life dành tặng 600 phần quà khuyến mãi cực hấp dẫn dành cho
+                                        những
+                                        khách hàng đầu tiên.
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="notification-item">
+                                <a href="#">
+                                    <small class="notification-item__time">16/08/2022 06:23</small>
+                                    <h3 class="notification-item__title">Lựa chọn quà tặng cho dịp Trung Thu</h3>
+                                    <p class="notification-item__content">
+                                        Nhân dịp ra mắt hệ thống quà tặng, từ ngày
+                                        05/09/2022 Daiichi Life dành tặng 600 phần quà khuyến mãi cực hấp dẫn dành cho
+                                        những
+                                        khách hàng đầu tiên.
+                                    </p>
+                                </a>
+                            </li>
+                            <li class="notification-item">
+                                <a href="#">
+                                    <small class="notification-item__time">16/08/2022 06:23</small>
+                                    <h3 class="notification-item__title">Bạn được tặng 1 mã COUPON</h3>
+                                    <p class="notification-item__content">Bạn được tặng 1 mã COUPON.</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="notification-box__footer">
+                        <a href="#">Xem tất cả</a>
                     </div>
                 </div>
             </div>
-            <div class="col-auto d-xl-none d-flex ml-auto p-0">
-                <button class="navbar-bottom mobile-menu-toggler" data-target="#mobile-search" type="button">
-                    <i class="fa-solid fa-magnifying-glass fs-22"></i>
-                </button>
-                <button class="navbar-bottom" type="button" data-count="20">
-                    <i class="fa-solid fa-cart-shopping fs-22"></i>
-                </button>
-                <button class="navbar-bottom mobile-menu-toggler" data-target="#mobile-profile" type="button">
-                    <i class="fa-solid fa-user fs-22"></i>
-                </button>
-                <button class="navbar-bottom mobile-menu-toggler bg-red text-white" data-target="#mobile-menu" type="button">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+            <div class="col col-mobile">
+                <div class="customer-tool-bar-mobile">
+                    <a class="customer-tool-bar-mobile__notification popup-count-number  mobile-menu-toggler"
+                       data-target="#notification-box-mobile" data-count="+99">
+                        <i class="fas fa-bell"></i>
+                    </a>
+                    <a class="customer-tool-bar-mobile__profile mobile-menu-toggler" data-target="#customer-profile">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <a class="customer-tool-bar-mobile__cart popup-count-number" href="#" data-count="+99">
+                        <i class="fas fa-shopping-cart"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
-</section>
-<div id="desktop-menu" class="container-xl">
-    <div class="navbar-menu col-xl-12 col-auto p-0">
-        <nav class="navbar navbar-expand-xl navbar-light p-0">
-            <div class="collapse navbar-collapse navbar-custom" id="navbarSupportedContent">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">
-                            <i class="fa-solid fa-bars pr-2"></i> <span class="text-uppercase">Danh mục sản phẩm</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link navbar-text">|</span>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Trang chủ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Khuyến mãi</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Tin tức</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Hướng dẫn mua hàng</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Hướng dẫn thanh toán</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link navbar-text" href="#">Liên hệ</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+</header>
+<nav class="navbar navbar-expand-xl navbar-red-heavy">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarColor03">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Khuyến mại</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Thông tin tham khảo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Liên hệ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Kiểm tra đơn hàng</a>
+                </li>
+            </ul>
+            <a class="nav-link nav-cart popup-count-number" href="#" data-count="+99">
+                <i class="fas fa-shopping-cart"></i>
+            </a>
+        </div>
+        <div class="collapse-mobile">
+            <button class="toggle-mobile-menu mobile-menu-toggler" data-target="#mobile-menu">
+                <i class="fas fa-bars"></i>
+            </button>
+            <form method="get" class="form-search">
+                <div class="input-group">
+                    <input type="text" class="form-control form-control-sm"
+                           placeholder="Nhập tên sản phẩm để tìm kiếm...">
+                    <div class="input-group-prepend">
+                        <button type="button" class="btn btn-sm btn-yellow">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+</nav>
 <div id="mobile-menu" class="container-mobile-menu">
     <div class="mobile-menu">
         <div class="mobile-menu-header">
-            <img class="header-logo" src="/images/content/logo.png" alt="@AppConst.AppName">
-            <button class="mobile-close" data-target="#mobile-menu">
-                <i class="fa-solid fa-xmark"></i>
+            <img class="logo" src="/images/PreviewProduct/logo.svg" alt="dai-ichi-life">
+            <button class="mobile-close" data-target-close="#mobile-menu">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="mobile-menu-body">
             <ul class="mobile-menu-items">
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-tag icon-menu"></i>Sản phẩm bán chạy</a>
+                <li class="mobile-menu-item bold has-children">
+                    <a class="mobile-menu-item-link mobile-menu-toggler mobile-close" data-target-close="#mobile-menu"
+                       data-target="#mobile-menu-product">
+                        Danh mục sản phẩm
+                    </a>
                 </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-calendar-check icon-menu"></i>Sản phẩm của tháng</a>
+                <li class="mobile-menu-item bold">
+                    <a class="mobile-menu-item-link" href="#">Trang chủ</a>
                 </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-umbrella icon-menu"></i>Ô dù - Áo mưa - Nón báo hiểm</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-bag-shopping icon-menu"></i>Balo - Túi cặp</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-person-snowboarding icon-menu"></i>Thể thao - du lịch</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-briefcase icon-menu"></i>Văn phòng - Công sở</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-tv icon-menu"></i>Nhà cửa - Gia dụng</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-shirt icon-menu"></i>Thời trang - Phụ kiện</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-baby-carriage icon-menu"></i>Quà tặng cho bé</a>
-                </li>
-                <li class="mobile-menu-item">
+                <li class="mobile-menu-item bold">
                     <a class="mobile-menu-item-link" href="#">Khuyến mãi</a>
                 </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#">Tin tức</a>
+                <li class="mobile-menu-item bold">
+                    <a class="mobile-menu-item-link" href="#">Thông tin tham khảo</a>
                 </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#">Hướng dẫn mua hàng</a>
-                </li>
-                <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#">Hướng dẫn thanh toán</a>
-                </li>
-                <li class="mobile-menu-item">
+                <li class="mobile-menu-item bold">
                     <a class="mobile-menu-item-link" href="#">Liên hệ</a>
+                </li>
+                <li class="mobile-menu-item bold">
+                    <a class="mobile-menu-item-link" href="#">Kiểm tra đơn hàng</a>
                 </li>
             </ul>
         </div>
+        <div class="mobile-menu-footer">
+            <div class="hotline-combobox">
+                <div class="hotline-combobox__icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="hotline-combobox__info">
+                    <div class="hotline-combobox__title">
+                        <p>Hotline</p>
+                    </div>
+                    <div class="hotline-combobox__content">
+                        <p>
+                            <strong>0857 456 996 - 0902 624 996</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mobile-menu-backdrop" data-target="#mobile-menu"></div>
+    <div class="mobile-menu-backdrop" data-target-close="#mobile-menu"></div>
 </div>
-<div id="mobile-profile" class="container-mobile-menu">
+<div id="mobile-menu-product" class="container-mobile-menu">
     <div class="mobile-menu">
         <div class="mobile-menu-header">
-            <img class="header-logo" src="/images/content/logo.png" alt="PruGift">
-            <button class="mobile-close" data-target="#mobile-profile">
-                <i class="fa-solid fa-xmark"></i>
+            <img class="logo" src="/images/PreviewProduct/logo.svg" alt="dai-ichi-life">
+            <button class="mobile-close" data-target-close="#mobile-menu-product">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="mobile-menu-body">
             <ul class="mobile-menu-items">
-                <li class="mobile-menu-item d-flex">
+                <li class="mobile-menu-item back">
+                    <a class="mobile-menu-item-link mobile-menu-toggler mobile-close"
+                       data-target-close="#mobile-menu-product" data-target="#mobile-menu">
+                        Quay lại
+                    </a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Tất cả sản phẩm</a>
+                </li>
+                <li class="mobile-menu-item has-children children-dropdown">
+                    <a class="mobile-menu-item-link" href="#">Áo mưa - Ô dù - Nón bảo hiểm</a>
+                    <ul class="mobile-menu-items children">
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Balo - Túi xách</a>
+                        </li>
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Ly - Bình nước</a>
+                        </li>
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Áo thun - Áo Sơ Mi</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Balo - Túi xách</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Ly - Bình nước</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Áo thun - Áo Sơ Mi</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Đồng hồ</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Văn phòng phẩm</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Quà cho bé</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Quà Tặng VIP</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mobile-menu-footer">
+            <div class="hotline-combobox">
+                <div class="hotline-combobox__icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="hotline-combobox__info">
+                    <div class="hotline-combobox__title">
+                        <p>Hotline</p>
+                    </div>
+                    <div class="hotline-combobox__content">
+                        <p>
+                            <strong>0857 456 996 - 0902 624 996</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-backdrop" data-target-close="#mobile-menu-product"></div>
+</div>
+<div id="customer-profile" class="container-mobile-menu">
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <img class="logo" src="/images/PreviewProduct/logo.svg" alt="dai-ichi-life">
+            <button class="mobile-close" data-target-close="#customer-profile">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-body">
+            <ul class="mobile-menu-items">
+                <li class="mobile-menu-item bold">
                     <div class="profile-info">
-                        <i class="fa-solid fa-user icon-profile"></i>
-                        <h3 class="h3 profile-name">Preview Product</h3>
+                        <i class="fas fa-user icon-profile"></i>
+                        <h3 class="h3 profile-name">Nguyễn Huỳnh Minh Anh</h3>
                     </div>
                 </li>
+                <li class="mobile-menu-item bold">
+                    <a class="mobile-menu-item-link" href="#">Thông tin tài khoản</a>
+                </li>
+                <li class="mobile-menu-item bold">
+                    <a class="mobile-menu-item-link" href="#">Thoát</a>
+                </li>
+            </ul>
+        </div>
+        <div class="mobile-menu-footer">
+            <div class="hotline-combobox">
+                <div class="hotline-combobox__icon">
+                    <i class="fas fa-phone"></i>
+                </div>
+                <div class="hotline-combobox__info">
+                    <div class="hotline-combobox__title">
+                        <p>Hotline</p>
+                    </div>
+                    <div class="hotline-combobox__content">
+                        <p>
+                            <strong>0857 456 996 - 0902 624 996</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-backdrop" data-target-close="#customer-profile"></div>
+</div>
+<div id="notification-box-mobile" class="container-mobile-menu">
+    <div class="mobile-menu mobile-notification">
+        <div class="mobile-menu-header">
+            <h3>Thông báo</h3>
+            <button class="mobile-close" data-target-close="#notification-box-mobile">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-menu-body">
+            <ul class="notification-items">
+                <li class="notification-item">
+                    <a href="#">
+                        <small class="notification-item__time">19/08/2022 11:39</small>
+                        <h3 class="notification-item__title">Đặt hàng thành công</h3>
+                        <p class="notification-item__content">Mã đơn hàng của bạn: xxxxxxxxxxx</p>
+                    </a>
+                </li>
+                <li class="notification-item">
+                    <a href="#">
+                        <small class="notification-item__time">16/08/2022 06:23</small>
+                        <h3 class="notification-item__title">Khuyến mãi tưng bừng - Chào mừng ra mắt</h3>
+                        <p class="notification-item__content">
+                            Nhân dịp ra mắt hệ thống quà tặng, từ ngày
+                            05/09/2022 Daiichi Life dành tặng 600 phần quà khuyến mãi cực hấp dẫn dành cho những
+                            khách hàng đầu tiên.
+                        </p>
+                    </a>
+                </li>
+                <li class="notification-item">
+                    <a href="#">
+                        <small class="notification-item__time">16/08/2022 06:23</small>
+                        <h3 class="notification-item__title">Lựa chọn quà tặng cho dịp Trung Thu</h3>
+                        <p class="notification-item__content">
+                            Nhân dịp ra mắt hệ thống quà tặng, từ ngày
+                            05/09/2022 Daiichi Life dành tặng 600 phần quà khuyến mãi cực hấp dẫn dành cho những
+                            khách hàng đầu tiên.
+                        </p>
+                    </a>
+                </li>
+                <li class="notification-item">
+                    <a href="#">
+                        <small class="notification-item__time">16/08/2022 06:23</small>
+                        <h3 class="notification-item__title">Bạn được tặng 1 mã COUPON</h3>
+                        <p class="notification-item__content">Bạn được tặng 1 mã COUPON.</p>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+        <div class="mobile-menu-footer">
+            <a class="/notification">Xem tất cả</a>
+        </div>
+    </div>
+    <div class="mobile-menu-backdrop" data-target-close="#notification-box-mobile"></div>
+</div>
+<div id="tool-bar-preview" class="container-fluid bg-like-footer">
+    <div class="row align-items-center">
+        <div class="col-12 col-md-2">
+            <h3 class="h3 mb-0 text-white">Xem trước</h3>
+        </div>
+        <div class="col-12 col-md-10 text-right">
+            @if (isCensorshipPrice && (product.Org1Status == ProductCensorshipConst.Pending.Status || product.Org1Status == null))
+            {
+                <button id="ApprovedPrice" data-id="@product.Id" type="button" class="btn btn-sm btn-green mr-10px">
+                    Duyệt giá, mã SP
+                </button>
+            }
+            @if (isCensorshipPrice && product.Org1Status != ProductCensorshipConst.NotApproved.Status)
+            {
+                <button data-toggle="modal" data-target="#NotApprovedPrice" type="button" class="btn btn-sm btn-red mr-10px">
+                    Xem lại giá, mã SP
+                </button>
+                <div class="modal fade text-left" id="NotApprovedPrice" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form asp-action="NotApprovedPrice" method="post">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại giá, mã SP</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="productId" value="@product.Id"/>
+                                        <input type="hidden" name="backUrl" value="@backUrl"/>
+                                        <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
+                                        <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-danger">Gửi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+            @if (isCensorshipContent && (product.Org2Status == ProductCensorshipConst.Pending.Status || product.Org2Status == null))
+            {
+                <button id="ApprovedContent" data-id="@product.Id" type="button" class="btn btn-sm btn-green mr-10px">
+                    Duyệt nội dung SP
+                </button>
+            }
+            @if (isCensorshipContent && product.Org2Status != ProductCensorshipConst.NotApproved.Status)
+            {
+                <button type="button" class="btn btn-red btn-sm mr-10px" data-target="#NotApprovedContent" data-toggle="modal">
+                    Xem lại nội dung SP
+                </button>
+                <div class="modal fade text-left" id="NotApprovedContent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form asp-action="NotApprovedContent" method="post">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại nội dung SP</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="productId" value="@product.Id"/>
+                                        <input type="hidden" name="backUrl" value="@backUrl"/>
+                                        <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
+                                        <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-danger">Gửi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+            @if (isCensorshipImage && (product.Org3Status == ProductCensorshipConst.Pending.Status || product.Org3Status == null))
+            {
+                <button id="ApprovedImage" data-id="@product.Id" type="button" class="btn btn-sm btn-green mr-10px">
+                    Duyệt hình ảnh, màu sắc, thương hiệu
+                </button>
+            }
+            @if (isCensorshipImage && product.Org3Status != ProductCensorshipConst.NotApproved.Status)
+            {
+                <button type="button" class="btn btn-sm btn-red mr-10px" data-target="#NotApprovedImage" data-toggle="modal">
+                    Xem lại hình ảnh, màu sắc, thương hiệu
+                </button>
+                <div class="modal fade text-left" id="NotApprovedImage" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form asp-action="NotApprovedImage" method="post">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Yêu cầu xem lại hình ảnh, màu sắc, thương hiệu</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <input type="hidden" name="productId" value="@product.Id"/>
+                                        <input type="hidden" name="backUrl" value="@backUrl"/>
+                                        <label for="exampleFormControlTextarea1">Nội dung yêu cầu<span class="text-danger">*</span></label>
+                                        <textarea class="form-control" name="Comment" minlength="1" maxlength="250" required="required" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-danger">Gửi</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+            <a class="btn btn-sm btn-light radius-5 font-weight-bold " href="@backUrl">Quay lại</a>
+        </div>
+    </div>
+</div>
+<main>
+<section id="breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+
+                        <li class="breadcrumb-item">
+                            <a href="#">Trang chủ</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#">@product.Name</a>
+                        </li>
+
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="product">
+<div class="container">
+<div class="row">
+<div class="d-none d-xl-block col-3">
+    <div class="card card-categories">
+        <div class="card-header">
+            <h2>Danh mục</h2>
+        </div>
+        <div class="card-body">
+            <ul class="mobile-menu-items">
                 <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-clock-rotate-left icon-menu"></i>Theo dõi đơn hàng</a>
+                    <a class="mobile-menu-item-link" href="#">Tất cả sản phẩm</a>
+                </li>
+                <li class="mobile-menu-item has-children children-dropdown">
+                    <a class="mobile-menu-item-link">Áo mưa - Ô dù - Nón bảo hiểm</a>
+                    <ul class="mobile-menu-items children">
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Balo - Túi xách</a>
+                        </li>
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Ly - Bình nước</a>
+                        </li>
+                        <li class="mobile-menu-item">
+                            <a class="mobile-menu-item-link" href="#">Áo thun - Áo Sơ Mi</a>
+                        </li>
+                    </ul>
                 </li>
                 <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-user icon-menu"></i>Thông tin tài khoản</a>
+                    <a class="mobile-menu-item-link" href="#">Balo - Túi xách</a>
                 </li>
                 <li class="mobile-menu-item">
-                    <a class="mobile-menu-item-link" href="#"><i class="fa-solid fa-right-from-bracket icon-menu"></i>Thoát</a>
+                    <a class="mobile-menu-item-link" href="#">Ly - Bình nước</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Áo thun - Áo Sơ Mi</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Đồng hồ</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Văn phòng phẩm</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Quà cho bé</a>
+                </li>
+                <li class="mobile-menu-item">
+                    <a class="mobile-menu-item-link" href="#">Quà Tặng VIP</a>
+                </li>
+                <li class="mobile-menu-item has-children children-dropdown">
+                    <a class="mobile-menu-item-link" href="#">Xem thêm</a>
                 </li>
             </ul>
         </div>
     </div>
-    <div class="mobile-menu-backdrop" data-target="#mobile-profile"></div>
+
+
+    <div class="card card-ads-image">
+        <a href="#">
+            <img src="/images/PreviewProduct/design/widgetAds1.png" alt="">
+        </a>
+    </div>
+
+    <div class="card card-ads-image">
+        <a href="#">
+            <img src="/images/PreviewProduct/design/widgetAds2.png" alt="">
+        </a>
+    </div>
+
+    <div class="card card-ads-image">
+        <a href="#">
+            <img src="/images/PreviewProduct/design/widgetAds3.png" alt="">
+        </a>
+    </div>
+
+
 </div>
-<div id="mobile-search" class="container-mobile-menu">
-    <div class="mobile-menu">
-        <div class="mobile-menu-header">
-            <img class="header-logo" src="/images/content/logo.png" alt="PruGift">
-            <button class="mobile-close" data-target="#mobile-search">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-        <div class="mobile-menu-body">
-            <div class="mobile-menu-search">
-                <div class="search-form">
-                    <input class="input-search" placeholder="Tìm kiếm sản phẩm...">
-                    <button class="button-search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
-                </div>
-                <div class="search-suggestions">
-                    <h5 class="search-suggestions-title">Sản phẩm gợi ý</h5>
-                    <ul class="search-suggestions-list">
-                        <li><i class="fa-solid fa-magnifying-glass search-suggestions-icon"></i> Ba lô</li><li><i class="fa-solid fa-magnifying-glass search-suggestions-icon"></i> Gấu bông</li><li><i class="fa-solid fa-magnifying-glass search-suggestions-icon"></i> Túi du lịch</li><li><i class="fa-solid fa-magnifying-glass search-suggestions-icon"></i> Áo mưa</li>
-                    </ul>
-                </div>
+<div class="col-12 col-xl-9">
+<div class="product-info">
+    <div class="product-info__images">
+        <div class="product-preview-slide owl-carousel owl-theme">
+            <div class="product-image-item"
+                 data-dot="<button style='background-image: url(@(product.Image);'></button>">
+                <img class="product-image" src="@product.Image" alt=""/>
             </div>
+            @if (images is {Count: > 0 })
+            {
+                foreach (var productImage in images)
+                {
+                    <div class="product-image-item"
+                         data-dot="<button style='background-image: url(@(productImage.Link));'></button>">
+                        <img class="product-image" src="@(productImage.Link)" alt=""/>
+                    </div>
+                }
+            }
+        </div>
+        <div class="product-preview-slide-dot">
+            <div class="product-preview-slide-owl-carousel-dot"></div>
+            @if (images is {Count: > 3 })
+            {
+                <div class="more-than-4" data-toggle="product-image-preview"data-target="#product-image-preview">
+                    Xem thêm 1 hình
+                </div>
+            }
         </div>
     </div>
-    <div class="mobile-menu-backdrop" data-target="#mobile-search"></div>
-</div>
-</header>
-<main>
-<section id="breadcrumbs">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <ul class="product-breadcrumbs">
-                    <li class="product-breadcrumb">
-                        <a href="#">Trang chủ</a>
-                    </li>
-                    <li class="product-breadcrumb">
-                        <a href="#">Tất cả sản phẩm</a>
-                    </li>
-                    <li class="product-breadcrumb active">@product.Name</li>
-                </ul>
+    <div class="product-info__action">
+        <div class="product-info-action">
+            <h1 class="product-info-action__title">@product.Name</h1>
+            <div class="product-info-action__feedback">
+                <p class="product-info-action__feedback-item">
+                    <strong class="product-info-action__feedback-number red">5.0</strong>
+                    <span
+                        class="product-item__star">
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                    </span>
+                </p>
+                <span class="product-info-action__feedback-separate">|</span>
+                <p class="product-info-action__feedback-item">
+                    <strong class="product-info-action__feedback-number">0</strong>Đánh giá
+                </p>
+                <span class="product-info-action__feedback-separate">|</span>
+                <p class="product-info-action__feedback-item">
+                    <strong class="product-info-action__feedback-number">0</strong>Đã bán
+                </p>
             </div>
-        </div>
-    </div>
-</section>
-<section id="product-info">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 col-xl-6">
-                <div class="product-preview-slide owl-carousel owl-theme">
-                    <div class="product-image-item image-wrapper image-5-4 position-relative" data-dot="<button style='background-image: url(@product.Image);'></button>">
-                        <img class="img-contain" src="@product.Image" alt=""/>
-                    </div>
-                    @if (images is {Count: > 0 })
-                    {
-                        @foreach (var image in images)
-                        {
-                            <div class="product-image-item image-wrapper image-5-4 position-relative" data-dot="<button style='background-image: url(@image.Link);'></button>">
-                                <img class="img-contain" src="@image.Link" alt=""/>
-                            </div>
-                        }
-                    }
-                </div>
-                <div class="product-preview-slide-dot">
-                    <div class="product-preview-slide-owl-carousel-dot"></div>
-                    @if (images.Count > 3)
-                    {
-                        <div class="more-than-4" data-toggle="product-image-preview" data-target="#product-image-preview">Xem thêm @(images.Count - 3) hình</div>
-                    }
-                </div>
+            <hr class="product-info-action__hr">
+            <div class="product-info-action__status">
+                <label class="product-info-action__status-label">Trạng thái</label>
+                <span class="product-info-action__status-badge">
+                    <i class="fa-solid fa-check"></i>còn hàng
+                </span>
             </div>
-            <div class="col-12 col-xl-6">
-                <div class="product-info">
-                    <h1 class="product-title">@product.Name</h1>
-                    <div class="product-feedback">
-                        <div class="product-item-star-rating">
-                            <span class="fa-solid fa-star"></span>
-                            <span class="fa-solid fa-star"></span>
-                            <span class="fa-solid fa-star"></span>
-                            <span class="fa-solid fa-star"></span>
-                            <span class="fa-solid fa-star"></span>
-                        </div>
-                        <span class="product-feedback-separation-vertical"></span>
-                        <span class="product-feedback-text"><strong class="product-feedback-text-strong">0</strong>Đánh giá</span>
-                        <span class="product-feedback-separation-vertical"></span>
-                        <span class="product-feedback-text"><strong class="product-feedback-text-strong">0</strong>Đã bán</span>
-                    </div>
-                    <hr class="product-feedback-separation-horizontal"/>
-                    <div class="price product-price">
-                        @if (product.PriceSale != null && product.PriceSale != 0)
-                        {
-                            <span class="price-old">
-                                @CmsFunction.NumberFormatShow(product.PriceSale) <u>đ</u>
-                            </span>
-                        }
-                        @if (listS is {Count:>0})
-                        {
-                            <span class="price-new">
-                                @CmsFunction.NumberFormatShow(listS[0].Price) <u>đ</u>
-                            </span>
-                        }
-                    </div>
-                    <p class="product-desc">@Html.Raw(product.Lead)</p>
-                    <hr class="product-feedback-separation-horizontal"/>
-                    <div class="product-form-order">
-                        @if (listPro is {Count: > 0})
-                        {
-                            @foreach (var item2 in listPro)
+            <div class="product-info-action__price">
+                @if (product.PriceSale != null && product.PriceSale != 0)
+                {
+                    <p class="old-price">@CmsFunction.NumberFormatShow(product.PriceSale)đ</p>
+                }
+                <p class="new-price">@CmsFunction.NumberFormatShow(listS[0].Price)đ</p>
+            </div>
+            <hr class="product-info-action__hr">
+            <p class="product-info-action__desc">@Html.Raw(product.Lead)</p>
+            <hr class="product-info-action__hr">
+            <div class="product-info-action__options">
+            @if (listPro.Count > 0)
+            {
+                @foreach (var item2 in listPro)
+                {
+                    <div class="product-info-action__option">
+                        <label class="product-info-action__opt-label">@item2.Name</label>
+                        <div class="product-info-action__option-items">
+                            @foreach (var item3 in item2.ListValueName)
                             {
-                                <div class="product-variation">
-                                    <label class="product-variation-title">@item2.Name</label>
-                                    <div class="product-variation-items">
-                                        @foreach (var item3 in item2.ListValueName)
-                                        {
-                                            <div class="product-variation-item">
-                                                <input type="radio" id="@(item2.Name + item3)" name="@item2.Name" value="@item3">
-                                                <label for="@(item2.Name + item3)">@item3</label>
-                                            </div>
-                                        }
-                                    </div>
+                                <div class="product-info-action__option-item">
+                                    <input type="radio" name="radio-color" id="radio-color@(item3)">
+                                    <label for="radio-color@(item3)">@item3</label>
                                 </div>
                             }
-                        }
-                        <div class="product-amount">
-                            <label class="product-amount-title">Số lượng</label>
-                            <div class="product-amount-group-contain">
-                                <div class="w-193px">
-                                    <div class="product-amount-group">
-                                        <span class="product-amount-group-decrease">
-                                            <i class="fa-solid fa-minus"></i>
-                                        </span><input type="number" class="product-amount-group-input"/>
-                                        <span class="product-amount-group-increase">
-                                            <i class="fa-solid fa-plus"></i>
-                                        </span>
-                                    </div>
-                                </div><span class="product-amount-group-quantity-in-stock">(Còn 12 sản phẩm)</span>
-                            </div>
-                        </div>
-                        <div class="product-form-action">
-                            <button class="btn btn-buy btn-outline-default"><i class="fa-solid fa-cart-shopping d-none d-md-inline-block"></i> Thêm vào giỏ hàng</button> <button class="btn btn-default">Mua ngay</button> <button class="btn btn-pre-order">Mua ngay</button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="product-image-preview" class="product-image-preview-modal">
-        <div class="product-image-preview-modal__header">
-            <h2 class="product-image-preview-modal__title">@product.Name</h2>
-            <a class="product-image-preview-modal__close" data-target="#product-image-preview">
-                <i class="fa-solid fa-xmark"></i>
-            </a>
-        </div>
-        <div class="product-image-preview-modal__body">
-            <div class="product-image-preview-modal__slider owl-carousel owl-theme">
-                <div class="product-image-item image-wrapper image-5-4 position-relative" data-dot="<button style='background-image: url(@product.Image);'></button>">
-                    <img class="img-contain" src="@product.Image" alt=""/>
-                </div>
-                @if (images is {Count: > 0 })
-                {
-                    @foreach (var image in images)
-                    {
-                        <div class="product-image-item image-wrapper image-5-4 position-relative" data-dot="<button style='background-image: url(@image.Link);'></button>">
-                            <img class="img-contain" src="@image.Link" alt=""/>
-                        </div>
-                    }
                 }
+            }
             </div>
-            <div class="product-image-preview-modal__dots">
-                <div class="list-dots"></div>
+            <div class="product-info-action__btn">
+                <button class="btn btn-red-heavy w-sm-100">Thêm vào giỏ hàng</button>
+                <button class="btn btn-red w-sm-50">Đặt hàng</button>
+                <button class="btn btn-yellow w-sm-50">Đặt hàng trước</button>
             </div>
         </div>
     </div>
-</section>
-<section id="product-detail">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <ul class="nav nav-pills" id="detail-tab" role="tablist">
-                    <li class="nav-item">
-                        <a class="nav-link active" id="desc-tab" data-toggle="pill" href="#desc-content" role="tab" aria-controls="pills-home" aria-selected="true">Mô tả sản phẩm</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="specification-tab" data-toggle="pill" href="#specification-content" role="tab" aria-controls="pills-profile" aria-selected="false">Thông số kỹ thuật</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link " id="contact-rating" data-toggle="pill" href="#rating-content" role="tab" aria-controls="pills-contact" aria-selected="false">Đánh giá</a>
-                    </li>
-                </ul>
-                <div class="tab-content" id="detail-tabContent">
-                    <div class="tab-pane show active" id="desc-content" role="tabpanel" aria-labelledby="pills-home-tab">
-                        @Html.Raw(product.Description)
-                    </div>
-                    <div class="tab-pane fade" id="specification-content" role="tabpanel" aria-labelledby="pills-profile-tab">
-                        @Html.Raw(product.Specifications)
-                    </div>
-                    <div class="tab-pane fade" id="rating-content" role="tabpanel" aria-labelledby="pills-contact-tab">
-                        <div class="rating-filter">
-                            <div class="rating-filter-info col-12 col-xl-2">
-                                <div class="number-of-start">
-                                    <span class="product-feedback-number-stars"><strong>0</strong> trên 5</span>
-                                    <div class="product-item-star-rating">
-                                        <span class="fa-solid fa-star"></span>
-                                        <span class="fa-solid fa-star"></span>
-                                        <span class="fa-solid fa-star"></span>
-                                        <span class="fa-solid fa-star"></span>
-                                        <span class="fa-solid fa-star"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rating-filter-select col-12 col-xl-10">
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-all" name="size" value="all" checked="checked"> <label for="rating-all">Tất cả</label>
-                                </div>
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-one" name="size" value="1"> <label for="rating-one">5 sao (0)</label>
-                                </div>
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-two" name="size" value="2"> <label for="rating-two">4 sao (0)</label>
-                                </div>
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-three" name="size" value="3"> <label for="rating-three">3 sao (0)</label>
-                                </div>
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-four" name="size" value="4"> <label for="rating-four">2 sao (0)</label>
-                                </div>
-                                <div class="rating-filter-item">
-                                    <input type="radio" id="rating-five" name="size" value="5"> <label for="rating-five">1 sao (0)</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="rating-comments">
-                        </div>
-                    </div>
+</div>
+<div class="product-card">
+    <div class="product-card-header">
+        <h2>Mô tả sản phẩm</h2>
+    </div>
+    <div class="product-card-body">
+        @Html.Raw(product.Description)
+    </div>
+</div>
+<div class="product-card">
+    <div class="product-card-header">
+        <h2>Đánh giá</h2>
+    </div>
+    <div class="product-card-body">
+        <div class="rating-filters">
+            <p class="rating-filters__start">
+                <strong class="rating-filters__start-number">5.0</strong>
+                <span
+                    class="product-item__star">
+                    <span class="fa-solid fa-star checked"></span>
+                    <span class="fa-solid fa-star checked"></span>
+                    <span class="fa-solid fa-star checked"></span>
+                    <span class="fa-solid fa-star checked"></span>
+                    <span class="fa-solid fa-star checked"></span>
+                </span>
+            </p>
+            <div class="rating-filter">
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start0" value="">
+                    <label for="start0">Tất cả</label>
+                </div>
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start5" value="">
+                    <label for="start5">5 sao (2)</label>
+                </div>
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start4" value="">
+                    <label for="start4">4 sao (2)</label>
+                </div>
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start3" value="">
+                    <label for="start3">3 sao (2)</label>
+                </div>
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start2" value="">
+                    <label for="start2">2 sao (2)</label>
+                </div>
+                <div class="rating-filter__item">
+                    <input type="radio" name="start" checked="" id="start1" value="">
+                    <label for="start1">1 sao (2)</label>
+                </div>
+            </div>
+        </div>
+        <div class="product-comments">
+            <div class="product-comment">
+                <div class="product-comment__avatar"></div>
+                <div class="product-comment__info">
+                    <p class="product-comment__customer">anh9ok</p>
+                    <p class="product-item__star">
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                    </p>
+                    <p class="product-comment__time">
+                        <span>2022-07-07 22:34</span>|
+                        <span>Phân loại hàng: Thông thường</span>
+                    </p>
+                    <p class="product-comment__badges">
+                        <span class="product-comment__badge">Chất lượng tuyệt vời</span>
+                        <span class="product-comment__badge">Chuyên nghiệp, thân thiện</span>
+                    </p>
+                    <p class="product-comment__content">
+                        Vô cùng ưng ý luôn! Như hình vậy đó! So với
+                        giá thì thật sự rẻ và rất đáng mua dùng mọi người ạ! Cám ơn shop vì sự uy
+                        tín! Tôi sẽ tiếp tục ủng hộ các bạn!
+                    </p>
+                </div>
+            </div>
+            <div class="product-comment">
+                <div class="product-comment__avatar"></div>
+                <div class="product-comment__info">
+                    <p class="product-comment__customer">anh9ok</p>
+                    <p class="product-item__star">
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star checked"></span>
+                        <span class="fa-solid fa-star"></span>
+                        <span class="fa-solid fa-star"></span>
+                    </p>
+                    <p class="product-comment__time">
+                        <span>2022-07-07 22:34</span>|
+                        <span>Phân loại hàng: Thông thường</span>
+                    </p>
+                    <p class="product-comment__badges">
+                        <span class="product-comment__badge">Chất lượng tuyệt vời</span>
+                        <span class="product-comment__badge">Chuyên nghiệp, thân thiện</span>
+                    </p>
+                    <p class="product-comment__content">
+                        Vô cùng ưng ý luôn! Như hình vậy đó! So với
+                        giá thì thật sự rẻ và rất đáng mua dùng mọi người ạ! Cám ơn shop vì sự uy
+                        tín! Tôi sẽ tiếp tục ủng hộ các bạn!
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+<div id="product-image-preview" class="product-image-preview-modal">
+    <div class="product-image-preview-modal__header">
+        <h2 class="product-image-preview-modal__title">@product.Name</h2>
+        <a class="product-image-preview-modal__close" data-target="#product-image-preview">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+    <div class="product-image-preview-modal__body">
+        <div class="product-image-preview-modal__slider owl-carousel owl-theme">
+            <div class="product-image-item"
+                 data-dot="<button style='background-image: url(@(product.Image));'></button>">
+                <img class="product-image" src="@(product.Image)" alt=""/>
+            </div>
+            @if (images is {Count: > 0 })
+            {
+                foreach (ProductImage productImage in images)
+                {
+                    <div class="product-image-item"
+                         data-dot="<button style='background-image: url(@(productImage.Link));'></button>">
+                        <img class="product-image" src="@(productImage.Link)" alt=""/>
+                    </div>
+                }
+            }
+        </div>
+        <div class="product-image-preview-modal__dots">
+            <div class="list-dots"></div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
 </section>
-<section id="product-bestseller">
+<section id="relative-product">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                @* <h2 class="h2 fs-30 fs-xl-40 font-weight-bold mb-10px mb-xl-10px text-center"></h2> *@
+                <div class="product-slide col3">
+                    <div class="product-slide__title">
+                        <h2>Sản phẩm liên quan</h2>
+                    </div>
+                    <div class="product-slide__body owl-carousel owl-theme">
+                        <div class="product-item">
+                            <div class="product-item__image">
+                                <img class="product-image" src="@product.Image" alt="@product.Name">
+                            </div>
+                            <div class="product-item__info">
+                                <a href="#">
+                                    <h2 class="product-item__title">@product.Name</h2>
+                                </a>
+                                <div class="product-item__star">
+                                    <span class="fa-solid fa-star checked"></span>
+                                    <span class="fa-solid fa-star checked"></span>
+                                    <span class="fa-solid fa-star checked"></span>
+                                    <span class="fa-solid fa-star checked"></span>
+                                    <span class="fa-solid fa-star checked"></span>
+                                </div>
+                                <div class="product-item__price">
+                                     @if (product.PriceSale != null && product.PriceSale != 0)
+                                    {
+                                        <p class="old-price">@CmsFunction.NumberFormatShow(product.PriceSale)đ</p>
+                                    }
+                                    <p class="new-price">@CmsFunction.NumberFormatShow(listS[0].Price)đ</p>
+                                </div>
+                                <a class="btn btn-outline-red-heavy w-100 btn-has-icon" href="#">
+                                    <i class="fas fa-shopping-cart mr-2"></i>Chọn mua
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-slide__footer">
+                        <a href="#">Xem thêm >></a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
 </section>
 </main>
-<footer>
-    <div class="container-fluid p-0">
+<footer class="footer">
+    <div class="footer-container">
         <div class="container">
-            <div class="info-footer">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="support-info">
-                            <div class="support-panel">
-                                <div class="support-items">
-                                    <div class="support-item">
-                                        <h4 class="support-tile"><i class="fa-solid fa-phone support-tile-icon"></i>Tổng đài</h4>
-                                        <p class="support-content">Bạn chưa tìm được sản phẩm ưng ý? Gọi ngay cho chúng tôi để được tư vấn.</p><a class="support-link" href="tel:0896599998">Gọi 0896 599 998</a>
-                                    </div>
-                                    <div class="support-item">
-                                        <h4 class="support-tile"><i class="fa-solid fa-comment-dots support-tile-icon"></i>Hỗ trợ trực tuyến</h4>
-                                        <p class="support-content">Bạn có thắc mắc và cần giải đáp? Chat ngay với chúng tôi để được tư vấn</p><a class="support-link" href="#">Liên hệ ngay</a>
-                                    </div>
-                                    <div class="support-item">
-                                        <h4 class="support-tile"><i class="fa-solid fa-globe support-tile-icon"></i>Kết nối với chúng tôi</h4>
-                                        <p class="support-content">Bạn có thể liên hệ với chúng tôi theo các kênh</p>
-                                        <ul class="support-social-networks">
-                                            <li>
-                                                <a class="support-social-network social-gmail" href="" target="_blank"></a>
-                                            </li>
-                                            <li>
-                                                <a class="support-social-network social-facebook" href="" target="_blank"></a>
-                                            </li>
-                                            <li>
-                                                <a class="support-social-network social-whatsapp" href="" target="_blank"></a>
-                                            </li>
-                                            <li>
-                                                <a class="support-social-network social-zalo" href="" target="_blank"></a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="footer-col">
+                        <h3>THÔNG TIN LIÊN HỆ</h3>
+                        <ul class="footer-content footer-content-contact">
+                            <li>
+                                <h3>Công ty CP Giải pháp Công nghệ Việt Nam.</h3>
+                            </li>
+                            <li>
+                                <strong>Hà Nội:</strong> Tầng 1, Tòa Sông Đà 9, số 2 Nguyễn Hoàng, Quận Nam Từ Liêm,
+                                TP.Hà Nội.
+                            </li>
+                            <li>
+                                <strong>Hồ Chí Minh:</strong> Số 10, đường số 4, khu đô thị Him Lam, Phường Tân Hưng,
+                                Quận 7, TP.HCM.
+                            </li>
+                            <li>
+                                <strong>Số điện thoại:</strong>
+                                <a href="tel:0857 456 996" class="hot-line">
+                                    0857 456
+                                    996
+                                </a>
+                            </li>
+                            <li><strong>Giấy chứng nhận KĐKD:</strong> 0102185180 - Ngày cấp: 14/3/2007.</li>
+                            <li><strong>Nơi cấp:</strong> Sở Kế Hoạch và Đầu Tư thành phố Hà Nội.</li>
+                        </ul>
                     </div>
-                    <div class="col-12 col-xl-3 mr-auto contact-info">
-                        <h3 class="contact-info-title">Thông tin liên hệ</h3><h4 class="contact-info-company-name">Quà tặng doanh nghiệp Giga Gift</h4>
-                        <div class="contact-info-method">
-                            <h4 class="contact-info-method-title"><i class="fa-solid fa-location-dot contact-info-method-icon"></i> Địa chỉ:</h4>
-                            <ul class="contact-info-method-list">
-                                <li class="contact-info-method-list-item">Hà Nội: Tầng 1, tòa nhà Sông Đà 9, số 2 Nguyễn Hoàng, Quận Nam Từ Liêm, TP.Hà Nội</li><li class="contact-info-method-list-item">Hồ Chí Minh: Số 10, đường số 4, KĐT Him Lam, Phường Tân Hưng, Quận 7, TP.HCM</li>
-                            </ul>
-                        </div>
-                        <div class="contact-info-method">
-                            <h4 class="contact-info-method-title"><i class="fa-solid fa-phone contact-info-method-icon"></i> Điện thoại: <span class="contact-info-method-list-item">0896 588 883</span></h4>
-                        </div>
-                        <div class="contact-info-method">
-                            <h4 class="contact-info-method-title"><i class="fa-solid fa-envelope contact-info-method-icon"></i>Email: <span class="contact-info-method-list-item">info@prugift.vn</span></h4>
-                        </div>
-                    </div>
-                    <div class="col-12 col-xl-3 mx-auto guidelines-policy">
-                        <h3 class="guidelines-policy-title">hướng dẫn - chính sách</h3>
-                        <ul class="guidelines-policy-list">
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                </div>
+                <div class="col-lg-3">
+                    <div class="footer-col">
+                        <h3>HỖ TRỢ KHÁCH HÀNG</h3>
+                        <ul class="footer-content">
+                            <li>
+                                <strong>Email:</strong>
+                                <a href="mailto:quatang.daiichilife@vets.com.vn"
+                                   class="hot-line">
+                                    quatang.daiichilife@vets.com.vn
+                                </a>
                             </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                            <li>
+                                <strong>Hotline:</strong> <a href="tel:0857 456 996" class="hot-line">0857 456 996</a> |
+                                <a href="tel:0857 456 996" class="hot-line">0902 624 996</a>
                             </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                            <li>
+                                <a href="#">Điều khoản sử dụng</a>
                             </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                            <li>
+                                <a href="#">Hướng dẫn đặt hàng</a>
                             </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                            <li>
+                                <a href="#">Câu hỏi thường gặp</a>
                             </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
-                            </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
-                            </li>
-                            <li class="guidelines-policy-item">
-                                <a href="#">Chính sách đổi trả</a>
+                            <li>
+                                <ul class="footer_social_list">
+                                    <li class="footer_social_item si_gmail">
+                                        <a
+                                            href="mailto:quatang.daiichilife@vets.com.vn">
+                                        </a>
+                                    </li>
+                                    <li class="footer_social_item si_phone">
+                                        <a href="https://wa.me/+84522596201"></a>
+                                    </li>
+                                    <li class="footer_social_item si_zalo">
+                                        <a href="https://zalo.me/0522596201"></a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </div>
-                    <div class="col-12 col-xl-3 ml-auto pay-methods">
-                        <h3 class="pay-methods-title">Phương thức thanh toán</h3>
-                        <div class="pay-methods-body">
-                            <img class="paymethod-cash" src="/images/content/footer/paymethod-cash.svg" alt="paymethod-cash">
-                            <img class="paymethod-internet-backking" src="/images/content/footer/paymethod-internet-backking.svg" alt="paymethod-internet-backking">
-                            <img class="bo-cong-thuong" src="/images/content/footer/da-thong-bao-bo-cong-thuong.svg" alt="đã thông báo bộ công thương">
+                </div>
+                <div class="col-lg-3">
+                    <div class="footer-col">
+                        <h3>VỀ DAI-ICHI LIFE GIFT CENTER</h3>
+                        <ul class="footer-content">
+                            <li>
+                                <a href="#">Chính sách đổi trả</a>
+                            </li>
+                            <li>
+                                <a href="#">Chính sách bảo mật</a>
+                            </li>
+                            <li>
+                                <a href="#">Chính sách bảo hành</a>
+                            </li>
+                            <li>
+                                <a href="#">Phương thức đặt hàng</a>
+                            </li>
+                            <li>
+                                <a href="#">Phương thức thanh toán</a>
+                            </li>
+                            <li>
+                                <a href="#">Phương thức giao hàng</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="footer-col">
+                        <h3>PHƯƠNG THỨC THANH TOÁN</h3>
+                        <div class="footer-content">
+                            <img src="/images/PreviewProduct/payment_4.svg" alt="payment">
+                            <img src="/images/PreviewProduct/payment_5.svg" alt="payment">
+                        </div>
+                        <div class="footer-content ">
+                            <a target="_blank" href="http://online.gov.vn/Home/WebDetails/80484">
+                                <img width="150" src="/images/PreviewProduct/bocongthuong.png" alt="bocongthuong">
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="copyright-footer">Copyright © @(DateTime.Now.Year) VETS. All rights reserved</div>
     </div>
 </footer>
-<script src="/js/PreviewProduct/vendor.js"></script>
-<script src="/js/PreviewProduct/app.js"></script>
-<script src="/js/PreviewProduct/product.js"></script>
+<div class="copyright">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 order-lg-1 order-2  ">
+                <div class="copyright_content d-flex flex-row align-items-center justify-content-center">
+                    <p>Managed by VETS</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/js/PreviewProduct/vendor.min.js"></script>
+<script src="/js/PreviewProduct/app.min.js"></script>
+<script src="/js/PreviewProduct/product.min.js"></script>
 <script src="/js/ProductCensorship/Details.js"></script>
 <script >
     @if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))

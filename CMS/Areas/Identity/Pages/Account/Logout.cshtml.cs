@@ -1,50 +1,67 @@
-﻿using System.Linq;
-using System.Net;
-using CMS_Lib.Util;
+﻿using System;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 
 namespace CMS.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
     [Authorize]
     public class LogoutModel : PageModel
     {
         private readonly ILogger<LogoutModel> _logger;
+        private readonly IHttpContextAccessor _iHttpContextAccessor;
 
-        public LogoutModel(ILogger<LogoutModel> logger)
+        public LogoutModel(ILogger<LogoutModel> logger,IHttpContextAccessor iHttpContextAccessor)
         {
             _logger = logger;
+            _iHttpContextAccessor = iHttpContextAccessor;
         }
-        public IActionResult OnGet(string returnUrl, string msg)
+        [IgnoreAntiforgeryToken]
+        public IActionResult OnGet(string returnUrl)
         {
-            this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
-            bool isWsFederation = User.HasClaim(CmsClaimType.UserType, "1");
-            HttpContext.Session.Clear();
-            if (!string.IsNullOrEmpty(msg))
+            try
             {
-                string d = WebUtility.UrlDecode(msg);
-                TempData[ResultMessage.IsShowMessage] = "-1";
-                TempData[ResultMessage.ContentMessage] = d;
+                HttpContext.Session.Clear();
+                if (User.Identity!.IsAuthenticated)
+                {
+                    this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
+                    return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
+                        new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
+                            IdentityConstants.ApplicationScheme });   
+                }
             }
-            return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
-                    new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
-                        IdentityConstants.ApplicationScheme });
+            catch (Exception)
+            {
+                // ignored
+            }
+            return Redirect("/Identity/Account/Login");
         }
 
+        [AutoValidateAntiforgeryToken]
         public IActionResult OnPost(string returnUrl = null)
         {
-            this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
-            HttpContext.Session.Clear();
-            return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
-                    new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
-                        IdentityConstants.ApplicationScheme });
+            try
+            {
+                HttpContext.Session.Clear();
+                if (User.Identity!.IsAuthenticated)
+                {
+                    this._logger.LogInformation($"Tài khoản {HttpContext.User.Identity?.Name} đăng xuất thành công");
+                    return SignOut(new AuthenticationProperties() { RedirectUri = "/Identity/Account/Login" },
+                        new[] {CookieAuthenticationDefaults.AuthenticationScheme, IdentityConstants.ExternalScheme,IdentityConstants.TwoFactorUserIdScheme,
+                            IdentityConstants.ApplicationScheme });   
+                }
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            return Redirect("/Identity/Account/Login");
         }
     }
 }

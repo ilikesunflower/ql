@@ -49,11 +49,11 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [Authorize(Policy = "PermissionMVC")]
-        public async Task<IActionResult> Index(string txtKeyword, string status, int? typeUser, int pageindex = 1)
+        public async Task<IActionResult> Index(string txtSearch, string status, int? typeUser, int pageindex = 1)
         {
             var query = _iApplicationUserRepository.FindAll();
-            if (!string.IsNullOrWhiteSpace(txtKeyword))
-                query = query.Where(p => EF.Functions.Like(p.UserName, "%" + txtKeyword.Trim() + "%"));
+            if (!string.IsNullOrWhiteSpace(txtSearch))
+                query = query.Where(p => EF.Functions.Like(p.UserName, "%" + txtSearch.Trim() + "%"));
 
 
             if (!string.IsNullOrEmpty(status))
@@ -71,7 +71,7 @@ namespace CMS.Areas.Admin.Controllers
             var model = await PagingList<ApplicationUser>.CreateAsync(query.OrderBy(x => x.Id), PageSize, pageindex);
             model.RouteValue = new RouteValueDictionary
             {
-                {"txtKeyword", txtKeyword},
+                {"txtSearch", txtSearch},
                 {"status", status},
                 {"typeUser", typeUser},
             };
