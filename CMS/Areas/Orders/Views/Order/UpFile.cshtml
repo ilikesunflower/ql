@@ -1,0 +1,75 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model CMS.Areas.Orders.Models.UpFileViewModel
+@{
+    string title = "Đối soát từ file excel";
+    string subName = "Quản đơn hàng";
+    string namePage = title;
+    string subName1 = title;
+    ViewData["Title"] = $"{title}  | {subName}";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a asp-action="Index">@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="UpFile" class="form-upload" method="post" enctype="multipart/form-data">
+                            <div class="form-upload-file">
+                                <input type="file" class="d-none" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" asp-for="File"/>
+                                <div class="form-upload-info-file">
+                                    <div class="text-center ">
+                                        <img alt="update file excel" src="/images/icon/excelUpload.png"/>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="form-upload-file-name"></p>
+                                    </div>
+                                </div>
+                                <div class="form-upload-select-file">
+                                    <div class="text-center">
+                                        <p class="form-upload-text">Chọn các file có đuôi .xlsx.<br/> Chọn file dữ liệu đúng cho file đối soát!</p>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="btn btn-default form-upload-choose">Chọn tệp</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <span asp-validation-for="File" class="text-danger d-block"></span>
+                            <button type="submit" class="btn btn-danger m-t-15">Nhập từ file excel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+@section Scripts
+{
+    <script type="text/javascript" src="/js/uploadFile.js"></script>
+}
+
+@section Styles
+{
+    <link rel="stylesheet" href="/css/uploadFile.css"/>
+}

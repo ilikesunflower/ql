@@ -14,6 +14,7 @@
     var IsEdit = Model.GetModel<bool>("IsEdit");
     var ShowOrderStatus = Model.GetModel<bool>("ShowOrderStatus");
     var ListStatus = Model.GetModel<Dictionary<int, string>>("ListStatus");
+    bool? isEdit = (bool)TempData["IsEdit"]!;
 }
 
 <section class="content-header">
@@ -39,6 +40,12 @@
                     <div class="card-header ">
                         <p class="card-title namePageText">@title</p>
                         <div class="float-right">
+                            @if (isEdit == true)
+                            {
+                                <a class="btn bg-gradient-primary btn-sl" asp-action="UpFile">
+                                    <i class="fa-solid fa-arrow-up-from-line"></i> Nhập dữ liệu
+                                </a>
+                            }
                             @* @await Html.PartialAsync("Partial/BasicAction/Create", new { area = "Orders" }) *@
                             @* @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Orders", action = "DeleteAll" }) *@
                         </div>
@@ -67,7 +74,7 @@
                                             <option value="@item.Key">@item.Value</option>
                                         }
                                     </select>
-                                </div>   
+                                </div>
                             }
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
                                 <select class="form-control form-control-xl" name="payment" asp-for="@listData.RouteValue["payment"]">
@@ -88,7 +95,10 @@
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
-                                <button type="submit" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                                <button type="submit" name="export" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 m-t-b-5">
+                                <button type="submit" name="export" value="1" class="btn btn-success btn-block filter btn-xl">Xuất file đối soát</button>
                             </div>
                         </form>
                         <div class="table-responsive m-t-15">
@@ -103,7 +113,9 @@
                                     <th class="text-center align-middle" style="width: 80px;">Thời gian tạo </th>
                                     <th class="align-middle text-center" style="width: 100px;">Người đặt hàng</th>
                                     <th class="align-middle" style="">Địa chỉ giao hàng</th>
-                                    <th class="text-center align-middle" style="width: 170px"><span>Tổng tiền (đ)</span></th>
+                                    <th class="text-center align-middle" style="width: 170px">
+                                        <span>Tổng tiền (đ)</span>
+                                    </th>
                                     <th class="text-center align-middle" style="width:150px">Trạng thái</th>
                                     <th class="text-center align-middle" style="width:10%">Giao hàng</th>
                                     <th class="text-center align-middle" style="width: 50px"></th>
@@ -128,9 +140,11 @@
                                                 <p class="font-size-14 m-all-0">@(item.Customer.FullName) @Html.Raw($"{(!string.IsNullOrEmpty(item.Customer!.Phone) ? ($"<br/> {item.Customer!.Phone}") : "")}")</p>
                                             </td>
                                             <td class="align-middle fontZ">
-                                                <p class="font-size-14 m-all-0"><label class="m-all-0">Họ tên:</label> @(item.OrderAddress?.Name) @Html.Raw($"{(!string.IsNullOrEmpty(item.OrderAddress!.Phone) ? ($" - <label>SĐT</label> {item.OrderAddress.Phone}") : "")}")</p>
+                                                <p class="font-size-14 m-all-0">
+                                                    <label class="m-all-0">Họ tên:</label> @(item.OrderAddress?.Name) @Html.Raw($"{(!string.IsNullOrEmpty(item.OrderAddress!.Phone) ? ($" - <label>SĐT</label> {item.OrderAddress.Phone}") : "")}")
+                                                </p>
                                                 <p class="">
-                                                    <label class="m-all-0">Địa chỉ:</label> 
+                                                    <label class="m-all-0">Địa chỉ:</label>
                                                     <span>@(item.OrderAddress?.Address)</span><br/>
                                                     <span>Tỉnh/TP: @(item.OrderAddress?.Province?.Name) - Quận/Huyện: @(item.OrderAddress?.District?.Name) - Xã/Phường: @(item.OrderAddress?.Commune?.Name)</span>
                                                 </p>
@@ -149,7 +163,7 @@
                                                 @(ShipConst.GetShipment((item.ShipPartner ?? 0), item.ShipType))
                                             </td>
                                             <td class="text-center align-middle">
-                                                @await Html.PartialAsync("Partial/FunctionOrder", new { id = @item.Code,IsEdit = IsEdit, status = item.Status })
+                                                @await Html.PartialAsync("Partial/FunctionOrder", new {id = @item.Code, IsEdit = IsEdit, status = item.Status})
                                             </td>
                                         </tr>
                                     }
@@ -163,7 +177,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new { DataList = listData })
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
                     </div>
 
                 </div>
