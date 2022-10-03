@@ -515,7 +515,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpGet]
         [Obsolete]
         //[ValidateAntiForgeryToken]
-        public async Task<JsonResult> GetAllListFile(string Keyword, string CreateAt, int? Type, int pageSize = 24, int pageNumber = 1)
+        public async Task<JsonResult> GetAllListFile(string txtSearch, string CreateAt, int? Type, int pageSize = 24, int pageNumber = 1)
         {
           
             this._iPaginationFilter.PageNumber = pageNumber;
@@ -524,9 +524,9 @@ namespace CMS.Areas.Admin.Controllers
             var route = Request.Path.Value;
 
             var query = _iFilesRepository.FindAll();
-            if (!string.IsNullOrEmpty(Keyword))
+            if (!string.IsNullOrEmpty(txtSearch))
             {
-                query = query.Where(x => EF.Functions.Like(x.Name, "%" + Keyword + "%"));
+                query = query.Where(x => EF.Functions.Like(x.Name, "%" + txtSearch + "%"));
             }
 
             if (Type != null)

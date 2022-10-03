@@ -1,6 +1,8 @@
-﻿namespace CMS.Extensions.Header;
+﻿using System.ComponentModel.DataAnnotations;
 
-public class CheckHeaderFilter
+namespace CMS.Extensions.Header;
+
+public class CheckHeaderFilter : ValidationAttribute
 {
     
 }

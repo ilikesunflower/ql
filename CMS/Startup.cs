@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using CMS_Access.init;
 using CMS_EF.DbContext;
 using CMS_EF.Models.Identity;
@@ -11,6 +10,7 @@ using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
+using CMS.Extensions.Url;
 using CMS.Hubs;
 using CMS.Middleware.AuthorizationController;
 using CMS.Middleware.Hubs;
@@ -25,9 +25,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.StaticFiles;
@@ -43,7 +41,6 @@ using ReflectionIT.Mvc.Paging;
 using Serilog;
 using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using ServiceCollectionExtensions = CMS_Lib.DI.ServiceCollectionExtensions;
-using UrlHelperExtensions = CMS.Extensions.Url.UrlHelperExtensions;
 
 namespace CMS
 {
@@ -86,10 +83,16 @@ namespace CMS
                     opt => { opt.MigrationsAssembly("CMS"); });
                 // options.EnableSensitiveDataLogging();
                 options.ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
+                options.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning));
             });
-            services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
-                .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-
+            // services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
+            //     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
+                {
+                    o.Stores.MaxLengthForKeys = 128;
+                })
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
