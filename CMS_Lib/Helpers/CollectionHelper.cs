@@ -12,7 +12,7 @@ public static class CollectionHelper
         try
         {
             return o.GetType().ImplementsGenericInterface(typeof(IList<>)) ||
-                   o.GetType().ImplementsGenericInterface(typeof(IEnumerable<>)) ||
+                   o.GetType().ImplementsGenericInterface(typeof(IEnumerable<string>)) ||
                    o.GetType().ImplementsGenericInterface(typeof(IReadOnlyList<>));
         }
         catch (Exception)

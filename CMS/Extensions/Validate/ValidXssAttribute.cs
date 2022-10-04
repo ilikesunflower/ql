@@ -15,7 +15,7 @@ namespace CMS.Extensions.Validate
             {
                 foreach (var item in (IEnumerable)value)
                 {
-                    if (item != null && item.GetType().ImplementsGenericInterface(typeof(string)))
+                    if (item != null && item.GetType() == (typeof(string)))
                     {
                         var data = $"{item}";
                         data = WebUtility.UrlDecode(data);
@@ -43,11 +43,14 @@ namespace CMS.Extensions.Validate
                         }else if (!string.IsNullOrEmpty(data) && data.Contains(";exec+"))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }else if (!string.IsNullOrEmpty(data) && data.Contains("iframe"))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
                     }
                 }
             }
-            else if (value != null && value.GetType().ImplementsGenericInterface(typeof(string)))
+            else if (value != null && value.GetType() == (typeof(string)))
             {
                 var data = $"{value}";
                 data = WebUtility.UrlDecode(data);
@@ -69,6 +72,9 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }else if (!string.IsNullOrEmpty(data) && data.Contains(";exec+"))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                }else if (!string.IsNullOrEmpty(data) && data.Contains("iframe"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
