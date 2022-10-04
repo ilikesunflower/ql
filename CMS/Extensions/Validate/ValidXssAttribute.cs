@@ -97,6 +97,9 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult(
                         "Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
+                }else if (!string.IsNullOrEmpty(data) && data.Contains(";exec+"))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
             }
 
