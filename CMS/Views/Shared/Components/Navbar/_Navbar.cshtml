@@ -53,9 +53,12 @@
                 }
                 @if (isSignIn)
                 {
-                    <a class="dropdown-item font-rem-0-9" title="Đăng xuất"  asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
-                        <i class="fal fa-sign-out-alt" ></i>&nbsp; Đăng xuất
-                    </a>
+                    <form method="post" asp-area="Identity" asp-page="/Account/Logout">
+                        @Html.AntiForgeryToken()
+                        <button class="dropdown-item font-rem-0-9" type="submit">
+                            <i class="fal fa-sign-out-alt"></i>&nbsp; &nbsp;Đăng xuất
+                        </button>
+                    </form>
                 }
             </div>
         </li>
