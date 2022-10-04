@@ -39,6 +39,7 @@ public class PreOrderController: BaseController
     }
 
     // GET
+    [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
     [Obsolete]
     public IActionResult Index(int? status,string startDate, string endDate, int pageindex = 1)
@@ -88,6 +89,7 @@ public class PreOrderController: BaseController
         }
     }
 
+    [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Details(int id)
     {
@@ -110,6 +112,7 @@ public class PreOrderController: BaseController
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public IActionResult CreateOrder([FromForm] CreateOrderViewModel model)
     {
         if (ModelState.IsValid)

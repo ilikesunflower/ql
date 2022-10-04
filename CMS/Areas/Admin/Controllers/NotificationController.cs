@@ -29,6 +29,7 @@ namespace CMS.Areas.Admin.Controllers
             this._iNotificationRepository = iNotificationRepository;
         }
 
+        [HttpGet]
         [NoActiveMenu]
         public async Task<IActionResult> UsersNotification(string txtSearch, string senderName, int? isUnread, int pageindex = 1)
         {
@@ -206,6 +207,8 @@ namespace CMS.Areas.Admin.Controllers
             }
         }
 
+        
+        [HttpGet]
         public JsonResult GetNotificationByUser()
         {
             // cập nhật thời gian khi user click vào nút thông báo

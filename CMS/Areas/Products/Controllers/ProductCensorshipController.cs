@@ -133,7 +133,7 @@ public class ProductCensorshipController : BaseController
             if (product == null)
             {
                 ToastMessage(-1, "Không tìm thấy sản phẩm !");
-                return RedirectToAction("Details",new{id=model.ProductId,backUrl=model.BackUrl});
+                return NotFound();
             }
             product.Org1Status = ProductCensorshipConst.NotApproved.Status;
             product.Org1Comment = model.Comment;

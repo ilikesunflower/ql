@@ -16,6 +16,7 @@ namespace CMS.Areas.Admin.ViewModels.ApplicationRole
         [ValidXss]
         public string Description { get; set; }
 
+        [ValidXss]
         public List<ExtendRoleController> ListRoleControllerAction { get; set; }
     }
 
@@ -36,5 +37,29 @@ namespace CMS.Areas.Admin.ViewModels.ApplicationRole
             }
             return null;
         }
+    }
+    
+    
+    public class ExtendRoleAction
+    {
+        public int Id { get; set; }
+        [ValidXss]
+        public string Title { get; set; }
+        [ValidXss]
+        public string Name { get; set; }
+        public int ControllerId { get; set; }
+        public bool IsChecked { get; set; }
+    }
+    public class ExtendRoleController
+    {
+        public int Id { get; set; }
+        [ValidXss]
+        public string Name { get; set; }
+        [ValidXss]
+
+        public string Title { get; set; }
+
+        public List<ExtendRoleAction> ListAction { get; set; }
+
     }
 }

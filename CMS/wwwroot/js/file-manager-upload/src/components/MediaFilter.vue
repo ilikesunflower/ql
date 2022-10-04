@@ -48,7 +48,7 @@ export default {
     ...mapGetters(['StateListTypes','StateListCreateAt','StateIsLoading']),
     Keyword:{
       get(){
-        return this.$store.state.fileFilter.Keyword;
+        return this.$store.state.fileFilter.txtSearch;
       },
       set(value){
         this.$store.dispatch('setDataKeyword', value);

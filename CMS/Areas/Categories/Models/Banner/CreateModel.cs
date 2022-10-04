@@ -19,6 +19,9 @@ namespace CMS.Areas.Categories.Models.Banner
         [Required(ErrorMessage = "Vui lòng nhập ảnh.")]
         [ValidXss]
         public string Images { get; set; }
+        
+        [MaxLength(1000)]
+        [ValidXss]
         public string ImagesMobile { get; set; }
 
         public int Status { get; set; }

@@ -37,6 +37,7 @@ public class CustomerActivityController : BaseController
     }
 
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public IActionResult Index(int isExport, string txtSearch, string startDate, string endDate, int? type, int pageindex = 1)
     {
         if (isExport == 1)
@@ -92,6 +93,7 @@ public class CustomerActivityController : BaseController
     }
 
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public IActionResult Export(string txtSearch, string startDate, string endDate, int? type, int pageindex = 1)
     {
         try
@@ -145,6 +147,7 @@ public class CustomerActivityController : BaseController
     }
     
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public JsonResult WidgetDashboard(string startDate, string endDate)
     {
         try
