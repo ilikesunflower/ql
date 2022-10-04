@@ -579,7 +579,26 @@ namespace CMS_Lib.Util
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
 
+        public static bool IsValidImage(string img)
+        {
+            if (string.IsNullOrEmpty(img))
+            {
+                return false;
+            }
 
+            if (IsHtml(img))
+            {
+                return true;
+            }
+
+            if (img.ToLower().Contains("javascript:") || img.ToLower().Contains("style=")
+                                                      || img.ToLower().Contains("iframe") || img.ToLower().Contains(";exec+") )
+            {
+                return true;
+            }
+
+            return false;
+        }
         public static string ConvertDateTimeToQuarterString(DateTime date)
         {
             return $"Quý {(date.Month + 2) / 3} {date.Year}";

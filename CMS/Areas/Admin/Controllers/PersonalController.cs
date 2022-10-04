@@ -175,7 +175,7 @@ namespace CMS.Areas.Admin.Controllers
                     }
                     ApplicationUser user = new ApplicationUser();
                     user.FullName = editProfileViewModel.FullName;
-                    user.Image = editProfileViewModel.Image;
+                    user.Image = CmsFunction.IsValidImage(editProfileViewModel.Image) ? user.Image : editProfileViewModel.Image;
                     user.Sex = editProfileViewModel.Sex;
                     user.Email = editProfileViewModel.Email;
                     user.PhoneNumber = editProfileViewModel.PhoneNumber;

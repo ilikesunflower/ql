@@ -133,7 +133,7 @@ namespace CMS.Areas.Admin.Controllers
                         Email = createdUserViewModel.Email,
                         Address = createdUserViewModel.Address,
                         FullName = createdUserViewModel.FullName,
-                        Image = createdUserViewModel.Image,
+                        Image = CmsFunction.IsValidImage(createdUserViewModel.Image) ? "" : createdUserViewModel.Image,
                         Sex = createdUserViewModel.Sex,
                         IsActive = createdUserViewModel.IsActive,
                         PasswordHash = createdUserViewModel.Password,
@@ -198,7 +198,7 @@ namespace CMS.Areas.Admin.Controllers
                     ApplicationUser user = new ApplicationUser();
                     user.Address = editUserViewModel.Address;
                     user.FullName = editUserViewModel.FullName;
-                    user.Image = editUserViewModel.Image;
+                    user.Image = CmsFunction.IsValidImage(editUserViewModel.Image) ? user.Image : editUserViewModel.Image;
                     user.Sex = editUserViewModel.Sex;
                     user.PasswordHash = editUserViewModel.Password;
                     user.Email = editUserViewModel.Email;
