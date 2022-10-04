@@ -627,6 +627,34 @@ namespace CMS_Lib.Util
                 return new List<DateTime>();
             }
         }
+        public static int ParseQuarterToInt(string t)
+        {
+            try
+            {
+                int quarter = 0;
+                if (t.StartsWith("Quý 1"))
+                {
+                    quarter = 1;
+                }
+                else if (t.StartsWith("Quý 2"))
+                {
+                    quarter = 2;
+                }
+                else if (t.StartsWith("Quý 3"))
+                {
+                    quarter = 3;
+                }
+                else if (t.StartsWith("Quý 4"))
+                {
+                    quarter = 4;
+                }
+                return quarter;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
 
         public static int ParseQuarterYear(string t)
         {

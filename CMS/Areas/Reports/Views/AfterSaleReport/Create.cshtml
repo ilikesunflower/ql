@@ -1,0 +1,107 @@
+﻿@using CMS_Lib.Util
+@using CMS.Areas.Reports.Const
+@model CMS.Areas.Reports.Models.AfterSaleReport.CreateViewModel
+
+@{
+    ViewData["Title"] = "Thêm mới báo cáo | Báo cáo sau bán hàng";
+    string namePage = "Thêm mới báo cáo ";
+    string subName = "Báo cáo";
+    string subName1 = "Báo cáo sau bán hàng ";
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active"><a class="active" asp-area="Reports" asp-action="Index">@subName1</a></li>
+
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-12 ">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <p class="card-title namePageText">@namePage</p>
+                                    <div class="float-right">
+                                        @await Html.PartialAsync("Partial/BasicAction/Save")
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-xs-3">Tên <span class="text-danger">*</span></label>
+                                            <div class="col-md-9 col-xs-9">
+                                                <input type="text" asp-for="Name" class="form-control form-control-xl"/>
+                                                <span asp-validation-for="Name" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-md-3 col-xs-3">Loại thời gian <span class="text-danger">*</span></label>
+                                            <div class="col-md-9 col-xs-9">
+                                               <select class="form-control   select2" asp-for="Type">
+                                                   @foreach (var item in  AfterSaleConst.ListAfterSaleCost)
+                                                        {
+                                                           <option value="@item.Key">@item.Value</option>
+                                                   }
+                                                </select>   
+                                                <span asp-validation-for="Type" class="text-danger"></span>
+
+                                            </div>
+                                        </div>
+                                                                            
+                                         <div class="form-group row">
+                                                <label class="col-md-3 col-xs-3">Thời gian <span class="text-danger">*</span></label>
+                                                <div class="col-md-9 col-xs-9">
+                                                      <input type="text" id="monthYearTime" value="@Model.Month" name="Month" class="form-control bg-color-transparent month-picker-max @(Model.Type == AfterSaleConst.month ? "show" : "hidden")" autocomplete="off" placeholder="Chọn tháng" readonly=""/>
+                                                      <input type="text" id="quarterYearTime" data-year="@CmsFunction.ParseQuarterYear(Model.Quater)" data-month="@CmsFunction.ParseIndexQuarterYear(Model.Quater)" value="@Model.Quater" name="Quater" class="form-control bg-color-transparent quarter-year-picker-max @(Model.Type == AfterSaleConst.quarter ? "show" : "hidden")" autocomplete="off" placeholder="Chọn quý" readonly=""/>
+                                                      <input type="text" id="yearTime" value="@Model.Year" name="Year" class="form-control bg-color-transparent year-picker-max-now @(Model.Type == AfterSaleConst.year ? "show" : "hidden")" autocomplete="off" placeholder="Chọn năm" readonly=""/>
+                                                </div>
+                                            </div>
+                                        <div class="form-group row">
+                                                <label class="col-md-3 col-xs-3">File báo cáo <span class="text-danger">*</span></label>
+                                            <div class="col-md-9 col-xs-9">
+                                                 <input type="file"  asp-for="File"  class="form-control" />
+                                                 <span asp-validation-for="File" class="text-danger d-block"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                                </div>
+                            </div>
+                        </div>
+                  
+                    </div>
+                  
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+@section Styles
+{
+    @* <link rel="stylesheet" href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css"/> *@
+    @* <link rel="stylesheet" href="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.css"/> *@
+}
+@section Scripts
+{
+    @* <script type="text/javascript" src="~/lib/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script> *@
+    @* <script type="text/javascript" src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js"></script> *@
+    <script type="text/javascript" src="~/js/Report/filterTime.js"></script>
+
+}

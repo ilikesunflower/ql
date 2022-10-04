@@ -97,7 +97,6 @@
 		<Folder Include="Areas\Orders\Views\Shared" />
 		<Folder Include="Areas\PointInput\Models" />
 		<Folder Include="Areas\Products\Data" />
-		<Folder Include="Areas\Reports\Const" />
 		<Folder Include="Areas\Reports\Pages" />
 		<Folder Include="Areas\Webhook\Data" />
 		<Folder Include="Config\Builder" />

@@ -1,0 +1,119 @@
+﻿@using CMS.Areas.Customer.Const
+@using CMS.Areas.Reports.Const
+@using CMS.Areas.Reports.Services
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using CMS_Lib.Util
+@model CMS.Areas.Reports.Models.AfterSaleReport.IndexViewModel
+
+@{
+    string namePage = "Báo cáo sau bán hàng";
+    string subName = "Báo cáo";
+    string subName1 = namePage;
+    ViewData["Title"] = namePage;
+    var listData = Model.ListData;
+}
+
+<section class="content-header">
+    <div class="container-fluid subname">
+        <div class="row">
+            <div class="col-sm-6 ">
+                <ol class="breadcrumb float-sm-left">
+                    <li class="breadcrumb-item">
+                        <a>@subName</a>
+                    </li>
+                    <li class="breadcrumb-item active">@subName1</li>
+                </ol>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header ">
+                        <p class="card-title namePageText">@namePage</p>
+                        <div class="float-right">
+                                 @await Html.PartialAsync("Partial/BasicAction/Create", new { area = "Reports" })
+                                 @await Html.PartialAsync("Partial/BasicAction/DeleteAll", new { area = "Reports", action = "DeleteAll" })
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form class="row" method="get" asp-action="Index">
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="input-group input-group-xl">
+                                    <input type="text" class="input-xl form-control" placeholder="Tên báo cáo..." autocomplete="off" name="txtSearch" asp-for="@listData.RouteValue["txtSearch"]"/>
+                                </div>
+                            </div>
+                         
+                            <div class="col-xs-12 col-sm-4">
+                                <select class="form-control form-control-xl" name="typeDate" asp-for="@listData.RouteValue["typeDate"]">
+                                    <option>Chọn loại báo cáo</option>
+                                    @foreach (var item in AfterSaleConst.ListAfterSaleCost)
+                                    {
+                                        <option value="@item.Key">@item.Value</option>
+                                    }
+                                </select>
+                            </div>
+                         
+                            <div class="col-xs-12 col-sm-2">
+                                <button type="submit" class="btn btn-primary btn-block filter btn-xl">Tìm kiếm</button>
+                            </div>
+                        </form>
+                    
+                        <div class="table-responsive tablePaddingTop">
+                            <table class="table tab-content table-bordered table-check-all table-bordered-index">
+                                <thead class="table-thead">
+                                <tr>
+                                    <th class="text-center" style="width: 45px">
+                                        <input type="checkbox" class="i-checks chkAll"/>
+                                    </th>
+                                    <th style="width: 45px">STT</th>
+                                    <th class="text-center" style="width: 180px">Thời gian</th>
+                                    <th class="">Tên báo cáo</th>
+                                    <th class="text-center"  style="width: 180px" >Chức năng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (listData.Count > 0)
+                                {
+                                    var stt = 1;
+                                    @foreach (var item in listData)
+                                    {
+                                        <tr>
+                                            <td class="text-center align-middle">
+                                               <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                                            </td>
+                                            <td class="align-middle text-center">@(stt++)</td>
+                                            <td class="align-middle">@AfterSaleConst.GetTime(item.Type, item.Month, item.Quater, item.Year)</td>
+                                            <td class="align-middle">@item.Name</td>
+                                            <td class="align-middle text-center">
+                                                @await Html.PartialAsync("Partial/BasicActionTable/Delete", new {id = item.Id})
+                                                <a  class="btn bg-gradient-success  btn-xs  btn-s-m mt-1 mb-1 " href="@("/"+ (item.LinkFile ?? ""))" >
+                                                    <i class="fas fa-download"></i> Tải
+                                                 </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
+                        </div>
+                        @await Html.PartialAsync("Partial/BasicActionTable/RecordData", new {DataList = listData})
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>

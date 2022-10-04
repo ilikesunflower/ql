@@ -9,6 +9,7 @@ using CMS_EF.Models.Identity;
 using CMS_EF.Models.Orders;
 using CMS_EF.Models.PreOrders;
 using CMS_EF.Models.Products;
+using CMS_EF.Models.Reports;
 using CMS_EF.Models.Ship;
 using CMS_EF.Models.WareHouse;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -69,6 +70,11 @@ namespace CMS_EF.DbContext
         public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<OrderPartnerShipLog> OrderPartnerShipLog { get; set; }
         public virtual DbSet<OrderPoint> OrderPoint { get; set; }
+
+        #endregion
+
+        #region Reports
+        public virtual DbSet<ReportAfterSales> ReportAfterSales { get; set; }
 
         #endregion
 
