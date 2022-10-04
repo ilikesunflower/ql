@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using CMS.Areas.Categories.Const;
+using CMS.Areas.Orders.Const;
 using CMS.Areas.Products.Const;
 using CMS_EF.Models.Products;
 using CMS.Areas.Products.Models.Product;
@@ -996,7 +997,7 @@ namespace CMS.Areas.Products.Controllers
                 });
             }
         }
-
+     
         [HttpGet]
         [NonLoad]
         public IActionResult ApiDetail(int? id)

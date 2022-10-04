@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useMemo} from 'react';
 import {formatNumber, isPoi} from '../../../common/app';
-import {getListProduct, getListCustomerCoupon, checkGetPointCustomer,getListCustomerCouponEdit, getListOrderEdit, getPriceProduct, getPointOldCustomer } from "./httpService"
+import {getListProduct, getListCustomerCoupon, checkGetPointCustomer,getListCustomerCouponEdit, getListOrderEdit, getPriceProduct, getListPromotionShip,  getPointOldCustomer } from "./httpService"
 
 function MainController(props) {
     const { productCartSelect, setProductCartSelect, formik,customer,orderId, isEdit } = props;
@@ -14,11 +14,16 @@ function MainController(props) {
     //coupon
     let [listCoupon, setListCoupon] = useState([]);
     let [showModalCoupon,setShowModalCoupon] = useState(false);
+    let [listPromotionShip, setListPromotionShip] = useState([]);
 
 
     useEffect(() => {
         getListProduct(function (rs) {
             setListProduct(rs);
+        })
+        getListPromotionShip(function (rs) {
+            console.log(rs);
+            setListPromotionShip(rs);
         })
         if(isEdit){
             getListOrderEdit({id: orderId}, function (rs) {
@@ -61,7 +66,6 @@ function MainController(props) {
                 })
             }
         }
-
     },[customer])
     
     //product
@@ -71,6 +75,35 @@ function MainController(props) {
         } ,0)
     }, [productCartSelect])
     
+    //productTotalPrice, provinceCode
+    //thay doi 
+    
+    useEffect(()=> {
+       
+            let priceNoSale =  formik.values.priceNoSale;
+            let saleTotal = formik.values.priceNoSale;
+            let percent = 100;
+            if(productTotalPrice != 0 && formik.values.priceNoSale != 0){
+                let check = listPromotionShip.find(x => x.codeAddress === formik.values.provinceCode ) || null;
+                if(check == null){
+                    let check1 = listPromotionShip.find(x => productTotalPrice >= x.totalStart && (!x.totalEnd ? true : productTotalPrice < x.totalEnd) && !x.codeAddress) || null;
+                    if(check1 != null){
+                        percent = check1?.percent ?? 100;
+                        saleTotal = priceNoSale/100 * (100 - percent );
+                    }
+                }else{
+                    if(productTotalPrice > check.totalStart){
+                        saleTotal = 0;
+                        percent = check?.percent ?? 100;
+                    }
+                }
+            }
+        if(!isEdit){
+            formik.setFieldValue("priceShip", saleTotal);
+        }
+
+        formik.setFieldValue("percent", percent );
+    }, [productTotalPrice, formik.values.provinceCode, formik.values.priceNoSale])
     const clickQuantityBuy = (type, index) => {
         let data = [...productCartSelect];
         let check = data[index];

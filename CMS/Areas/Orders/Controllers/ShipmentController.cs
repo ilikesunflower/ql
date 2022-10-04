@@ -1,4 +1,5 @@
 using System;
+using CMS.Areas.Orders.Const;
 using CMS.Areas.Orders.Servers;
 using CMS.Controllers;
 using CMS_Lib.Extensions.Attribute;
@@ -52,4 +53,29 @@ public class ShipmentController : BaseController
             });
         }
     }
+    
+    [HttpGet]
+    [NonLoad]
+    public IActionResult GetListPromotionShip()
+    {
+        try
+        {
+            var rs = PromotionShipCost.ListPromotionShipConst;
+            return Json(new
+            {
+                msg = "successful",
+                content = rs,
+                code = 200
+            });
+        }
+        catch (Exception)
+        {
+            return Json(new
+            {
+                msg = "fail",
+                content = "Lỗi "
+            });
+        }
+    }
+
 }

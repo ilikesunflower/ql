@@ -567,6 +567,8 @@ public class OrderController : BaseController
             {
                 CustomerId = model.CustomerId ?? 0,
                 PriceShip = model.PriceShip,
+                PriceShipSalePercent = model.Percent,
+                PriceShipNonSale = model.PriceNoSale,
                 PaymentType = model.PaymentType,
                 ShipPartner = model.ShipPartner,
                 Total = model.Total,
@@ -1285,6 +1287,12 @@ public class OrderController : BaseController
             ).ToList();
             modelApi.ListOrderProductDelete = orderDelete;
             var customer = _iCustomerRepository.FindById(model!.CustomerId ?? 0);
+            if (model.PriceShip != order.PriceShip)
+            {
+                order.PriceShipNonSale = null;
+                order.PriceShipSalePercent = null;
+
+            }
             order.PriceShip = model.PriceShip;
             order.PaymentType = model.PaymentType;
             order.ShipPartner = model.ShipPartner;

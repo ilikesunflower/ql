@@ -7,10 +7,12 @@ import Select2ComponentNew from "../../../components/Select2ComponentNew";
 import MainController from "./MainController";
 import DetailProduct from "../detailProduct/MainView";
 import Coupon from "../modelCoupon/Coupon";
+import {NumberFormatField} from  "../../../components/formikField"
 
 function MainView(props) {
     let {formik, isEdit} = props;
     let {state,method } = MainController(props) ;
+    console.log(formik.values)
     return (
         <>
             {(state.showModelDetailProduct) && <DetailProduct formik={formik} showModelDetailProduct={state.showModelDetailProduct} productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}
@@ -120,15 +122,26 @@ function MainView(props) {
                                             <div className="row mt-3">
                                                 <div className="col-md-10">
                                                     <div className="d-flex justify-content-end">
-                                                        <strong>Phí giao hàng</strong>
+                                                        <strong>Phí giao hàng { (formik.values?.priceNoSale != 0 && <>({formatNumber(formik.values?.priceNoSale )} | -{formik.values?.percent}%)</> )}</strong>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-2">
-                                                    <div className="d-flex justify-content-end">
-                                                        <strong>{formatNumber(formik.values?.priceShip )} <u>đ</u></strong>
+                                                {isEdit ?
+                                                    <div className="col-md-2">
+                                                        <div className="d-flex justify-content-end">
+                                                            <NumberFormatField formik={formik} name="priceShip"
+                                                                               className="form-control col-md-8 text-right"/>
+                                                        </div>
+
+                                                    </div> :
+                                                    <div className="col-md-2">
+                                                        <div className="d-flex justify-content-end">
+                                                            <strong>{formatNumber(formik.values?.priceShip )} <u>đ</u></strong>
+                                                        </div>
+
                                                     </div>
-                                        
-                                                </div>
+                                                }
+                                                
+                                               
                                             </div>
                                         </div>
                                         {/*<div className="col-12">*/}

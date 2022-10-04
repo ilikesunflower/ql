@@ -63,7 +63,9 @@ function Shipment(props) {
         let shipPartner = shipmentPartners.find(partner => partner.type == formik.values.shipPartner);
         if (shipPartner) {
             let shipmentType = shipPartner?.shipmentTypes.find(shipmentType => shipmentType.type == formik.values.shipType);
-            formik.setFieldValue("priceShip", shipmentType?.cost || 0);
+            formik.setFieldValue("priceNoSale", shipmentType?.cost || 0);
+        }else{
+            formik.setFieldValue("priceNoSale",0);
         }
     }, [
         shipmentPartners,

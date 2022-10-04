@@ -7,6 +7,8 @@ public class CreateOrderModel
 {
     public List<ProductCheckoutViewmodel>? Products { get; set; }
     public int? PriceShip { get; set; }
+    public int? PriceNoSale { get; set; }
+    public int? Percent { get; set; }
     public double? Total { get; set; }
     public int? CouponDiscount { get; set; }
     public int? CustomerId { get; set; }

@@ -15,6 +15,8 @@ function MainController(props) {
         initialValues: {
             customerId: 0,
             priceShip: 0,
+            priceNoSale: 0,
+            percent: 100,
             couponDiscount: 0,
             couponCode: '',
             point: 0,

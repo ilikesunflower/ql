@@ -303,7 +303,7 @@ function MainApp(props) {
                                             <Form.Group className="col-md-12 pt-3">
                                                 <div className="row">
                                                     <Form.Label className=" col-md-2 pr-2  " style={{fontSize:"18px"}}>Mô tả ngắn</Form.Label>
-                                                    <TextareaShort className="col-md-10"  placeholder="Nhập mô tả sản phẩm"   formik={formik.formikProduct} name="lead"/>
+                                                    <TextareaField className="col-md-10"  placeholder="Nhập mô tả sản phẩm"   formik={formik.formikProduct} name="lead"/>
                                                 </div>
                                             </Form.Group>
                                             <Form.Group className="col-md-12 pt-3">

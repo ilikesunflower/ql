@@ -17,6 +17,23 @@ export const getListProduct = ( callback) => {
         })
 
 }
+export const getListPromotionShip = ( callback) => {
+    UserInterface.prototype.showLoading();
+    http.get("/Orders/Shipment/GetListPromotionShip")
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content);
+            } else {
+                console.error("getListPromotionShip err:" + response.msg)
+            }
+            UserInterface.prototype.hideLoading();
+        })
+        .catch(e => {
+            console.log(e)
+            UserInterface.prototype.hideLoading();
+        })
+
+}
 
 export const checkGetPointCustomer =  (param, callback) => {
     http.get("/Orders/Point/PointOfCustomer", {params : param})
