@@ -69,7 +69,20 @@ namespace CMS.Areas.Admin.Controllers
             var rs = new DetailApplicationRoleViewModel
             {
                 Role = applicationRole,
-                ListRoleControllerAction = listApplicationRole,
+                ListRoleControllerAction = listApplicationRole.Select(x => new ExtendRoleController()
+                                                                                       {
+                                                                                           Id = x.Id,
+                                                                                           Name = x.Name,
+                                                                                           Title = x.Title,
+                                                                                           ListAction = x.ListAction.Select(a => new ExtendRoleAction()
+                                                                                           {
+                                                                                               Id = a.Id,
+                                                                                               Name = a.Name,
+                                                                                               Title = a.Title,
+                                                                                               ControllerId = a.ControllerId,
+                                                                                               IsChecked = a.IsChecked
+                                                                                           }).ToList()
+                                                                                       }).ToList(),
             };
             return View(rs);
         }
@@ -80,7 +93,20 @@ namespace CMS.Areas.Admin.Controllers
             var listApplicationRole = _iApplicationRoleRepository.GetControllerActionByRole(0);
             var rs = new CreateApplicationRoleViewModel
             {
-                ListRoleControllerAction = listApplicationRole
+                ListRoleControllerAction = listApplicationRole.Select(x => new ExtendRoleController()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Title = x.Title,
+                    ListAction = x.ListAction.Select(a => new ExtendRoleAction()
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Title = a.Title,
+                        ControllerId = a.ControllerId,
+                        IsChecked = a.IsChecked
+                    }).ToList()
+                }).ToList()
             };
             return View(rs);
         }
@@ -100,7 +126,20 @@ namespace CMS.Areas.Admin.Controllers
                     };
                     var result = _iApplicationRoleRepository.InsertRoleByUser(
                         role,
-                        createApplicationRoleView.ListRoleControllerAction
+                        createApplicationRoleView.ListRoleControllerAction.Select(x => new RoleController()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Title = x.Title,
+                            ListAction = x.ListAction.Select(a => new RoleAction()
+                            {
+                                Id = a.Id,
+                                Name = a.Name,
+                                Title = a.Title,
+                                ControllerId = a.ControllerId,
+                                IsChecked = a.IsChecked
+                            }).ToList()
+                        }).ToList()
                     );
 
                     if (result > 0)
@@ -133,7 +172,20 @@ namespace CMS.Areas.Admin.Controllers
                 Id = applicationRole.Id,
                 Name = applicationRole.Name,
                 Description = applicationRole.Description,
-                ListRoleControllerAction = listApplicationRole
+                ListRoleControllerAction = listApplicationRole.Select(x => new ExtendRoleController()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Title = x.Title,
+                    ListAction = x.ListAction.Select(a => new ExtendRoleAction()
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        Title = a.Title,
+                        ControllerId = a.ControllerId,
+                        IsChecked = a.IsChecked
+                    }).ToList()
+                }).ToList()
             };
             return View(rs);
         }
@@ -156,7 +208,20 @@ namespace CMS.Areas.Admin.Controllers
                     var result = _iApplicationRoleRepository.UpdateRoleByUser(
                         id,
                         role,
-                        editApplicationRoleView.ListRoleControllerAction
+                        editApplicationRoleView.ListRoleControllerAction.Select(x => new RoleController()
+                        {
+                            Id = x.Id,
+                            Name = x.Name,
+                            Title = x.Title,
+                            ListAction = x.ListAction.Select(a => new RoleAction()
+                            {
+                                Id = a.Id,
+                                Name = a.Name,
+                                Title = a.Title,
+                                ControllerId = a.ControllerId,
+                                IsChecked = a.IsChecked
+                            }).ToList()
+                        }).ToList()
                     );
                     if (result == 1)
                     {

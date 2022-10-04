@@ -15,7 +15,7 @@ namespace CMS_Access.Repositories
     public interface IApplicationRoleRepository : IBaseRepository<ApplicationRole>, IScoped
     {
 
-        List<ExtendRoleController> GetControllerActionByRole(int roleId);
+        List<RoleController> GetControllerActionByRole(int roleId);
 
 
         ApplicationRole GetApplicationRoleByName(string name);
@@ -26,12 +26,12 @@ namespace CMS_Access.Repositories
         int UpdateRoleByUser(
             int id,
             ApplicationRole editApplicationRoleView,
-            List<ExtendRoleController> listRoleControllerAction
+            List<RoleController> listRoleControllerAction
         );
 
         int InsertRoleByUser(
             ApplicationRole createApplicationRoleView,
-            List<ExtendRoleController> listRoleControllerAction
+            List<RoleController> listRoleControllerAction
         );
 
         bool DeleteApplicationRole(int id);
@@ -46,14 +46,15 @@ namespace CMS_Access.Repositories
         {
             this._claimType = configuration.GetSection(CmsClaimType.ClaimType);
         }
-        public List<ExtendRoleController> GetControllerActionByRole(int roleId)
+        public List<RoleController> GetControllerActionByRole(int roleId)
         {
-            var controllerAction = ApplicationDbContext.ApplicationControllers.Where(x => x.Flag == 0).Select(x => new ExtendRoleController
-            {
+            var controllerAction = ApplicationDbContext.ApplicationControllers.Where(x => x.Flag == 0)
+                .Select(x => new RoleController
+                {
                 Id = x.Id,
                 Name = x.Name,
                 Title = x.Title,
-                ListAction = x.ApplicationActions.Where(a => a.Flag == 0).Select(a => new ExtendRoleAction
+                ListAction = x.ApplicationActions.Where(a => a.Flag == 0).Select(a => new RoleAction
                 {
                     Id = a.Id,
                     Title = a.Title,
@@ -64,7 +65,7 @@ namespace CMS_Access.Repositories
                                     r.ClaimType == _claimType[CmsClaimType.ControllerAction] &&
                                     r.ClaimValue == a.Id.ToString())
                 }).ToList()
-            });
+                });
 
             return controllerAction.ToList();
         }
@@ -96,7 +97,7 @@ namespace CMS_Access.Repositories
         public int UpdateRoleByUser(
             int id,
             ApplicationRole editApplicationRoleView,
-            List<ExtendRoleController> listRoleControllerAction
+            List<RoleController> listRoleControllerAction
         )
         {
             using (IDbContextTransaction transaction = ApplicationDbContext.Database.BeginTransaction())
@@ -175,7 +176,7 @@ namespace CMS_Access.Repositories
 
         public int InsertRoleByUser(
             ApplicationRole createApplicationRoleView,
-            List<ExtendRoleController> listRoleControllerAction
+            List<RoleController> listRoleControllerAction
         )
         {
             using IDbContextTransaction transaction = ApplicationDbContext.Database.BeginTransaction();
@@ -297,7 +298,7 @@ namespace CMS_Access.Repositories
     {
         public bool IsSelected { get; set; }
     }
-    public class ExtendRoleAction
+    public class RoleAction
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -305,15 +306,15 @@ namespace CMS_Access.Repositories
         public int ControllerId { get; set; }
         public bool IsChecked { get; set; }
     }
-    public class ExtendRoleController
+    public class RoleController
     {
         public int Id { get; set; }
-
+    
         public string Name { get; set; }
-
+    
         public string Title { get; set; }
-
-        public List<ExtendRoleAction> ListAction { get; set; }
-
+    
+        public List<RoleAction> ListAction { get; set; }
+    
     }
 }
