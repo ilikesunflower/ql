@@ -33,6 +33,9 @@ public class CreateViewModel
     [ValidXss]
     public string Org { get; set; }
     
+    [Required(ErrorMessage = "Vui lòng chon đối tượng khách hàng")]
+    public int TypeGroup { get; set; }
+    
     [ValidXss]
     public string Detail { get; set; }
 }

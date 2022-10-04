@@ -22,7 +22,7 @@ public class CustomerTypeGroupConst
     public static Dictionary<int, string> ListCustomerTypeGroupConst = new()
     {
         { Staff, "Staff" },
-        { PhongBan, "Phòng ban" },
+        // { PhongBan, "Phòng ban" },
         { GA, "GA" },
         { POD, PartnerText },
         { OP, OPText },
@@ -31,7 +31,7 @@ public class CustomerTypeGroupConst
     public static Dictionary<int, string> ListCustomerTypeGroupConstColor = new Dictionary<int, string>()
     {
         { Staff, "<span class='badge badge-success'>Staff</span>" },
-        { PhongBan, "<span class='badge badge-primary'>Phòng ban</span>" },
+        // { PhongBan, "<span class='badge badge-primary'>Phòng ban</span>" },
         { GA, "<span class='badge badge-info'>GA</span>" },
         { POD, $"<span class='badge badge-warning'>{PartnerText}</span>" },
         { OP, $"<span class='badge badge-default'>{OPText}</span>" },

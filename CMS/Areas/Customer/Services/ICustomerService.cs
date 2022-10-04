@@ -57,7 +57,7 @@ public class CustomerService : ICustomerService
             FullName = model.FullName,
             Phone = model.Phone,
             Status = 1,
-            TypeGroup = CustomerTypeGroupConst.PhongBan,
+            TypeGroup = model.TypeGroup,
             Org = model.Org,
             Type = CustomerConst.TypeOrgPru,
             Password = BCrypt.Net.BCrypt.HashPassword(password)

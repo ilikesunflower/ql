@@ -48,6 +48,7 @@ public class CustomerController : BaseController
     }
     
     // GET
+    [Authorize(Policy = "PermissionMVC")]
     public async Task<IActionResult> Index(string txtSearch, int? Type, int? status, int? TypeGroup, int pageindex = 1)
     {
         IndexViewModel rs = new IndexViewModel();
@@ -140,6 +141,7 @@ public class CustomerController : BaseController
 
         [HttpGet]
         [ClaimRequirement(CmsClaimType.AreaControllerAction, "Customer@CustomerController@Details")]
+        [NonLoad]
         public IActionResult GetCouponCustomer(int idCustomer, int page)
         {
             var customerCoupons = _iCustomerCouponRepository.GetAllNoDateByCustomerId(idCustomer);
@@ -496,6 +498,7 @@ public class CustomerController : BaseController
 
 
         [HttpGet("/Customer/Customer/{id:int}/Point")]
+        [NonLoad]
         public async Task<IActionResult> Point(int id,[FromQuery] int pageindex = 1)
         {
             try

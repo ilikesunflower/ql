@@ -82,7 +82,7 @@ function MainController(props) {
        
             let priceNoSale =  formik.values.priceNoSale;
             let saleTotal = formik.values.priceNoSale;
-            let percent = 100;
+            let percent = 0;
             if(productTotalPrice != 0 && formik.values.priceNoSale != 0){
                 let check = listPromotionShip.find(x => x.codeAddress === formik.values.provinceCode ) || null;
                 if(check == null){
