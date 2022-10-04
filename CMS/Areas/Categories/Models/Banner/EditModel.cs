@@ -22,12 +22,17 @@ namespace CMS.Areas.Categories.Models.Banner
         [Required(ErrorMessage = "Vui lòng nhập ảnh.")]
         [ValidXss]
         public string Images { get; set; }
+        
+        [MaxLength(1000)]
+        [ValidXss]
         public string ImagesMobile { get; set; }
 
         public int Status { get; set; }
         
         [Range(0, 99999999999, ErrorMessage = "Vui lòng nhập thứ tự lớn hơn 0.")]
         public int? Ord { get; set; }
+        
+        
         public Dictionary<int, string> ListBanner { get; set; }
 
     }
