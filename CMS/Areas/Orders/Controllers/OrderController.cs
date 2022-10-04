@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Castle.Core.Internal;
+using ClosedXML.Report;
 using CMS_Access.Repositories.Customers;
 using CMS_Access.Repositories.Orders;
 using CMS_Access.Repositories.Products;
@@ -25,7 +28,10 @@ using CMS_Access.Repositories.WareHouse;
 using CMS_EF.Models.WareHouse;
 using CMS_WareHouse.KiotViet;
 using CMS_WareHouse.KiotViet.Consts;
+using CMS.Areas.PointInput.Const;
+using CMS.Areas.Reports.Models.SummaryReports;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -54,7 +60,7 @@ public class OrderController : BaseController
     private readonly ICustomerNotificationService _iCustomerNotificationService;
     private readonly IWhTransactionRepository _iWhTransactionRepository;
     private readonly IKiotVietService _iKiotVietService;
-
+    private readonly IWebHostEnvironment _iHostingEnvironment;
 
     private double IsPoi = PointConst.Coefficient;
 
@@ -65,7 +71,8 @@ public class OrderController : BaseController
         IFileService fileService, IOrdersRepository iOrdersRepository,
         IProductSimilarRepository iProductSimilarRepository, IOrderService iOrderService,
         IOrdersAddressRepository iOrdersAddressRepository, IOrderProductRepository iOrderProductRepository,
-        ICustomerNotificationService iCustomerNotificationService, IWhTransactionRepository iWhTransactionRepository, IKiotVietService iKiotVietService)
+        ICustomerNotificationService iCustomerNotificationService, IWhTransactionRepository iWhTransactionRepository,
+        IKiotVietService iKiotVietService, IWebHostEnvironment iHostingEnvironment)
     {
         _iLogger = iLogger;
         _iOrderServer = iOrderServer;
@@ -82,13 +89,18 @@ public class OrderController : BaseController
         _iCustomerNotificationService = iCustomerNotificationService;
         _iWhTransactionRepository = iWhTransactionRepository;
         _iKiotVietService = iKiotVietService;
+        _iHostingEnvironment = iHostingEnvironment;
     }
 
     // GET
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int? payment,
-        int? ship, int pageindex = 1)
+        int? ship, int export = 0, int pageindex = 1)
     {
+        if (export == 1)
+        {
+            return RedirectToAction("Export", new {txtSearch,startDate,endDate,status,payment,ship });
+        }
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())
         {
@@ -132,12 +144,12 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtSearch", txtSearch },
-            { "startDate", startDate },
-            { "endDate", endDate },
-            { "status", status },
-            { "payment", payment },
-            { "ship", ship },
+            {"txtSearch", txtSearch},
+            {"startDate", startDate},
+            {"endDate", endDate},
+            {"status", status},
+            {"payment", payment},
+            {"ship", ship},
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Tất cả đơn hàng");
@@ -196,11 +208,11 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtSearch", txtSearch },
-            { "startDate", startDate },
-            { "endDate", endDate },
-            { "payment", payment },
-            { "ship", ship },
+            {"txtSearch", txtSearch},
+            {"startDate", startDate},
+            {"endDate", endDate},
+            {"payment", payment},
+            {"ship", ship},
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn chờ xử lý");
@@ -257,11 +269,11 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtSearch", txtSearch },
-            { "startDate", startDate },
-            { "endDate", endDate },
-            { "payment", payment },
-            { "ship", ship },
+            {"txtSearch", txtSearch},
+            {"startDate", startDate},
+            {"endDate", endDate},
+            {"payment", payment},
+            {"ship", ship},
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn đang giao");
@@ -318,12 +330,12 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtSearch", txtSearch },
-            { "startDate", startDate },
-            { "endDate", endDate },
-            { "status", OrderStatusConst.StatusOrderSuccess },
-            { "payment", payment },
-            { "ship", ship },
+            {"txtSearch", txtSearch},
+            {"startDate", startDate},
+            {"endDate", endDate},
+            {"status", OrderStatusConst.StatusOrderSuccess},
+            {"payment", payment},
+            {"ship", ship},
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn hoàn thành");
@@ -380,11 +392,11 @@ public class OrderController : BaseController
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
         {
-            { "txtSearch", txtSearch },
-            { "startDate", startDate },
-            { "endDate", endDate },
-            { "payment", payment },
-            { "ship", ship },
+            {"txtSearch", txtSearch},
+            {"startDate", startDate},
+            {"endDate", endDate},
+            {"payment", payment},
+            {"ship", ship},
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn hủy");
@@ -583,7 +595,7 @@ public class OrderController : BaseController
                 PrCode = model.PrCode,
                 PrFile = model.PrFile,
                 Status = 0,
-                // PointDiscount = (double)(model.Point * IsPoi),
+                // PointDiscount = (double) (model.Point * IsPoi),
                 TotalWeight = model.TotalWeight!.Value,
                 BillCompanyName =
                     customer.Type == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName,
@@ -731,6 +743,107 @@ public class OrderController : BaseController
         return View(model);
     }
 
+    [NonLoad]
+    [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
+    public IActionResult Export(string txtSearch, string startDate, string endDate, int? status, int? payment, int? ship)
+    {
+        var query = _iOrderServer.GetOrderAll();
+        if (!txtSearch.IsNullOrEmpty())
+        {
+            query = query.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Phone, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.Customer.FullName, "%" + txtSearch.Trim() + "%") ||
+                                     EF.Functions.Like(x.OrderAddress.Name, "%" + txtSearch.Trim() + "%"));
+        }
+
+        if (!string.IsNullOrEmpty(startDate))
+        {
+            var start = DateTime.ParseExact(startDate + " 00:00:00 AM", "dd/MM/yyyy hh:mm:ss tt",
+                CultureInfo.InvariantCulture);
+            query = query.Where(x => x.OrderAt >= start);
+        }
+
+        if (!string.IsNullOrEmpty(endDate))
+        {
+            var end = DateTime.ParseExact(endDate + " 11:59:59 PM", "dd/MM/yyyy hh:mm:ss tt",
+                CultureInfo.InvariantCulture);
+            query = query.Where(x => x.OrderAt <= end);
+        }
+
+        if (status != null)
+        {
+            query = query.Where(x => x.Status == status);
+        }
+
+        if (ship.HasValue)
+        {
+            query = query.Where(x => x.ShipPartner == ship);
+        }
+
+        if (payment.HasValue)
+        {
+            query = payment == 0
+                ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
+                : query.Where(x => x.StatusPayment == payment);
+        }
+
+        var listData = query.Select( x => new ExportForControlViewModel
+        {
+            Code = x.Code,
+            Status = x.StatusPayment,
+            StatusStr = x.StatusPayment == ExcelStatus.Paid.Status ? ExcelStatus.Paid.StatusStr : ExcelStatus.Unpaid.StatusStr
+        }).ToList();
+
+        var filePath = Path.Combine(_iHostingEnvironment.WebRootPath, "Templates/Excels/Orders", "doi_soat_thanh_toan.xlsx");
+        var template = new XLTemplate(filePath);
+
+        template.AddVariable("ListData", listData);
+        template.Generate();
+        byte[] excelFile;
+        using (var ms = new MemoryStream())
+        {
+            template.SaveAs(ms);
+            ms.Position = 0;
+            excelFile = ms.ToArray();
+        }
+
+        ILoggingService.Infor(_iLogger, "Xuất file đối soát đơn hàng", "Thành công");
+        return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Doi_soat_don_dat_hang.xlsx");
+    }
+
+    [NonLoad]
+    [HttpGet]
+    [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Edit")]
+    public IActionResult UpFile()
+    {
+        var model = new UpFileViewModel();
+        return View(model);
+    } 
+
+    [NonLoad]
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Edit")]
+    public IActionResult UpFile([FromForm] UpFileViewModel form)
+    {
+        if (!ModelState.IsValid) return View(form);
+        try
+        {
+            var file = form.File;
+            var dataFile = _iOrderService.ReadDataFromExcelAndValidate(file);
+            _iOrderService.ImportData(dataFile);
+            ToastMessage(1, "Nhập dữ liệu thành công");
+            ILoggingService.Infor(_iLogger, "UpFile", "Nhập file đối soát sản phẩm thành công");
+        }
+        catch (Exception e)
+        {
+            ToastMessage(-1, "Nhập dữ liệu lỗi, " + e.Message);
+            ILoggingService.Error(_iLogger, "UpFile", "Nhập file đối soát sản phẩm lỗi, " + e.Message);
+        }
+
+        return View(form);
+    }
+    
     [HttpPost]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult ChangeOrderConfirm([FromBody] JObject data)
@@ -746,7 +859,7 @@ public class OrderController : BaseController
                     if (order.Status == OrderStatusConst.StatusWaitCustomerConfirm ||
                         order.Status == OrderStatusConst.StatusCustomerSuccess)
                     {
-                        var rs = this._iOrderService.UpdateOrderStatus(order, OrderStatusConst.StatusOrderConfirm,
+                        var rs = _iOrderService.UpdateOrderStatus(order, OrderStatusConst.StatusOrderConfirm,
                             UserInfo);
                         if (rs)
                         {
@@ -925,7 +1038,8 @@ public class OrderController : BaseController
             return Ok(new OutputObject(500, "", "Đơn hàng không tồn tại").Show());
         }
     }
-  [HttpPost]
+
+    [HttpPost]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult ChangeOrderSynchronizedKiot([FromBody] JObject data)
     {
@@ -937,15 +1051,16 @@ public class OrderController : BaseController
                 var order = this._iOrdersRepository.FindByCode(id);
                 if (order != null)
                 {
-                    if (order.OrderIdWh == null )
+                    if (order.OrderIdWh == null)
                     {
                         var o = this._iWhTransactionRepository.FindByOrderIdStatus(order.Id, WhTransactionConst.Create);
-                        var wareHouse =  this._iKiotVietService.CreateOrder(order);
+                        var wareHouse = this._iKiotVietService.CreateOrder(order);
                         if (wareHouse != null)
                         {
                             if (wareHouse.Status == 1)
                             {
-                                this._iLogger.LogInformation($"Đồng bộ đơn hàng {order.Code} sang kiot việt thành công");
+                                this._iLogger.LogInformation(
+                                    $"Đồng bộ đơn hàng {order.Code} sang kiot việt thành công");
                                 order.OrderIdWh = wareHouse.OrderId;
                                 this._iOrdersRepository.Update(order);
                                 if (o != null)
@@ -953,7 +1068,7 @@ public class OrderController : BaseController
                                     this._iWhTransactionRepository.Delete(o);
                                 }
                             }
-                            else 
+                            else
                             {
                                 // xử lý lưu db để call lại khi kiot việt lỗi
                                 if (o == null)
@@ -971,13 +1086,15 @@ public class OrderController : BaseController
                                     o.CreatedAt = DateTime.Now;
                                     this._iWhTransactionRepository.Update(o);
                                 }
+
                                 return Ok(new OutputObject(404, "",
                                         $"{wareHouse.Msg}")
                                     .Show());
                             }
                         }
+
                         ToastMessage(1, "Đồng bộ đơn hàng thành công");
-                         return Ok(new OutputObject(200, "", $"Đồng bộ đơn hàng thành công").Show());
+                        return Ok(new OutputObject(200, "", $"Đồng bộ đơn hàng thành công").Show());
                     }
                     else
                     {
@@ -997,7 +1114,7 @@ public class OrderController : BaseController
         }
     }
 
-    
+
     [HttpPost]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult ChangeOrderCancel([FromBody] OrderCancelRequest data)

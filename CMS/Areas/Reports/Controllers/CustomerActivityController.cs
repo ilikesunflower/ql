@@ -144,29 +144,41 @@ public class CustomerActivityController : BaseController
         }
     }
     
-     [Authorize(Policy = "PermissionMVC")]
+    [Authorize(Policy = "PermissionMVC")]
     public JsonResult WidgetDashboard(string startDate, string endDate)
     {
-        DateTime now = DateTime.Now;
-        DateTime start = new DateTime(now.Year, now.Month, now.Day, 00, 00, 00);
-        DateTime end = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
-        if (!string.IsNullOrEmpty(startDate))
+        try
         {
-            start = DateTime.ParseExact(startDate + " 00:00:00 AM", "dd/MM/yyyy hh:mm:ss tt",
-                CultureInfo.InvariantCulture);
-        }
+            DateTime now = DateTime.Now;
+            DateTime start = new DateTime(now.Year, now.Month, now.Day, 00, 00, 00);
+            DateTime end = new DateTime(now.Year, now.Month, now.Day, 23, 59, 59);
+            if (!string.IsNullOrEmpty(startDate))
+            {
+                start = DateTime.ParseExact(startDate + " 00:00:00 AM", "dd/MM/yyyy hh:mm:ss tt",
+                    CultureInfo.InvariantCulture);
+            }
 
-        if (!string.IsNullOrEmpty(endDate))
-        {
-            end = DateTime.ParseExact(endDate + " 11:59:59 PM", "dd/MM/yyyy hh:mm:ss tt",
-                CultureInfo.InvariantCulture);
-        }
-        List<IndexViewModelCustomerTypeChart> customerType = _iCustomerActivityService.GetTypeCustomerActiveChart(start,end);
+            if (!string.IsNullOrEmpty(endDate))
+            {
+                end = DateTime.ParseExact(endDate + " 11:59:59 PM", "dd/MM/yyyy hh:mm:ss tt",
+                    CultureInfo.InvariantCulture);
+            }
+            List<IndexViewModelCustomerTypeChart> customerType = _iCustomerActivityService.GetTypeCustomerActiveChart(start,end);
       
-        return Json(new
+            return Json(new
+            {
+                msg = "successful",
+                content = customerType
+            });
+        }
+        catch (Exception ex)
         {
-            msg = "successful",
-            content = customerType
-        });
+            this._iLogger.LogError(ex,"");
+            return Json(new
+            {
+                msg = "fail",
+                content = ""
+            });
+        }
     }
 }

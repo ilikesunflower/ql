@@ -118,6 +118,8 @@ public class ProductCensorshipController : BaseController
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Price")]
     public IActionResult NotApprovedPrice([FromForm] CensorshipModel model)
     {
+        model.BackUrl = CmsFunction.IsBackUrl(model.BackUrl) ? "#" : model.BackUrl;
+        model.BackUrl = Url.IsLocalUrl(model.BackUrl) ? model.BackUrl : "#";
         if (!ModelState.IsValid)
         {
             var errorMessage = "" ;
@@ -229,6 +231,8 @@ public class ProductCensorshipController : BaseController
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Products@ProductCensorshipController@Content")]
     public IActionResult NotApprovedContent([FromForm]CensorshipModel model)
     {
+        model.BackUrl = CmsFunction.IsBackUrl(model.BackUrl) ? "#" : model.BackUrl;
+        model.BackUrl = Url.IsLocalUrl(model.BackUrl) ? model.BackUrl : "#";
         if (!ModelState.IsValid)
         {
             var errorMessage = "" ;
@@ -302,6 +306,7 @@ public class ProductCensorshipController : BaseController
     {
         try
         {
+            
             var product = _iProductRepository.FindById(id);
             if (product == null)
             {
@@ -350,6 +355,8 @@ public class ProductCensorshipController : BaseController
         }
         try
         {
+            model.BackUrl = CmsFunction.IsBackUrl(model.BackUrl) ? "#" : model.BackUrl;
+            model.BackUrl = Url.IsLocalUrl(model.BackUrl) ? model.BackUrl : "#";
             var product = _iProductRepository.FindById(model.ProductId);
             if (product == null)
             {
