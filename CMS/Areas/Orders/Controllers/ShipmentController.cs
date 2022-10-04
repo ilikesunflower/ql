@@ -21,6 +21,7 @@ public class ShipmentController : BaseController
         _logger = logger;
     }
     
+    [HttpGet]
     public IActionResult CheckShipmentCost(string provinceCode, string districtCode, string communeCode, int weight)
     {
         try

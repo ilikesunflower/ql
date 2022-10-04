@@ -34,6 +34,7 @@ public class OrderCommentController : BaseController
     }
     
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int pageindex = 1)
     {
         try

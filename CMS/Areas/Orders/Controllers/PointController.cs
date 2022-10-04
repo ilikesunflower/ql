@@ -49,6 +49,7 @@ public class PointController : BaseController
         }
     }
 
+    [HttpGet]
     public IActionResult PointOldCustomer( int orderId)
     {
         try

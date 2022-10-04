@@ -44,6 +44,7 @@ public class ProductCategoryController : BaseController
     }
     // GET
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public  Task<IActionResult> Index(string txtSearch, int? status, int? pid)
     {
         
@@ -225,7 +226,7 @@ public class ProductCategoryController : BaseController
         return View(model);
     }
     [HttpPost]
-    // [ValidateAntiForgeryToken]
+    [ValidateAntiForgeryToken]
     // [Authorize(Policy = "PermissionMVC")]
     public JsonResult UpdateOrder(UpdateOrderViewModel form)
     {

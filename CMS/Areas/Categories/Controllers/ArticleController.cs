@@ -43,6 +43,7 @@ public class ArticleController : BaseController
     }
 
     // GET
+    [HttpGet]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Index(string txtSearch, string startDate, int? type, string endDate, int? status,
         int pageindex = 1)

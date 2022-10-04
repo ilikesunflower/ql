@@ -4,6 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using ClosedXML.Report;
+using CMS_Lib.Extensions.Attribute;
+using CMS_Lib.Extensions.Claim;
+using CMS_Lib.Util;
 using CMS.Areas.Orders.Const;
 using CMS.Areas.Reports.Models.SummaryReports;
 using CMS.Areas.Reports.Services;
@@ -34,6 +37,7 @@ public class SummaryReportController : BaseController
     }
 
     [Authorize(Policy = "PermissionMVC")]
+    [HttpGet]
     public IActionResult Index(int isExport, string txtSearch, string startDate, string endDate,int? paymentStatus,int? status, int pageindex = 1)
     {
         try
@@ -96,6 +100,9 @@ public class SummaryReportController : BaseController
         }
     }
 
+    [HttpGet]
+    [NonLoad]
+    [ClaimRequirement(CmsClaimType.AreaControllerAction, "Reports@SummaryReportController@Index")]
     public IActionResult Export( string txtSearch,string startDate, string endDate,int? paymentStatus,int? status)
     {
         try

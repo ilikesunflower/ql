@@ -503,6 +503,7 @@ public class OrderController : BaseController
         });
     }
 
+    [HttpGet]
     [NonLoad]
     public IActionResult GetListCustomer()
     {

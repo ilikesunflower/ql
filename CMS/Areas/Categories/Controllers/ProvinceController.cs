@@ -21,6 +21,8 @@ public class ProvinceController: BaseController
         _iDistrictRepository = iDistrictRepository;
         _iLogger = iLogger;
     }
+    
+    [HttpGet]
     public  IActionResult ListAddressProvince()
     {
         try

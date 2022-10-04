@@ -32,7 +32,8 @@ namespace CMS.Areas.Categories.Controllers
             _iLogger = iLogger;
             _iBannerRepository = iBannerRepository;
         }
-
+        
+        [HttpGet]
         [Authorize(Policy = "PermissionMVC")]
         public IActionResult Index(int txtSearch, int? status, int pageindex = 1)
         {

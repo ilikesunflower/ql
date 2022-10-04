@@ -29,7 +29,8 @@ namespace CMS.Areas.Admin.Controllers
             this._iLogger = iLogger;
             this._iDashBoardService = iDashBoardService;
         }
-
+        
+        [HttpGet]
         [NoActiveMenu]
         [NonLoad]
         public IActionResult Index()
