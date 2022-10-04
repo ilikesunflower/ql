@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Text.Encodings.Web;
 using CMS_Lib.Helpers;
 using CMS_Lib.Util;
 
@@ -16,6 +18,7 @@ namespace CMS.Extensions.Validate
                     if (item != null && item.GetType().ImplementsGenericInterface(typeof(string)))
                     {
                         var data = $"{item}";
+                        data = WebUtility.UrlDecode(data);
                         if (!string.IsNullOrEmpty(data) &&
                             (data.ToLower().Contains("<script>") || data.ToLower().Contains("</script>")))
                         {
@@ -31,7 +34,13 @@ namespace CMS.Extensions.Validate
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
-                        else if (!string.IsNullOrEmpty(data) && data.StartsWith("javascript:"))
+                        else if (!string.IsNullOrEmpty(data) && data.Contains("javascript:"))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }else if (!string.IsNullOrEmpty(data) && data.Contains("style="))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }else if (!string.IsNullOrEmpty(data) && data.Contains(";exec+"))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
@@ -41,6 +50,7 @@ namespace CMS.Extensions.Validate
             else if (value != null && value.GetType().ImplementsGenericInterface(typeof(string)))
             {
                 var data = $"{value}";
+                data = WebUtility.UrlDecode(data);
                 if (!string.IsNullOrEmpty(data) &&
                     (data.ToLower().Contains("<script>") || data.ToLower().Contains("</script>")))
                 {
@@ -51,11 +61,14 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
+                else if (!string.IsNullOrEmpty(data) && data.Contains("../"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.StartsWith("javascript:"))
+                else if (!string.IsNullOrEmpty(data) && data.Contains("javascript:"))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                }else if (!string.IsNullOrEmpty(data) && data.Contains(";exec+"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
@@ -73,13 +86,14 @@ namespace CMS.Extensions.Validate
             if (value != null && value.GetType().ImplementsGenericInterface(typeof(string)))
             {
                 var data = $"{value}";
+                data = WebUtility.UrlDecode(data);
                 if (!string.IsNullOrEmpty(data) &&
                     (data.ToLower().Contains("<script") || data.ToLower().Contains("</script>")))
                 {
                     return new ValidationResult(
                         "Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.StartsWith("javascript:"))
+                else if (!string.IsNullOrEmpty(data) && data.Contains("javascript:"))
                 {
                     return new ValidationResult(
                         "Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
@@ -97,6 +111,7 @@ namespace CMS.Extensions.Validate
             if (value != null && value.GetType().ImplementsGenericInterface(typeof(string)))
             {
                 var data = $"{value}";
+                data = WebUtility.UrlDecode(data);
                 if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nhập nội dung này, vui lòng nhập lại");

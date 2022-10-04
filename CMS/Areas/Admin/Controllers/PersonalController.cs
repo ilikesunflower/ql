@@ -50,6 +50,7 @@ namespace CMS.Areas.Admin.Controllers
         // [ClaimRequirement("CONTROLLER@ACTION", "ApplicationUsersController@Index , ApplicationUsersController@Edit ")]
         // [ClaimOrRequirement("CONTROLLER@ACTION", "ApplicationUsersController@Index")]
         [NoActiveMenu]
+        [HttpGet]
         public async Task<IActionResult> Details()
         {
             var applicationUser = _iApplicationUserRepository.FindById(UserInfo.UserId);
@@ -75,6 +76,7 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [NoActiveMenu]
+        [HttpGet]
         public IActionResult ChangePassword()
         {
             ChangePasswordViewModel rs = new ChangePasswordViewModel();
@@ -130,6 +132,7 @@ namespace CMS.Areas.Admin.Controllers
         }
 
         [NoActiveMenu]
+        [HttpGet]
         public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -161,6 +164,11 @@ namespace CMS.Areas.Admin.Controllers
             {
                 try
                 {
+                    var u = _iApplicationUserRepository.FindById(id);
+                    if (u == null)
+                    {
+                        return NotFound();
+                    }
                     if (User.HasClaim(CmsClaimType.UserType, "1"))
                     {
                         return NotFound();
@@ -177,7 +185,6 @@ namespace CMS.Areas.Admin.Controllers
                         ILoggingService.Infor(this._iLogger, "Cập nhật thông tin cá nhân thành công",
                             user.Id.ToString());
                         ToastMessage(1, "Cập nhật thông tin cá nhân thành công");
-                        var u = _iApplicationUserRepository.FindById(UserInfo.UserId);
                         _iClaimService.ReloadInfoUser(HttpContext.User, u);
                         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(u).Result, new AuthenticationProperties() { IsPersistent = true });
                         return RedirectToAction(nameof(Details), new { id });
@@ -203,6 +210,7 @@ namespace CMS.Areas.Admin.Controllers
 
         [ImportModelState]
         [NoActiveMenu]
+        [HttpGet]
         public async Task<IActionResult> EnableAuthenticator()
         {
             var user = await _userManager.GetUserAsync(User);

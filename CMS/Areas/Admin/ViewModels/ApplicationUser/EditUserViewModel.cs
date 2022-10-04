@@ -47,7 +47,7 @@ namespace CMS.Areas.Admin.ViewModels.ApplicationUser
         // [Phone(ErrorMessage = "Không đúng định dạng số điện thoại, vui lòng nhập lại")]
         // [RegularExpression(@"^(\d{10,11})$", ErrorMessage = "Không đúng định dạng số điện thoại, vui lòng nhập lại")]
         [ValidXss]
-        public String PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; }
 
         public int Sex { get; set; }
         public int TypeUser { get; set; }
