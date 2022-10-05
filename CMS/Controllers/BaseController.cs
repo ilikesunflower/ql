@@ -8,6 +8,7 @@ using CMS.Services.Loggings;
 using CMS_Access.Repositories;
 using CMS_Lib.Extensions.Json;
 using CMS_Lib.Util;
+using CMS.Extensions.Validate;
 using Ganss.XSS;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CMS.Controllers
 {
     [Authorize]
+    [ValidHeader]
     // [AutoValidateAntiforgeryToken]
     [ValidateAntiForgeryToken]
     [IgnoreAntiforgeryToken]
