@@ -48,7 +48,7 @@ namespace CMS.Extensions.Validate
                         }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
+                        }else if (!string.IsNullOrEmpty(data) && (data.ToLower().Contains("iframe") || data.ToLower().Contains("onerror=")))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
@@ -87,7 +87,7 @@ namespace CMS.Extensions.Validate
                 }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
+                }else if (!string.IsNullOrEmpty(data) && (data.ToLower().Contains("iframe") || data.ToLower().Contains("onerror=")))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
