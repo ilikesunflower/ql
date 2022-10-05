@@ -570,7 +570,10 @@ namespace CMS_Lib.Util
             {
                 return true;
             }
-
+            if (checkString.StartsWith("style"))
+            {
+                return true;
+            }
             if (checkString.StartsWith("../"))
             {
                 return true;
@@ -591,7 +594,7 @@ namespace CMS_Lib.Util
                 return true;
             }
 
-            if (img.ToLower().Contains("javascript:") || img.ToLower().Contains("style=")
+            if (img.ToLower().Contains("javascript:") || img.ToLower().Contains("style")
                                                       || img.ToLower().Contains("iframe") || img.ToLower().Contains(";exec+") || img.ToLower().Contains("script/>") )
             {
                 return true;
