@@ -1,4 +1,5 @@
 ﻿using System;
+using CMS.Extensions.Validate;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -11,6 +12,7 @@ using Microsoft.Extensions.Logging;
 namespace CMS.Areas.Identity.Pages.Account
 {
     [Authorize]
+    [ValidHeader]
     public class LogoutModel : PageModel
     {
         private readonly ILogger<LogoutModel> _logger;

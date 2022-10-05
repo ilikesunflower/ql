@@ -20,6 +20,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 namespace CMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    [ValidHeader]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

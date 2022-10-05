@@ -7,11 +7,13 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using CMS_Lib.Util;
 using CMS.Extensions.Validate;
 
 namespace CMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    [ValidHeader]
     public class LoginWith2faModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -28,6 +30,7 @@ namespace CMS.Areas.Identity.Pages.Account
 
         public bool RememberMe { get; set; }
 
+        [ValidXss]
         public string ReturnUrl { get; set; }
 
         public class InputModel
@@ -71,7 +74,9 @@ namespace CMS.Areas.Identity.Pages.Account
             }
 
             returnUrl ??= Url.Content("~/");
-
+            returnUrl ??= Url.Content("~/");
+            returnUrl = CmsFunction.IsBackUrl(returnUrl) ? Url.Content("~/") : returnUrl;
+            returnUrl = Url.IsLocalUrl(returnUrl) ? returnUrl : Url.Content("~/");
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
