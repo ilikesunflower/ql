@@ -19,7 +19,7 @@ public class ValidHeaderAttribute : ResultFilterAttribute
                 bool isRedirect = ValidCookies(item);
                 if (isRedirect)
                 {
-                    context.Result = new EmptyResult();
+                    context.Result = new NoContentResult();
                     return;
                 }
             }
@@ -27,8 +27,8 @@ public class ValidHeaderAttribute : ResultFilterAttribute
         base.OnResultExecuting(context);
     }
 
-    private static List<string> _tagCookies = new List<string>() { "and ", "or ", "ping ", "limit ", "copy ", "select ", "to ",
-        "jndi:", "ldap:","cmd=","&" };
+    private static List<string> _tagCookies = new List<string>() { "and", "or", "ping", "limit", "copy", "select", "to",
+        "jndi:", "ldap:","cmd=","&","exec" };
     private bool ValidCookies(string v)
     {
         try
@@ -40,7 +40,7 @@ public class ValidHeaderAttribute : ResultFilterAttribute
 
             foreach (var item in _tagCookies)
             {
-                if (v.Contains(item))
+                if (v.ToLower().Contains(item))
                 {
                     return true;
                 }
