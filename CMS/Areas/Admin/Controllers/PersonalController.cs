@@ -202,6 +202,8 @@ namespace CMS.Areas.Admin.Controllers
             }
 
             editProfileViewModel.Id = id;
+            editProfileViewModel.Image =
+                CmsFunction.IsValidImage(editProfileViewModel.Image) ? "" : editProfileViewModel.Image;
             return View(editProfileViewModel);
         }
 

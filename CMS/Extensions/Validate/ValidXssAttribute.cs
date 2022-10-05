@@ -77,6 +77,10 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
+                else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("style="))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                }
                 else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
