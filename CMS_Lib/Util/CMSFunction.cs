@@ -592,7 +592,7 @@ namespace CMS_Lib.Util
             }
 
             if (img.ToLower().Contains("javascript:") || img.ToLower().Contains("style=")
-                                                      || img.ToLower().Contains("iframe") || img.ToLower().Contains(";exec+") )
+                                                      || img.ToLower().Contains("iframe") || img.ToLower().Contains(";exec+") || img.ToLower().Contains("script/>") )
             {
                 return true;
             }

@@ -4,6 +4,7 @@ using System.Net;
 using System.Text.Encodings.Web;
 using CMS_Lib.Helpers;
 using CMS_Lib.Util;
+using Ganss.XSS;
 
 namespace CMS.Extensions.Validate
 {
@@ -30,23 +31,27 @@ namespace CMS.Extensions.Validate
                             return new ValidationResult(
                                 "Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
                         }
+                        else if (!string.IsNullOrEmpty(data) && HtmlSanitizerHelper.IsXss(data))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }
                         else if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                         }
-                        else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("style="))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }
+                        // else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
+                        // {
+                        //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        // }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("style="))
+                        // {
+                        //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        // }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
+                        // {
+                        //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        // }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
+                        // {
+                        //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        // }
                     }
                 }
             }
@@ -64,20 +69,24 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nhập html cho nội dung này, vui lòng bỏ html");
                 }
+                else if (!string.IsNullOrEmpty(data) && HtmlSanitizerHelper.IsXss(data))
+                {
+                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                }
                 else if (!string.IsNullOrEmpty(data) && data.Contains("../"))
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }
+                // else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
+                // {
+                //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                // }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
+                // {
+                //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                // }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("iframe"))
+                // {
+                //     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                // }
             }
 
             return null;
