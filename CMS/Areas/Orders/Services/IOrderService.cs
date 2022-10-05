@@ -319,7 +319,10 @@ public class OrderService : IOrderService
     public List<ExportForControlViewModel> ReadDataFromExcelAndValidate(IFormFile file)
     {
         XLWorkbook workbook = new XLWorkbook(file.OpenReadStream());
-        IXLWorksheet ws = workbook.Worksheet("order");
+        if (!workbook.TryGetWorksheet("order",out IXLWorksheet ws))
+        {
+            throw new NullReferenceException("Không tìm thấy Sheet order");
+        }
         IXLRange range = ws.RangeUsed();
         int rowCount = range.RowCount();
 

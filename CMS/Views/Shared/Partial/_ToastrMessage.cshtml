@@ -1,4 +1,5 @@
 ﻿@using CMS_Lib.Util
+@using System.Web
 @{
     <script src="~/js/shared/toastrConfig.js"></script>
     <script>
@@ -9,7 +10,7 @@
         }
         else if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "-1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))
         {
-            @Html.Raw("toastr.error('" + TempData["ContentMessage"] + "', \"Thông báo\")");
+            @Html.Raw("toastr.error('" + HttpUtility.HtmlEncode(TempData["ContentMessage"]) + "', \"Thông báo\")");
             TempData.Remove("ContentMessage");
         }
     </script>
