@@ -34,23 +34,15 @@ namespace CMS.Extensions.Validate
                         else if (!string.IsNullOrEmpty(data) && HtmlSanitizerHelper.IsXss(data))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }
-                        else if (!string.IsNullOrEmpty(data) && data.StartsWith("../"))
+                        }else if (!string.IsNullOrEmpty(data))
                         {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }
-                        else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("style"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data) && (data.ToLower().Contains("iframe") || data.ToLower().Contains("onerror")))
-                        {
-                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                            foreach (var t in HtmlSanitizerHelper.ListTagXss)
+                            {
+                                if (data.ToLower().Contains(t))
+                                {
+                                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                                }
+                            }
                         }
                     }
                 }
@@ -73,23 +65,15 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.Contains("../"))
+                else if (!string.IsNullOrEmpty(data))
                 {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }
-                else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("style"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }
-                else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                }else if (!string.IsNullOrEmpty(data) && (data.ToLower().Contains("iframe") || data.ToLower().Contains("onerror=")))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                    foreach (var t in HtmlSanitizerHelper.ListTagXss)
+                    {
+                        if (data.ToLower().Contains(t))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }
+                    }
                 }
             }
 
@@ -112,13 +96,15 @@ namespace CMS.Extensions.Validate
                     return new ValidationResult(
                         "Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
                 }
-                else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains("javascript:"))
+                else if (!string.IsNullOrEmpty(data))
                 {
-                    return new ValidationResult(
-                        "Hệ thống không hỗ trợ nhập script cho nội dung này, vui lòng bỏ script");
-                }else if (!string.IsNullOrEmpty(data) && data.ToLower().Contains(";exec+"))
-                {
-                    return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                    foreach (var t in HtmlSanitizerHelper.ListTagXssScript)
+                    {
+                        if (data.ToLower().Contains(t))
+                        {
+                            return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
+                        }
+                    }
                 }
             }
 

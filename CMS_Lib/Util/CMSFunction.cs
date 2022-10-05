@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using CMS_Lib.Helpers;
 using Microsoft.AspNetCore.Http;
 
 namespace CMS_Lib.Util
@@ -565,20 +567,13 @@ namespace CMS_Lib.Util
             {
                 return false;
             }
-
-            if (checkString.StartsWith("javascript:"))
+            foreach (var t in HtmlSanitizerHelper.ListTagXss)
             {
-                return true;
+                if (checkString.ToLower().Contains(t))
+                {
+                    return true;
+                }
             }
-            if (checkString.StartsWith("style"))
-            {
-                return true;
-            }
-            if (checkString.StartsWith("../"))
-            {
-                return true;
-            }
-            
             return Regex.IsMatch(checkString, "<(.|\n)*?>");
         }
 
@@ -593,14 +588,13 @@ namespace CMS_Lib.Util
             {
                 return true;
             }
-
-            if (img.ToLower().Contains("javascript:") || img.ToLower().Contains("style")
-                                                      || img.ToLower().Contains("iframe") || img.ToLower().Contains(";exec+")
-                                                      || img.ToLower().Contains("script/>") || img.ToLower().Contains("onerror") )
+            foreach (var t in HtmlSanitizerHelper.ListTagXss)
             {
-                return true;
+                if (img.ToLower().Contains(t))
+                {
+                    return true;
+                }
             }
-
             return false;
         }
         public static string ConvertDateTimeToQuarterString(DateTime date)

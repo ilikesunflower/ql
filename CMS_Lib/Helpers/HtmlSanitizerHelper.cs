@@ -1,9 +1,12 @@
-﻿using Ganss.XSS;
+﻿using System.Collections.Generic;
+using Ganss.XSS;
 
 namespace CMS_Lib.Helpers;
 
 public class HtmlSanitizerHelper
 {
+    public static List<string> ListTagXss = new List<string>() { "../", "javascript", "style", "exec","iframe","onerror", "onmouse" };
+    public static List<string> ListTagXssScript = new List<string>() { "../", "javascript", "exec","iframe","onerror", "onmouse" };
     public static string Sanitize(string v)
     {
         if (string.IsNullOrEmpty(v))
