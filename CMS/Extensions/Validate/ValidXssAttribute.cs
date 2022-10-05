@@ -1,10 +1,8 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
-using System.Text.Encodings.Web;
 using CMS_Lib.Helpers;
 using CMS_Lib.Util;
-using Ganss.XSS;
 
 namespace CMS.Extensions.Validate
 {
