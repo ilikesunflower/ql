@@ -11,6 +11,7 @@ public class ValidHeaderAttribute : ResultFilterAttribute
 {
     public override void OnResultExecuting(ResultExecutingContext context)
     {
+        base.OnResultExecuting(context);
         var cookies = context.HttpContext.Request.Cookies.Select(x => x.Value).ToList();
         if (cookies.Count > 0)
         {
@@ -24,7 +25,6 @@ public class ValidHeaderAttribute : ResultFilterAttribute
                 }
             }
         }
-        base.OnResultExecuting(context);
     }
 
     private static List<string> _tagCookies = new List<string>() { "and", "or", "ping", "limit", "copy", "select", "to",
