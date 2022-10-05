@@ -159,6 +159,9 @@ namespace CMS.Areas.Admin.Controllers
                     ILoggingService.Error(this._ilogger, "Thêm mới tài khoản lỗi",ex.Message,ex);
                 }
             }
+
+            createdUserViewModel.Image =
+                CmsFunction.IsValidImage(createdUserViewModel.Image) ? "" : createdUserViewModel.Image;
             return View(createdUserViewModel);
         }
 
@@ -249,6 +252,7 @@ namespace CMS.Areas.Admin.Controllers
             }
 
             editUserViewModel.Id = id;
+            editUserViewModel.Image = CmsFunction.IsValidImage(editUserViewModel.Image) ? "" : editUserViewModel.Image;
             return View(editUserViewModel);
         }
 
