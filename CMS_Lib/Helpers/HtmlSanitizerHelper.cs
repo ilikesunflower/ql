@@ -25,8 +25,11 @@ public class HtmlSanitizerHelper
         }
     
         string s = v.Trim();
+        s = s.Replace("@", "*");
+        s = s.Replace(".", "*");
+        s = s.Replace("&", "*");
         var sanitizer = new HtmlSanitizer();
-        var sanitized = sanitizer.Sanitize(v);
-        return sanitized.Length != v.Length;
+        var sanitized = sanitizer.Sanitize(s);
+        return sanitized.Length != s.Length;
     }
 }
