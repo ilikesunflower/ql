@@ -12,8 +12,6 @@ public class ValidHeaderAttribute : ResultFilterAttribute
     public override void OnResultExecuting(ResultExecutingContext context)
     {
         var cookies = context.HttpContext.Request.Cookies.Select(x => x.Value).ToList();
-        var c = context.RouteData;
-        int m = cookies.Count;
         if (cookies.Count > 0)
         {
             foreach (var item in cookies)
