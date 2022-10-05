@@ -5,8 +5,8 @@ namespace CMS_Lib.Helpers;
 
 public class HtmlSanitizerHelper
 {
-    public static List<string> ListTagXss = new List<string>() { "../", "javascript", "style", "exec","iframe","onerror", "onmouse", "click","change","alert" };
-    public static List<string> ListTagXssScript = new List<string>() { "../", "javascript", "exec","iframe","onerror", "onmouse","click","change", "alert" };
+    public static List<string> ListTagXss = new List<string>() { "../", "javascript", "style", "exec","iframe","onerror", "onmouse", "click","change","alert","focus","load","blur" };
+    public static List<string> ListTagXssScript = new List<string>() { "../", "javascript", "exec","iframe","onerror", "onmouse","click","change", "alert","focus", "load","blur" };
     public static string Sanitize(string v)
     {
         if (string.IsNullOrEmpty(v))
