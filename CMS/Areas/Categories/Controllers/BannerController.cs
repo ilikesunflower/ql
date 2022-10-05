@@ -118,6 +118,7 @@ namespace CMS.Areas.Categories.Controllers
                 ToastMessage(-1, "Thêm mới banner lỗi, liên hệ người quản trị");
             }
             createData.ListBanner = BannerConst.ListStatus;
+            createData.Images = CmsFunction.IsValidImage(createData.Images) ? "" : createData.Images;
             return View(createData);
         }
 
@@ -283,6 +284,7 @@ namespace CMS.Areas.Categories.Controllers
                 ILoggingService.Error(this._iLogger, "Chỉnh sửa banner lỗi" + "id:" + EditData.Id, "UserId :" + UserInfo.UserId, e);
                 ToastMessage(-1, "Lỗi không thể sửa banner này, Vui lòng liên hệ người quản trị");
             }
+            EditData.Images = CmsFunction.IsValidImage(EditData.Images) ? "" : EditData.Images;
             return View(EditData);
         }
 

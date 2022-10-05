@@ -89,7 +89,7 @@
                                                                     <input type="checkbox" class="i-checks chkAll checkAllRole_@Model.ListRoleControllerAction[i].Id" data-id="@Model.ListRoleControllerAction[i].Id" data-class="checkAllRole_@Model.ListRoleControllerAction[i].Id" data-tableid="table_@Model.ListRoleControllerAction[i].Id" />
                                                                     <a class="control-label collapse-link font-bold roleName" style="color: black; cursor: pointer" data-toggle="collapse" href="#@Model.ListRoleControllerAction[i].Id" asp-for="@Model.ListRoleControllerAction[i].ListAction">
                                                                         <label>
-                                                                            &nbsp;@Html.Raw(String.IsNullOrEmpty(Model.ListRoleControllerAction[i].Title) ? Model.ListRoleControllerAction[i].Name : Model.ListRoleControllerAction[i].Title)
+                                                                            &nbsp;@(String.IsNullOrEmpty(Model.ListRoleControllerAction[i].Title) ? Model.ListRoleControllerAction[i].Name : Model.ListRoleControllerAction[i].Title)
                                                                         </label>
                                                                     </a>
                                                                 </div>
@@ -113,7 +113,7 @@
                                                                                                 <td>
                                                                                                     <div class="checkbox icheck-success">
                                                                                                         <input type="checkbox" class="i-checks chkItem" asp-for="@Model.ListRoleControllerAction[i].ListAction[j].IsChecked" />
-                                                                                                        @Html.Raw(String.IsNullOrEmpty(Model.ListRoleControllerAction[i].ListAction[j].Title) ? Model.ListRoleControllerAction[i].ListAction[j].Name : Model.ListRoleControllerAction[i].ListAction[j].Title)
+                                                                                                        @(String.IsNullOrEmpty(Model.ListRoleControllerAction[i].ListAction[j].Title) ? Model.ListRoleControllerAction[i].ListAction[j].Name : Model.ListRoleControllerAction[i].ListAction[j].Title)
                                                                                                         <input type="hidden" asp-for="@Model.ListRoleControllerAction[i].ListAction[j].Id" />
                                                                                                         <input type="hidden" asp-for="@Model.ListRoleControllerAction[i].ListAction[j].Name" />
                                                                                                         <input type="hidden" asp-for="@Model.ListRoleControllerAction[i].ListAction[j].Title" />
