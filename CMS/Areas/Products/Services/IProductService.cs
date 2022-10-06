@@ -95,7 +95,7 @@ public class ProductService : IProductService
         //sửa product
                      var image = _iFileService.SavingFile(editData.Image, "upload/product");
                     var product = _iProductRepository.FindById(editData.Id);
-                    product.Sku = editData.Sku;
+                    product.Sku = editData.Sku.Trim();
                     product.Name = editData.Name.Trim();
                     product.Weight = editData.Weight;
                     // product.Price = editData.Price;
@@ -330,7 +330,7 @@ public class ProductService : IProductService
                     int statusPending = ProductCensorshipConst.Pending.Status;
                     var product = new CMS_EF.Models.Products.Products()
                     {
-                        Sku = createData.Sku,
+                        Sku = createData.Sku.Trim(),
                         Name = createData.Name.Trim(),
                         Weight = createData.Weight,
                         // Price = createData.Price,
@@ -474,7 +474,7 @@ public class ProductService : IProductService
                     }
 
                     transaction.Commit();
-                    return  new OutputObject(200, new{}, "").Show();
+                    return  new OutputObject(200, product.Id, "").Show();
         }
         catch (Exception e)
         {

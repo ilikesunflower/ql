@@ -70,8 +70,11 @@ function MainController(props) {
                 let data = [];
                 proties.forEach((obj, i) => {
                     let val = {
+                        ord: i,
                         name: obj.name,
-                        properties: obj.listValueName
+                        properties: Array.isArray( obj.listValueName) ?  obj.listValueName.map((x , index) => {
+                            return { ord: index, value: x}
+                        }) : []
                     }
                     data.push(val);
                 })
@@ -106,11 +109,9 @@ function MainController(props) {
 
     }, []);
     useEffect(function () {
-        console.log("change setListProperProduct ", listProperties)
         let data = [];
         let product = {...listProperProduct};
         let dataC = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0) || [];
-        console.log(dataC, checkEditPro)
         
         if(checkEditPro){
             if(Array.isArray(dataC) && dataC.length > 0){
@@ -119,7 +120,7 @@ function MainController(props) {
                     let  valueP = fitterTrimArrayString(dataC[0].properties);
                     valueP.forEach((obj, index) => {
                         let dataP = {
-                            name:  obj,
+                            name:  obj?.value,
                             skuMh: product[index]?.skuMh || '',
                             price: 0,
                             quantity: 0
@@ -129,7 +130,6 @@ function MainController(props) {
                 }else if(count > 1){
                     
                     let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
-                    console.log(valueP)
                     valueP.forEach((obj, index) => {
                         let dataP = {
                             name:  obj,
@@ -145,7 +145,7 @@ function MainController(props) {
         }
     }, [listProperties]);
     const fitterTrimArrayString = function (lisObj) {
-        let value = lisObj.filter(x => x != '');
+        let value = lisObj.filter(x => x?.value != '');
         return value;
     }
     const clickElement = function (e) {
@@ -193,7 +193,7 @@ function MainController(props) {
         let properties = [];
         listPro.forEach(obj => {
             pro2.forEach(obj2 => {
-                properties.push(obj + ' _ ' + obj2 );
+                properties.push((index2 == 1 ? obj?.value  : obj )+ ' _ ' + obj2?.value );
             })
         })
         let indexNext = index2 + 1;
@@ -242,25 +242,46 @@ function MainController(props) {
             setListFile([...listFile,...value1]);
         }
     }
-    const addFormProperties = function (){
-        setCheckEditPro(true);
-            let val = {
-                name: '',
-                properties: ['']
-            }
-            setListProperties([...listProperties, val]);
+    
+    const maxIndexProperties = function (listProperties){
+        let indexMax = 0;
+        if(Array.isArray(listProperties) && listProperties.length > 0 ){
+            let properties = listProperties.reduce(function (previous, current) {
+                return (previous.ord > current.ord ? previous : current)
+            })
+            indexMax = properties.ord + 1;
+        }
+        return indexMax;
     }
-    const addDetailProperties = function (e, index){
+
+    const addFormProperties = function (){
+        let ord = maxIndexProperties(listProperties);
+        setCheckEditPro(true);
+        let val = {
+            ord : ord,
+            name: '',
+            properties: [{ord: 0, value: ''}]
+        }
+        setListProperties([...listProperties, val]);
+        
+    }
+    const addDetailProperties = function (e, property){
         setCheckEditPro(true);
         let data =[...listProperties] ;
-        data[index].properties.push('');
+        let ordNew = maxIndexProperties(property.properties)
+        let valueNew = {ord: (ordNew || 1), value: ''}
+        let index = data.findIndex(x => x.ord == property.ord);
+        data[index].properties.push(valueNew);
         setListProperties(data);
+
     }
-    const handFormProperties1 = function (e, index){
+    const handFormProperties1 = function (e, property){
         setCheckEditPro(true);
         let value =  e.target.value.trim();
         let data =[...listProperties] ;
         let check = data.findIndex(x => x.name == value && x.name != '');
+        let index = data.findIndex(x => x.ord == property?.ord);
+
         if(check >= 0 && check != index){
             data.splice(index, 1);
             setListProperties(data);
@@ -269,26 +290,31 @@ function MainController(props) {
             data[index].name = value;
             setListProperties(data);
         }
+        
     }
-    const handFormProperties11 = function (e, index, index1){
+    const handFormProperties11 = function (e, property, property1){
         setCheckEditPro(true);
         let value = e.target.value.trim();
-        let data = [...listProperties];
-        let check = data[index].properties.findIndex(x => x == value);
-        if(value == ''){
-            
-        }else if(check > -1 &&  check != index1 ){
-            e.target.value = '';
-            toastr.error("Thuộc tính này đã tồn tại")
-        }else{
-            data[index].properties[index1] = value;
-            setListProperties(data);
+        if(value != ''){
+
+            let data = [...listProperties];
+            let index = data.findIndex(x => x?.ord == property?.ord);
+            let check = data[index]?.properties.findIndex(x => x?.value == value);
+            let index1 = property.properties.findIndex(x => x?.value == property1?.value);
+            if(check > -1 &&  check != index1 ){
+                e.target.value = '';
+                toastr.error("Thuộc tính này đã tồn tại")
+            }else{
+                data[index].properties[index1].value = value;
+                setListProperties(data);
+            }
         }
-        console.log(listProperties)
     }
-    const deleteDetailProperties = function ( index, index1) {
+    const deleteDetailProperties = function (  property1, property2) {
         setCheckEditPro(true);
         let data = [...listProperties];
+        let index = data.findIndex(x => x?.ord == property1?.ord);
+        let index1 = property1.properties.findIndex(x => x.ord == property2.ord);
         data[index].properties.splice(index1, 1);
         setListProperties(data);
     }
@@ -315,7 +341,7 @@ function MainController(props) {
         let data = [...listProperProduct];
         if(parInt2Str(e.floatValue) >= 0){
             data[index].price = e.floatValue;
-            setListProperProduct(data);4
+            setListProperProduct(data);
         }
     } 
     const handQuantitySkuMh = function (e, index) {
@@ -325,12 +351,14 @@ function MainController(props) {
             setListProperProduct(data);
         }
     }
-   const deleteProperties = function (index){
-       setCheckEditPro(true);
-       let data =[...listProperties] ;
-       data.splice(index, 1);
-       setListProperties(data);
-   }
+  
+    const deleteProperties = function (property){
+        setCheckEditPro(true);
+        let data =[...listProperties] ;
+        let index = data.findIndex(x => x.ord == property.ord);
+        data.splice(index, 1);
+        setListProperties(data);
+    }
     const onClickImage = function () {
         $(refImage.current).click();
     }
@@ -384,13 +412,11 @@ function MainController(props) {
             } ),
             checkExitSku: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
                 let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
-                console.log("checkList",checkList)
 
                 if(checkList.length == 0){
                     return  true
                 }
                 let checkSku = listProperProduct.filter(x => x.skuMh == "");
-                console.log("checkSku", checkSku)
                 return  checkSku.length == 0;
 
             } ),
@@ -450,7 +476,7 @@ function MainController(props) {
                             formData.append("Name"+(i + 1),obj.name);
                             let nameP = "Properties" + (i + 1);
                             fitterTrimArrayString(obj.properties).forEach(obj1 => {
-                                formData.append(nameP, obj1);
+                                formData.append(nameP, obj1?.value);
                             })
                         })
                     }
