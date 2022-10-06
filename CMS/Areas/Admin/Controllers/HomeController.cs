@@ -54,7 +54,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public JsonResult GetChartDataSales([FromBody] SalesFilterViewModel model)
+        public IActionResult GetChartDataSales([FromBody] SalesFilterViewModel model)
         {
             try
             {
@@ -68,89 +68,91 @@ namespace CMS.Areas.Admin.Controllers
                 {
                     rs = _iDashBoardService.GetDataSalesMonth(time.Start, time.End);
                 }
-                return Json(new
+                return Ok(new
                 {
                     code = 200,
                     msg = "successful",
                     content = rs
-                },StatusCode(200));
+                });
             }
             catch (Exception e)
             {
-                return Json(new
+                return BadRequest(new
                 {
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                }, StatusCode(500));
-            }
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Policy = "PermissionMVC")]
-        public JsonResult GetChartDataSaleGroup([FromBody] SaleGroupViewModel model)
-        {
-            try
-            {
-                var time = new TimeRange( model.DateStart, model.DateEnd);
-                CharDataModel rs = new CharDataModel();
-                rs = _iDashBoardService.GetDataSaleGroup(time.Start, time.End);
-                return Json(new
-                {
-                    code = 200,
-                    msg = "successful",
-                    content = rs
-                },StatusCode(200));
-            }
-            catch (Exception e)
-            {
-                return Json(new
-                {
-                    code = 500,
-                    msg = "fail",
-                    content = e.Message
-                },StatusCode(500));
+                });
             }
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public JsonResult GetChartToProduct([FromBody] ToProductViewModel model)
+        public IActionResult GetChartDataSaleGroup([FromBody] SaleGroupViewModel model)
+        {
+            try
+            {
+                var time = new TimeRange( model.DateStart, model.DateEnd);
+                CharDataModel rs = new CharDataModel();
+                rs = _iDashBoardService.GetDataSaleGroup(time.Start, time.End);
+                return Ok(new
+                {
+                    code = 200,
+                    msg = "successful",
+                    content = rs
+                });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new
+                {
+                    code = 500,
+                    msg = "fail",
+                    content = e.Message
+                });
+            }
+        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Policy = "PermissionMVC")]
+        public IActionResult GetChartToProduct([FromBody] ToProductViewModel model)
         {
             try
             {
                 var time = new TimeRange(model.DateStart, model.DateEnd);
                 CharDataToProductModel rs = new CharDataToProductModel();
                 rs = _iDashBoardService.GetDataToProduct(time.Start, time.End, model.FilterStatus,20);
-                return Json(new
+                return Ok(new
                 {
                     code = 200,
                     msg = "successful",
                     content = rs,
                     filter = FilterToProductConst.GetStringStatus,
-                },StatusCode(200));
+                });
             }
             catch (Exception e)
             {
-                return Json(new
+                return BadRequest(new
                 {
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                },StatusCode(500));
+                });
             }
         } 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public JsonResult GetChartArea([FromBody] SaleGroupViewModel model)
+        public IActionResult GetChartArea([FromBody] SaleGroupViewModel model)
         {
             try
             {
                 var time = new TimeRange(model.DateStart, model.DateEnd);
                 var listGroup1 = _iDashBoardService.GetDataArea(time.Start, time.End);
-                return Json(new
+                return Ok(new
                 {
                     code = 200,
                     msg = "successful",
@@ -166,43 +168,43 @@ namespace CMS.Areas.Admin.Controllers
                             Y = x.Quantity
                         }).ToList()
                     },
-                },StatusCode(200));
+                });
             }
             catch (Exception e)
             {
-                return Json(new
+                return BadRequest(new
                 {
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                },StatusCode(500));
+                });
             }
         }  
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public JsonResult GetToRating([FromBody] SaleGroupViewModel model)
+        public IActionResult GetToRating([FromBody] SaleGroupViewModel model)
         {
             try
             {
                 var time = new TimeRange(model.DateStart, model.DateEnd);
                 var rs = _iDashBoardService.GetDataToRating(time.Start, time.End);
-                return Json(new
+                return Ok(new
                 {
                     code = 200,
                     msg = "successful",
                     content = rs,
-                },StatusCode(200));
+                });
             }
             catch (Exception e)
             {
-                return Json(new
+                return BadRequest(new
                 {
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                },StatusCode(500));
+                });
             }
         }
         
