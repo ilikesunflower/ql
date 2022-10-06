@@ -19,7 +19,7 @@ public class EditModel
     public string Font { get; set; }
     
     [MaxLength(255,ErrorMessage = "Tên ảnh chỉ được phép chứa 255 ký tự!")]
-    [Required(ErrorMessage = "Vui lòng nhập Ảnh.")]
+    // [Required(ErrorMessage = "Vui lòng nhập Ảnh.")]
     [ValidXss]
     public string ImageBanner { get; set; }
     
