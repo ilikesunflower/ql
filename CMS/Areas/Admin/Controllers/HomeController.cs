@@ -54,10 +54,11 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartDataSales([FromBody] SalesFilterViewModel model)
+        public IActionResult GetChartDataSales([Bind("TimeFlow","DateStart", "DateEnd")] [FromBody] SalesFilterViewModel model)
         {
             try
             {
+                
                 var time = new TimeRange(model.TimeFlow, model.DateStart, model.DateEnd);
                 CharDataModel rs;
                 if ("days" == model.TimeFlow)
@@ -89,7 +90,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartDataSaleGroup([FromBody] SaleGroupViewModel model)
+        public IActionResult GetChartDataSaleGroup([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
             {
@@ -117,7 +118,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartToProduct([FromBody] ToProductViewModel model)
+        public IActionResult GetChartToProduct([Bind("FilterStatus","DateStart","DateEnd")] [FromBody] ToProductViewModel model)
         {
             try
             {
@@ -146,7 +147,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetChartArea([FromBody] SaleGroupViewModel model)
+        public IActionResult GetChartArea([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
             {
@@ -184,7 +185,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult GetToRating([FromBody] SaleGroupViewModel model)
+        public IActionResult GetToRating([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
             {

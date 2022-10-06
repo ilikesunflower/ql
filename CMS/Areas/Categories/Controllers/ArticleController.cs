@@ -369,7 +369,7 @@ public class ArticleController : BaseController
                     Detail = article.Lead,
                     Link =$"/{CmsFunction.RewriteUrlFriendly(article.Title)}-{article.Id}.html"
                 });
-                return Ok(new OutputObject(200,"","").Show());
+                return Ok(new OutputObject(200,"Gửi thông báo thành công","").Show());
             }
             else
             {
@@ -378,7 +378,7 @@ public class ArticleController : BaseController
         }
         catch (Exception ex)
         {
-            this._iLogger.LogError(ex, "Gửi thông báo tin bài thành công");
+            this._iLogger.LogError(ex, "Gửi thông báo tin bài");
             return Ok(new OutputObject(400,"","").Show());
         }
     }
