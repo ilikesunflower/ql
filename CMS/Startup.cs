@@ -8,6 +8,7 @@ using CMS_Lib.DI;
 using CMS_Ship.Extensions;
 using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
+using CMS.Extensions.Header;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
 using CMS.Hubs;
@@ -227,7 +228,7 @@ namespace CMS
                     options.EnableEndpointRouting = false;
                 })
                 .AddRazorRuntimeCompilation()
-                // .AddSessionStateTempDataProvider()
+                .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -235,7 +236,7 @@ namespace CMS
                 });
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation()
-                // .AddSessionStateTempDataProvider()
+                .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -264,6 +265,7 @@ namespace CMS
                 app.UseStatusCodePagesWithReExecute("/Error/Page/{0}");
                 app.UseHsts();
                 app.UseHttpsRedirection();
+                app.UseHeaderApplication();
             }
             app.UseRouting();
             app.UseCors();
