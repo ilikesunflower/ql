@@ -111,10 +111,10 @@
                 </div>
               
             </div>
-            <div class="col-md-6 col-xs-12">
+            <div class="col-md-12 col-xs-12">
                 <div id="coupon_app"></div>     
             </div>
-            <div class="col-md-6 col-xs-12" id="table-point"></div>
+            @* <div class="col-md-6 col-xs-12" id="table-point"></div> *@
 
         </div>
     </div>
@@ -125,7 +125,7 @@
     <script>
         const customerId = @Model.Customer.Id;
     </script>
-    <script type="text/javascript" src="/dist/js/customers/customerDetailPoint/bundle.js"></script>
+    @* <script type="text/javascript" src="/dist/js/customers/customerDetailPoint/bundle.js"></script> *@
     <script type="text/javascript">
         window.id = @(Model.Customer.Id);
         $(".resetPassword").click(function (e) {
