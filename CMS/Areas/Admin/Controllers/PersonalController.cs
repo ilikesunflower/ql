@@ -185,8 +185,9 @@ namespace CMS.Areas.Admin.Controllers
                         ILoggingService.Infor(this._iLogger, "Cập nhật thông tin cá nhân thành công",
                             user.Id.ToString());
                         ToastMessage(1, "Cập nhật thông tin cá nhân thành công");
+                        await _signInManager.RefreshSignInAsync(u);
                         _iClaimService.ReloadInfoUser(HttpContext.User, u);
-                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(u).Result, new AuthenticationProperties() { IsPersistent = true });
+                        // await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(u).Result, new AuthenticationProperties() { IsPersistent = true });
                         return RedirectToAction(nameof(Details), new { id });
                     }
                     else
