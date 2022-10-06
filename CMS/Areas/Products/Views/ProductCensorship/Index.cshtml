@@ -135,7 +135,7 @@
                                                 @BindComment(item)
                                             </td>
                                             <td class="text-center align-middle">
-                                                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="Details" asp-route-id="@item.Id"  asp-route-backUrl="@Context.Request.GetEncodedUrl()">
+                                                <a title="Xem" class="btn bg-gradient-primary btn-xs btn-s-m mt-1 mb-1" asp-action="Details" asp-route-id="@item.Id"  asp-route-backUrl="@Context.Request.GetEncodedPathAndQuery()">
                                                     <i class="fa fa-solid fa-eye"></i><span class="d-lg-inline-block d-md-inline-block d-none">&nbsp;Xem</span>
                                                 </a>
                                             </td>
