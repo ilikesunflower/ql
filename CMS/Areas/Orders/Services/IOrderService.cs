@@ -363,8 +363,16 @@ public class OrderService : IOrderService
         List<string> codes = dataFile.Select(x => x.Code).ToList();
 
         List<CMS_EF.Models.Orders.Orders> orders = _iOrdersRepository.FindByCodes(codes);
+
+        List<String> wrongCode = codes.Where(x => !orders.Select(xx => xx.Code).Contains(x)).ToList();
+
+        if (wrongCode is {Count: > 0})
+        {
+            throw new NullReferenceException($"Mã {string.Join( ",", wrongCode )} không tồn tại!");
+        }
+
         List<CMS_EF.Models.Orders.Orders> changeList = new List<CMS_EF.Models.Orders.Orders>();
-        
+
         foreach (var order in orders)
         {
             var orderExcelData = dataFile.FirstOrDefault(x => x.Code == order.Code);
@@ -375,6 +383,7 @@ public class OrderService : IOrderService
 
             if (orderExcelData.Status == order.StatusPayment) continue;
             order.StatusPayment = orderExcelData.Status;
+            order.LastModifiedAt = DateTime.Now;
             changeList.Add(order);
         }
 
