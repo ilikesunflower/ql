@@ -119,6 +119,7 @@ namespace CMS.Areas.Categories.Controllers
             }
             createData.ListBanner = BannerConst.ListStatus;
             createData.Images = CmsFunction.IsValidImage(createData.Images) ? "" : createData.Images;
+            createData.ImagesMobile = CmsFunction.IsValidImage(createData.ImagesMobile) ? "" : createData.ImagesMobile;
             return View(createData);
         }
 
@@ -285,6 +286,7 @@ namespace CMS.Areas.Categories.Controllers
                 ToastMessage(-1, "Lỗi không thể sửa banner này, Vui lòng liên hệ người quản trị");
             }
             EditData.Images = CmsFunction.IsValidImage(EditData.Images) ? "" : EditData.Images;
+            EditData.ImagesMobile = CmsFunction.IsValidImage(EditData.ImagesMobile) ? "" : EditData.ImagesMobile;
             return View(EditData);
         }
 

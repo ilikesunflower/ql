@@ -12,16 +12,5 @@ public class SalesFilterViewModel
     public string DateStart { get; set; }
     [ValidXss]
     public string DateEnd { get; set; }
-    
-    [Editable(false)]
-    [BindNever]
-    public bool IsAdmin { get; set; }
-    
-    [Editable(false)]
-    [BindNever]
-    public bool IsSso { get; set; }
-    
-    [Editable(false)]
-    [BindNever]
-    public string Role { get; set; }
+
 }

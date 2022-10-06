@@ -163,6 +163,7 @@ public class ArticleController : BaseController
         }
 
         createData.ListArticleType = _iArticleTypeRepository.FindAll().ToList();
+        createData.Thumbnail = CmsFunction.IsValidImage(createData.Thumbnail) ? "" : createData.Thumbnail;
         return View(createData);
     }
 
@@ -347,6 +348,7 @@ public class ArticleController : BaseController
                 "UserId :" + UserInfo.UserId, e);
             ToastMessage(-1, "Lỗi không thể sửa tin tức này, Vui lòng liên hệ người quản trị");
         }
+        EditData.Thumbnail = CmsFunction.IsValidImage(EditData.Thumbnail) ? "" : EditData.Thumbnail;
 
         return View(EditData);
     }

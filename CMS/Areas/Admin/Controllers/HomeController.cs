@@ -73,7 +73,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 200,
                     msg = "successful",
                     content = rs
-                });
+                },StatusCode(200));
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                });
+                }, StatusCode(500));
             }
         }
         [HttpPost]
@@ -100,7 +100,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 200,
                     msg = "successful",
                     content = rs
-                });
+                },StatusCode(200));
             }
             catch (Exception e)
             {
@@ -109,7 +109,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                });
+                },StatusCode(500));
             }
         }
         
@@ -129,7 +129,7 @@ namespace CMS.Areas.Admin.Controllers
                     msg = "successful",
                     content = rs,
                     filter = FilterToProductConst.GetStringStatus,
-                });
+                },StatusCode(200));
             }
             catch (Exception e)
             {
@@ -138,7 +138,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                });
+                },StatusCode(500));
             }
         } 
         [HttpPost]
@@ -166,7 +166,7 @@ namespace CMS.Areas.Admin.Controllers
                             Y = x.Quantity
                         }).ToList()
                     },
-                });
+                },StatusCode(200));
             }
             catch (Exception e)
             {
@@ -175,7 +175,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                });
+                },StatusCode(500));
             }
         }  
         
@@ -193,7 +193,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 200,
                     msg = "successful",
                     content = rs,
-                });
+                },StatusCode(200));
             }
             catch (Exception e)
             {
@@ -202,7 +202,7 @@ namespace CMS.Areas.Admin.Controllers
                     code = 500,
                     msg = "fail",
                     content = e.Message
-                });
+                },StatusCode(500));
             }
         }
         
