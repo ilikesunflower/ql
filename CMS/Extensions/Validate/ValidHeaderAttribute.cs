@@ -27,7 +27,7 @@ public class ValidHeaderAttribute : ResultFilterAttribute
         }
     }
 
-    private static List<string> _tagCookies = new List<string>() { "and", "or", "ping", "limit", "copy", "select", "to",
+    private static List<string> _tagCookies = new List<string>() { "and ", "or ", "ping ", "limit ", "COPY", "select ", "to ",
         "jndi:", "ldap:","cmd=","&","exec" };
     private bool ValidCookies(string v)
     {
@@ -40,7 +40,7 @@ public class ValidHeaderAttribute : ResultFilterAttribute
 
             foreach (var item in _tagCookies)
             {
-                if (v.ToLower().Contains(item))
+                if (v.Contains(item))
                 {
                     return true;
                 }
