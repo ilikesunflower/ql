@@ -174,7 +174,7 @@ namespace CMS.Areas.Admin.Services.Home
                     .Select(x => new
                     {
                         ProductName = x.Key.ProductName,
-                        Prices = x.Sum(x => x.Price ?? 0)
+                        Prices = x.Sum(x => (x.Price ?? 0) * (x.Quantity ?? 0))
                     }).OrderByDescending(x => x.Prices).Take(page).ToList();
                 newData = new CharDataToProductModel()
                 {
