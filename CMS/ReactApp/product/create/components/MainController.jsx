@@ -26,6 +26,7 @@ function MainController(props) {
     let [listProperProduct, setListProperProduct] = useState([]);
     let [showDeletePurpose, setShowDeletePurpose]  = useState(false);
     let [listPurposeDelete, setListPurposeDelete] = useState([]);
+    let [showCropImage, setShowCropImage] = useState(false);
     useEffect(function () {
      
         getProductCategory(function (rs) {

@@ -14,7 +14,7 @@ import {
     NumberFormatFieldAfter,
     FileField,
     CheckBoxField,
-    FileFieldP, Textarea, TextareaShort
+    FileFieldP, Textarea, TextareaShort, FileFieldCropImage
 } from "../../../components/formikField"
 import ProductPurposeView from "../../components/ProductPurposeView";
 
@@ -226,10 +226,11 @@ function MainApp(props) {
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <div className="row">
-                                                            <div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>
-                                                                <FileFieldP setImageString={method.setImageString} formik={formik.formikProduct} refU={state.refI}  name="image" className="hidden"/>
-                                                                <img src={state.imageString} className="imgA"/>
-                                                            </div>
+                                                            
+                                                            {/*<div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>*/}
+                                                                <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
+                                                                {/*<img src={state.imageString} className="imgA"/>*/}
+                                                            {/*</div>*/}
                                                          </div>
                                                     </Card.Body>
                                                 </Card>
