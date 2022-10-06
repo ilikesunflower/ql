@@ -28,6 +28,7 @@ const useChart = (props) => {
         subtitle: {
             text: ''
         },
+        colors: ['#7CB5EC','#F15C80', '#90ED7D','#F7A35C','#5B9BD5'],
         accessibility: {
             point: {
                 valueSuffix: '%'

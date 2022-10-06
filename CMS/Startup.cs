@@ -133,17 +133,17 @@ namespace CMS
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.TempDataCookie";
             });
 
-            
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    policy =>
-                    {
-                        policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
-                        policy.AllowAnyHeader();
-                        policy.AllowAnyMethod();
-                    });
-            });
+            services.AddCors();
+            // services.AddCors(options =>
+            // {
+            //     options.AddDefaultPolicy(
+            //         policy =>
+            //         {
+            //             policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
+            //             policy.AllowAnyHeader();
+            //             policy.AllowAnyMethod();
+            //         });
+            // });
 
             #endregion
 

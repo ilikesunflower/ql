@@ -155,6 +155,7 @@ public class CustomerNotificationService : ICustomerNotificationService
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
                     string res = response.Content.ReadAsStringAsync().Result;
+                    this._iLogger.LogInformation($"send notification to FE: {res}");
                 }   
             }
             else
