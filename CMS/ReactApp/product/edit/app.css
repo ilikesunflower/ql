@@ -16,6 +16,10 @@
     color: red;
     cursor: pointer;
 }
+.buttonCrop:hover{
+    color: red;
+    cursor: pointer;
+}
 .btnButtonY{
     background: #eaeaea;
     color: #19274B;

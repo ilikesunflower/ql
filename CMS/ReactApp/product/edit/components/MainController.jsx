@@ -22,7 +22,10 @@ function MainController(props) {
     let [listFileSave, setListFileSave] = useState([]);
     let [listFile, setListFile] = useState([]);
     let [listFileOld, setListFileOld] = useState([]);
- 
+    let [showCropImage, setShowCropImage] = useState(false); 
+    let [imageCrop, setImageCrop] = useState('');
+    let [indexImage, setIndexImage] = useState(null);
+    let [typeFile, setTypeFile] = useState(0);
     let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg');
     let refI = useRef(null);
     let refImage = useRef(null);
@@ -222,6 +225,50 @@ function MainController(props) {
         data.splice(i, 1);
         setListFileOld(data);
     }
+//crop imgae cũ
+    const cropImage = function (i) { 
+        setTypeFile(1);
+        let data = [...listFileOld];
+        let img = data[i];
+        setImageCrop(img);
+        setIndexImage(i);
+        setShowCropImage(true);
+    }
+    const handleCropImage = function (event){
+        if(!event) return;
+        let data = [...listFileOld];
+        data.splice(indexImage, 1);
+        setListFileOld(data);
+        let data1 = [...listFile];
+        let data2 = [...listFileSave];
+        data2.push(event);
+        data1.push(URL.createObjectURL(event));
+        setListFileSave(data2);
+        setListFile(data1);
+        setShowCropImage(false)
+    }
+    
+    //crop image mới
+    const cropImageNew = function (i) {
+        setTypeFile(2);
+        let data = [...listFile];
+        let img = data[i];
+        setImageCrop(img);
+        setIndexImage(i);
+        setShowCropImage(true);
+    }
+    const handleCropImageNew = function (event){
+        if(!event) return;
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        data[indexImage] = URL.createObjectURL(event);
+        data1[indexImage] = event;
+        setListFileSave(data1);
+        setListFile(data);
+        setShowCropImage(false)
+    }
+    
+    
     const handCategory = function () {
         setShowCategory(!showCategory);
     }
@@ -587,7 +634,10 @@ function MainController(props) {
             listProperties,
             listProperProduct,
             listFileOld,
-            showDeletePurpose
+            showDeletePurpose,
+            showCropImage,
+            imageCrop,
+            typeFile
         },
         method:{
             handPurpose,
@@ -609,7 +659,12 @@ function MainController(props) {
             deleteManyOld,
             clickElement,
             deletePurpose,
-            handDeletePurpose
+            handDeletePurpose,
+            cropImage, 
+            handleCropImage, 
+            cropImageNew, 
+            handleCropImageNew,
+            setShowCropImage
         } };
 }
 export default MainController;

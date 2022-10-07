@@ -26,6 +26,10 @@ function MainController(props) {
     let [listProperProduct, setListProperProduct] = useState([]);
     let [showDeletePurpose, setShowDeletePurpose]  = useState(false);
     let [listPurposeDelete, setListPurposeDelete] = useState([]);
+
+    let [showCropImage, setShowCropImage] = useState(false);
+    let [imageCrop, setImageCrop] = useState('');
+    let [indexImage, setIndexImage] = useState(null); 
     useEffect(function () {
      
         getProductCategory(function (rs) {
@@ -142,6 +146,27 @@ function MainController(props) {
     const handCategory = function () {
         setShowCategory(!showCategory);
     }
+    //crop imgae
+
+    const cropImageNew = function (i) { 
+        let data = [...listFile];
+        let img = data[i];
+        setImageCrop(img);
+        setIndexImage(i);
+        setShowCropImage(true);
+    }
+    const handleCropImageNew = function (event){
+        if(!event) return;
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        data[indexImage] = URL.createObjectURL(event);
+        data1[indexImage] = event;
+        setListFileSave(data1);
+        setListFile(data);
+        setShowCropImage(false)
+    }
+
+
     const handleChangeFile = function (e) {
         let value = [];
         let value1 = [];
@@ -494,6 +519,7 @@ function MainController(props) {
             listProperties,
             listProperProduct,
             showDeletePurpose,
+            showCropImage, imageCrop
         },
         method:{
             handPurpose,
@@ -515,8 +541,10 @@ function MainController(props) {
             handDeletePurpose,
             setShowDeletePurpose,
             clickElement, 
-            deletePurpose
-            
+            deletePurpose,
+            cropImageNew, 
+            handleCropImageNew, 
+            setShowCropImage
         } };
 }
 export default MainController;
