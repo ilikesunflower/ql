@@ -54,6 +54,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
+        [Consumes("application/json")]
         public IActionResult GetChartDataSales([Bind("TimeFlow","DateStart", "DateEnd")] [FromBody] SalesFilterViewModel model)
         {
             try
@@ -90,6 +91,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
+        [Consumes("application/json")]
         public IActionResult GetChartDataSaleGroup([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
@@ -118,6 +120,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
+        [Consumes("application/json")]
         public IActionResult GetChartToProduct([Bind("FilterStatus","DateStart","DateEnd")] [FromBody] ToProductViewModel model)
         {
             try
@@ -147,6 +150,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
+        [Consumes("application/json")]
         public IActionResult GetChartArea([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
@@ -185,6 +189,7 @@ namespace CMS.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
+        [Consumes("application/json")]
         public IActionResult GetToRating([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
