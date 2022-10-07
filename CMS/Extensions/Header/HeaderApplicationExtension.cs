@@ -25,6 +25,7 @@ public static class HeaderApplicationExtension
                     context.Response.Headers.Add("X-Xss-Protection", _iConfiguration.GetSection("Header:X-Xss-Protection").Value);
                     context.Response.Headers.Add("X-Content-Type-Options", _iConfiguration.GetSection("Header:X-Content-Type-Options").Value);
                     context.Response.Headers.Add("Referrer-Policy", _iConfiguration.GetSection("Header:Referrer-Policy").Value);
+                    context.Response.Headers.Add("X-Frame-Options", _iConfiguration.GetSection("Header:X-Frame-Options").Value);
                     context.Response.Headers.Add("X-Permitted-Cross-Domain-Policies", _iConfiguration.GetSection("Header:X-Permitted-Cross-Domain-Policies").Value);
                     context.Response.Headers.Add("Content-Security-Policy", _iConfiguration.GetSection("Header:Content-Security-Policy").Value);
                     await next();
