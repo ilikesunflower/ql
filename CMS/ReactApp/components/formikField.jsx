@@ -321,10 +321,12 @@ export const FileFieldCropImage = function (props) {
     let [show, setShow] = useState(false);
     let [src, setSrc] = useState('');
     const handleImageChange = function (event) {
-        console.log(event);
+        formik.setFieldValue(name, event);
+        setImageString(URL.createObjectURL(event))
+        setShow(false);
     }
     const handleInputChange = function (event) {
-        let nameFile = event.target.files[0].name;
+        let nameFile = event.target.files[0]?.name;
         let check = "";
         if (nameFile != "") {
             check = nameFile.split('.').pop();
@@ -332,13 +334,12 @@ export const FileFieldCropImage = function (props) {
         if (check == "jpg" || check == "jpeg" || check == "gif" || check == "png" ) {
             setSrc(URL.createObjectURL(event.target.files[0]));
             setShow(true);
-            // formik.setFieldValue(name, event.target.files[0]);
-            // setImageString(URL.createObjectURL(event.target.files[0]))
         }else {
             toastr.error("File không đúng định dạng hình ảnh")
         }
 
     }
+
     return (
         <>
             {
@@ -347,7 +348,7 @@ export const FileFieldCropImage = function (props) {
                 <CropImageView showCrop={show} setShowCrop={setShow} src={src} handleValue={handleImageChange}/> 
             }
             <div className="col-lg-12 " onClick={()=> {$(refU.current).click()}}>
-                <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange} className={"form-control input-sm " + (className || '')} />
+                <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />
                 {meta.touched && meta.error ? (<p className="text-danger">{meta.error}</p>) : null}
                 <img src={imageString} className="imgA"/>
             </div>
