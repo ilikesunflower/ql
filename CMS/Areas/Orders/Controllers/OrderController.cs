@@ -165,7 +165,7 @@ public class OrderController : BaseController
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
     public IActionResult IndexOrderCustomerSuccess(string txtSearch, string startDate, string endDate, int? payment,
-        int? ship, int pageindex = 1)
+        int? ship, int export = 0,int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())

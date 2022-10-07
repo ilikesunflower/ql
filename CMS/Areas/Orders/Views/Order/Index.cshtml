@@ -40,7 +40,7 @@
                     <div class="card-header ">
                         <p class="card-title namePageText">@title</p>
                         <div class="float-right">
-                            @if (isEdit == true)
+                            @if (isEdit == true && ShowOrderStatus)
                             {
                                 <a class="btn bg-gradient-primary btn-sl" asp-action="UpFile">
                                     <i class="fa-solid fa-arrow-up-from-line"></i> Nhập dữ liệu
@@ -64,7 +64,7 @@
                                     <input type="text" class="input-xl form-control datepicker" placeholder="Đến ngày" autocomplete="off" name="endDate" asp-format="{0:dd/MM/yyyy}" asp-for="@listData.RouteValue["endDate"]"/>
                                 </div>
                             </div>
-                            @if (ShowOrderStatus == true)
+                            @if (ShowOrderStatus)
                             {
                                 <div class="col-xs-12 col-sm-3 m-t-b-5">
                                     <select class="form-control form-control-xl" name="status" asp-for="@listData.RouteValue["status"]">
@@ -97,9 +97,12 @@
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
                                 <button type="submit" name="export" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
                             </div>
-                            <div class="col-xs-12 col-sm-3 m-t-b-5">
-                                <button type="submit" name="export" value="1" class="btn btn-success btn-block filter btn-xl">Xuất file đối soát</button>
-                            </div>
+                            @if (ShowOrderStatus)
+                            {
+                                <div class="col-xs-12 col-sm-3 m-t-b-5">
+                                    <button type="submit" name="export" value="1" class="btn btn-success btn-block filter btn-xl">Xuất file đối soát</button>
+                                </div>
+                            }
                         </form>
                         <div class="table-responsive m-t-15">
                             <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
