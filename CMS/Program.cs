@@ -27,7 +27,7 @@ builder.WebHost.UseDefaultServiceProvider(o =>
 });
 
 Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.Console().CreateBootstrapLogger();
-Log.Information("Starting up!");
+Log.Information($"Starting up: {builder.Environment.EnvironmentName}");
 AppConst.Domain = $"{builder.Configuration.GetSection("AppSetting:Domain").Value}";
 AppConst.DomainFE = $"{builder.Configuration.GetSection("AppSetting:FEDomain").Value}";
 #region FFmpeg
