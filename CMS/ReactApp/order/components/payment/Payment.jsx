@@ -65,12 +65,12 @@ function Payment(props) {
                                            </thead>
                                            <tbody>
                                            <tr>
-                                               <td>Ngân hàng TMCP Tiên Phong (TPBank) – chi nhánh Thăng Long - Hà Nội</td>
-                                               <td className="text-center">04098489001</td>
+                                               <td>Ngân hàng TMCP Đầu tư và Phát triển Việt Nam</td>
+                                               <td className="text-center">22010000846979</td>
                                            </tr>
                                            <tr>
-                                               <td>Ngân hàng TMCP Sài Gòn (SCB) – Phòng giao dịch Hoàng Quốc Việt - Hà Nội</td>
-                                               <td className="text-center">17430390001</td>
+                                               <td>Ngân hàng TMCP Quân Đội (MB bank)</td>
+                                               <td className="text-center">0541102002009</td>
                                            </tr>
                                            </tbody>
                                        </table>

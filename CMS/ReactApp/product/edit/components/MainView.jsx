@@ -18,7 +18,7 @@ import {
 } from "../../../components/formikField"
 import NumberFormat from "react-number-format";
 import ProductPurposeView from "../../components/ProductPurposeView";
-import CropImageView from "../../../components/CropImageView";
+import CropImageView from "../../../components/cropImage/CropImageView";
 
 const optionsSex = [
     {value: 0 , label: "Tất cả"},

@@ -2,7 +2,7 @@
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 import ReactCrop from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css';
-
+import './CropImage.css'
 class CropImageView extends PureComponent  {
     constructor(props) {
         super(props);
@@ -11,8 +11,9 @@ class CropImageView extends PureComponent  {
             src: src ?? null,
             crop: {
                 unit: '%',
-                width: 30,
-                aspect: 16 / 9
+                width: 100,
+                height: 100
+               
             },
             showCrop,
             setShowCrop,
@@ -94,7 +95,7 @@ class CropImageView extends PureComponent  {
                         <Modal.Header>
                             <Modal.Title>Cắt ảnh</Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>
+                        <Modal.Body className="modal-body body-crop-image">
                             {src && (
                                 <ReactCrop
                                     crop={crop}
@@ -102,7 +103,7 @@ class CropImageView extends PureComponent  {
                                     onComplete={this.onCropComplete}
                                     onChange={this.onCropChange}
                                 >
-                                    <img src={src} onLoad={this.onImageLoaded} />
+                                    <img  height="450" src={src} onLoad={this.onImageLoaded} />
                                 </ReactCrop>
                             )}
 

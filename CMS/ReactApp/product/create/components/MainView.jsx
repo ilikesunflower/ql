@@ -19,7 +19,7 @@ import {
 import ProductPurposeView from "../../components/ProductPurposeView";
 
 import NumberFormat from "react-number-format";
-import CropImageView from "../../../components/CropImageView";
+import CropImageView from "../../../components/cropImage/CropImageView";
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
     {value: 1 , label: "Nam"},

@@ -190,7 +190,7 @@ namespace CMS.Areas.Products.Controllers
         {
             try
             {
-                var productCategory = _iProductCategoryRepository.FindAll()
+                var productCategory = _iProductCategoryRepository.FindAll().Where(x => x.Pid.HasValue && x.Pid != 0)
                     .OrderByDescending(x => x.Name).Select(x => new
                     {
                         Value = x.Id,

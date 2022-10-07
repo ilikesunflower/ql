@@ -103,6 +103,7 @@ function MainController(props) {
             }else{
                 formikProduct.setFieldValue("quantityStock", sima[0].quantityWh || 0);
                 formikProduct.setFieldValue("codeStock", sima[0].skuwh || '');
+                formikProduct.setFieldValue("price", sima[0].price || '');
             }
             
             let category = rs.content4;

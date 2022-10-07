@@ -12,7 +12,7 @@
         <div class="col-md-12 category-item " data-id="@item.Id" data-lvl="@item.Lvl">
             <div class="row info-category">
                 <div class="w-45-px text-center vetical_div ">
-                    <input type="checkbox" class="i-checks chkItem" value="@item.Id"/>
+                    <input type="checkbox" class="@("i-checks chkItem checkGroup"+ (Model.Pid == null ? "" : Model.Pid) ) "  value="@item.Id"/>
                 </div>
                 <div class="col-md text-left  vetical_text  @($"category-level-{item.Lvl}")  ">
                     @(item.Name)
