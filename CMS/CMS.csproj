@@ -178,6 +178,7 @@
 	  <AdditionalFiles Include="Areas\Products\Views\Product\Details.cshtml" />
 	  <AdditionalFiles Include="Areas\Products\Views\Product\Edit.cshtml" />
 	  <AdditionalFiles Include="Areas\Products\Views\Product\Index.cshtml" />
+	  <AdditionalFiles Include="Areas\Reports\Views\PointOrderReport\Index.cshtml" />
 	  <AdditionalFiles Include="Areas\Webhook\Views\AccessDenied\Index.cshtml" />
 	  <AdditionalFiles Include="Areas\Webhook\Views\Page\Index.cshtml" />
 	  <AdditionalFiles Include="Areas\Webhook\Views\Page\PageNotFound.cshtml" />

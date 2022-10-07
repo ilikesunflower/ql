@@ -20,6 +20,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 namespace CMS.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
+    [ValidHeader]
     public class LoginModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -75,17 +76,18 @@ namespace CMS.Areas.Identity.Pages.Account
                 // Clear the existing external cookie to ensure a clean login process
                 if (HttpContext.User.Identity!.IsAuthenticated)
                 {
-                    if (HttpContext.User.Identities.Any(i => i.AuthenticationType == CmsConsts.WsFederationAuth))
-                    {
-                        await _signInManager.SignOutAsync();
-                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                        await HttpContext.SignOutAsync(CmsConsts.WsFederationAuth);
-                    }
-                    else
-                    {
-                        await _signInManager.SignOutAsync();
-                        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    }
+                    await _signInManager.SignOutAsync();
+                    // if (HttpContext.User.Identities.Any(i => i.AuthenticationType == CmsConsts.WsFederationAuth))
+                    // {
+                    //     await _signInManager.SignOutAsync();
+                    //     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    //     await HttpContext.SignOutAsync(CmsConsts.WsFederationAuth);
+                    // }
+                    // else
+                    // {
+                    //     await _signInManager.SignOutAsync();
+                    //     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    // }
                 }
 
                 ReturnUrl = returnUrl;
@@ -125,10 +127,10 @@ namespace CMS.Areas.Identity.Pages.Account
                             }
 
                             _logger.LogInformation($"Tài khoản {user!.UserName} đăng nhập thành công.");
-                            HttpContext.Session.SetString("User",user!.UserName);
-                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                                _signInManager.CreateUserPrincipalAsync(user).Result,
-                                new AuthenticationProperties { IsPersistent = Input.RememberMe });
+                            // HttpContext.Session.SetString("User",user!.UserName);
+                            // await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            //     _signInManager.CreateUserPrincipalAsync(user).Result,
+                            //     new AuthenticationProperties { IsPersistent = Input.RememberMe });
                             return LocalRedirect(returnUrl);
                         }
 

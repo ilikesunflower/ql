@@ -22,13 +22,13 @@ namespace CMS.Areas.Reports.Controllers;
 
 [Area("Reports")]
 [Obsolete]
-public class SummaryReportController : BaseController
+public class PointOrderReportController : BaseController
 {
-    private readonly ILogger<SummaryReportController> _iLogger;
+    private readonly ILogger<PointOrderReportController> _iLogger;
     private readonly ISummaryReportService _summaryReportService;
     private readonly IWebHostEnvironment _iHostingEnvironment;
 
-    public SummaryReportController(ILogger<SummaryReportController> iLogger, ISummaryReportService summaryReportService, IWebHostEnvironment iHostingEnvironment)
+    public PointOrderReportController(ILogger<PointOrderReportController> iLogger, ISummaryReportService summaryReportService, IWebHostEnvironment iHostingEnvironment)
     {
         _iLogger = iLogger;
         _summaryReportService = summaryReportService;
@@ -70,7 +70,7 @@ public class SummaryReportController : BaseController
                     });
             }
 
-            IQueryable<CMS_EF.Models.Orders.Orders> orders = _summaryReportService.GetListOrders(txtSearch,start, end,paymentStatus,status,false);
+            IQueryable<CMS_EF.Models.Orders.Orders> orders = _summaryReportService.GetListOrders(txtSearch,start, end,paymentStatus,status,true);
             var listData = PagingList.Create(orders.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
             listData.RouteValue = new RouteValueDictionary()
             {
@@ -88,13 +88,13 @@ public class SummaryReportController : BaseController
                 ListStatus = OrderStatusConst.ListStatus
             };
 
-            ILoggingService.Infor(_iLogger, "Xem báo cáo tổng hợp");
+            ILoggingService.Infor(_iLogger, "Xem báo cáo sử dụng điểm");
 
             return View(model);
         }
         catch (Exception e)
         {
-            ILoggingService.Infor(_iLogger, "Xem báo cáo tổng hợp", "Lỗi: " + e.Message);
+            ILoggingService.Infor(_iLogger, "Xem báo cáo sử dụng điểm", "Lỗi: " + e.Message);
             return View(new IndexViewModel());
         }
     }
@@ -124,8 +124,8 @@ public class SummaryReportController : BaseController
                 "SummaryReportTemplate.xlsx");
             var template = new XLTemplate(filePath);
 
-            List<ExportExcelModel> orders = _summaryReportService.GetListOrdersExcel(txtSearch,start, end, paymentStatus, status,false);
-            template.AddVariable("Title", "Báo cáo tổng hợp");
+            List<ExportExcelModel> orders = _summaryReportService.GetListOrdersExcel(txtSearch,start, end, paymentStatus, status,true);
+            template.AddVariable("Title", "Báo cáo sử dụng điểm");
             template.AddVariable("ListData", orders);
             template.AddVariable("From", startDate);
             template.AddVariable("To", endDate);
@@ -138,17 +138,15 @@ public class SummaryReportController : BaseController
                 excelFile = ms.ToArray();
             }
 
-            ILoggingService.Infor(_iLogger, "Xuất file báo cáo tổng hợp", "Thành công");
+            ILoggingService.Infor(_iLogger, "Xuất file báo cáo sử dụng điểm", "Thành công");
             return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                $"bao_cao_tong_hop_tu_{startDate}_den_{endDate}.xlsx");
+                $"bao_cao_su_dung_diem_tu_{startDate}_den_{endDate}.xlsx");
         }
         catch (Exception e)
         {
-            ILoggingService.Error(_iLogger, "Xuất file báo cáo tổng hợp", "Lỗi" + e.Message);
-            ToastMessage(-1, "Xuất file báo cáo tổng hợp lỗi");
+            ILoggingService.Error(_iLogger, "Xuất file báo cáo sử dụng điểm", "Lỗi" + e.Message);
+            ToastMessage(-1, "Xuất file báo cáo sử dụng điểm lỗi");
             return RedirectToAction("Index", new {startDate, endDate});
         }
     }
-    
-    
 }

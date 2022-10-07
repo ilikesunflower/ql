@@ -1,24 +1,11 @@
-using System.ComponentModel.DataAnnotations;
 using CMS.Extensions.Validate;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CMS.Areas.Admin.ViewModels.Home.Sales;
 
 public class SalesFilterViewModel
 {
-    [ValidXss]
-    public string TimeFlow { get; set; }
-    [ValidXss]
-    public string DateStart { get; set; }
-    [ValidXss]
-    public string DateEnd { get; set; }
-    
-    [Editable(false)]
-    public bool IsAdmin { get; set; }
-    
-    [Editable(false)]
-    public bool IsSso { get; set; }
-    
-    [Editable(false)]
-    [ValidXss]
-    public string Role { get; set; }
+    [ValidXss] [BindProperty] public string TimeFlow { get; set; }
+    [ValidXss] [BindProperty] public string DateStart { get; set; }
+    [ValidXss] [BindProperty] public string DateEnd { get; set; }
 }

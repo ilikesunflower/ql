@@ -17,7 +17,7 @@ public interface IOrdersRepository : IBaseRepository<CMS_EF.Models.Orders.Orders
     CMS_EF.Models.Orders.Orders FindByCodeWithProductAndPoint(string code);
 
     IQueryable<CMS_EF.Models.Orders.Orders> GetOrderIncludeProductAndAddressAndCustomer(string txtSearch,
-        DateTime? start, DateTime? end, int? paymentStatus, int? status);
+        DateTime? start, DateTime? end, int? paymentStatus, int? status,bool isUsePoint);
 
     List<CMS_EF.Models.Orders.Orders> FindByCodes(List<string> codes);
 }
@@ -83,7 +83,7 @@ public class OrdersRepository : BaseRepository<CMS_EF.Models.Orders.Orders>, IOr
     }
 
     public IQueryable<CMS_EF.Models.Orders.Orders> GetOrderIncludeProductAndAddressAndCustomer(string txtSearch,
-        DateTime? start, DateTime? end, int? paymentStatus, int? status)
+        DateTime? start, DateTime? end, int? paymentStatus, int? status,bool isUsePoint)
     {
         var queryOrders = _applicationDbContext.Orders.Where(x => x.Flag == 0);
         if (!string.IsNullOrEmpty(txtSearch))
@@ -91,6 +91,10 @@ public class OrdersRepository : BaseRepository<CMS_EF.Models.Orders.Orders>, IOr
             queryOrders = queryOrders.Where(x => EF.Functions.Like(x.Code, "%" + txtSearch.Trim() + "%"));
         }
 
+        if (isUsePoint)
+        {
+            queryOrders = queryOrders.Where(x => x.Point != null && x.Point > 0 );
+        }
         if (start != null)
         {
             queryOrders = queryOrders.Where(x => x.OrderAt >= start);

@@ -310,7 +310,7 @@ public class ProductService : IProductService
                      
                     }
                 transaction.Commit();
-                return  new OutputObject(200, new{}, "").Show();
+                return  new OutputObject(200, product.Id, "").Show();
         }
         catch (Exception e)
         {
@@ -474,7 +474,7 @@ public class ProductService : IProductService
                     }
 
                     transaction.Commit();
-                    return  new OutputObject(200, new{}, "").Show();
+                    return  new OutputObject(200, product.Id, "").Show();
         }
         catch (Exception e)
         {

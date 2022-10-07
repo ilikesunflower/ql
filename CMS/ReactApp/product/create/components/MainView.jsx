@@ -180,7 +180,6 @@ function MainApp(props) {
                                                                                    <Form.Label className="col-12  " style={{fontSize:"18px"}}>Danh sách phân loại hàng </Form.Label>
 
                                                                                    <Col md={12}>
-                                                                                       {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
                                                                                        <div className="table-responsive">
                                                                                            <Table className=" table-bordered " >
                                                                                                <thead>
@@ -375,16 +374,17 @@ const ModalCategory = props => {
 
 const Properties = props => {
     const {hand11, hand1, listProperties, deleteT , addDetailProperties, deleteDetailProperties} = props;
+    console.log("list properties", listProperties);
     return(
         <div className="col-12 pb-3"  >
-            {listProperties.map((value , index) => {
+            {listProperties.map((value, index)  => {
                 return(
-                    <div className="col-12 pb-3" key={index} >
+                    <div className="col-12 pb-3" key={value?.ord} >
                         <div className="row" >
                             <Form.Label className="col-2  ">Nhóm phân loại {index + 1} </Form.Label>
                             <div  className="col-8" >
                                 <Card>
-                                    <i className="fas fa-minus-circle p-1 buttonDelete" onClick={() => deleteT(index)}></i>
+                                    <i className="fas fa-minus-circle p-1 buttonDelete" onClick={() => deleteT(value)}></i>
                                     <Card.Body className="row">
                                         <Form.Group className="col-md-12 pt-3">
                                             <div className="row">
@@ -392,7 +392,7 @@ const Properties = props => {
                                                 <div className="col-md-10">
                                                     <div className="row" >
                                                         <div className="col-11">
-                                                            <input    defaultValue={value?.name}  onBlur={(e) => hand1(e, index)}  className="form-control-xl form-control" placeholder="Nhập tên phân loại, Ví dụ size ..." size="xl" name="isHot"/>
+                                                            <input  defaultValue={value?.name} onBlur={(e) => hand1(e, value)}  className="form-control-xl form-control" placeholder="Nhập tên phân loại, Ví dụ size ..." size="xl" name="isHot"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -405,24 +405,24 @@ const Properties = props => {
                                                 </div>
                                                 <div className="col-md-10 ">
                                                     {(value != null && value?.properties.length > 0 ) && (
-                                                        value?.properties.map((x , i)=> {
+                                                        value?.properties.map((x )=> {
                                                             return(
-                                                                <div className="row" key={i}>
+                                                                <div className="row" key={x?.ord}>
                                                                     <div className="col-11">
-                                                                        <input defaultValue={x}  onBlur={(e) => hand11(e, index, i)}  placeholder="Nhập phân loại, Ví dụ S,M" className="form-control-xl form-control mt-3 " size="xl" name="ssd"/>
+                                                                        <input defaultValue={x?.value}  onBlur={(e) => hand11(e, value, x)}  placeholder="Nhập phân loại, Ví dụ S,M" className="form-control-xl form-control mt-3 " size="xl" name="ssd"/>
                                                                     </div>
                                                                     <div className="col-1">
-                                                                        {(value?.properties.length != 1) && (<i className="far fa-trash-alt iconTrash pt-4" onClick={() =>deleteDetailProperties(index, i)}></i>)}
+                                                                        {(value?.properties.length != 1) && (<i className="far fa-trash-alt iconTrash pt-4" onClick={() =>deleteDetailProperties(value, x)}></i>)}
                                                                     </div>
-
+                                                
                                                                 </div>
                                                             )
                                                         })
                                                     )}
                                                 </div>
-
+                                                
                                                 <div className="col-md-12 pt-3  d-flex justify-content-center">
-                                                    <Button  variant="danger"  className="btn btnButtonY" onClick={(e) => addDetailProperties(e, index)}  >
+                                                    <Button  variant="danger"  className="btn btnButtonY" onClick={(e) => addDetailProperties(e, value)}  >
                                                         <i className="far fa-plus"></i>
                                                         Thêm phân loại hàng
                                                     </Button>

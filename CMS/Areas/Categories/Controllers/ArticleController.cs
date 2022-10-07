@@ -163,6 +163,7 @@ public class ArticleController : BaseController
         }
 
         createData.ListArticleType = _iArticleTypeRepository.FindAll().ToList();
+        createData.Thumbnail = CmsFunction.IsValidImage(createData.Thumbnail) ? "" : createData.Thumbnail;
         return View(createData);
     }
 
@@ -347,6 +348,7 @@ public class ArticleController : BaseController
                 "UserId :" + UserInfo.UserId, e);
             ToastMessage(-1, "Lỗi không thể sửa tin tức này, Vui lòng liên hệ người quản trị");
         }
+        EditData.Thumbnail = CmsFunction.IsValidImage(EditData.Thumbnail) ? "" : EditData.Thumbnail;
 
         return View(EditData);
     }
@@ -367,7 +369,7 @@ public class ArticleController : BaseController
                     Detail = article.Lead,
                     Link =$"/{CmsFunction.RewriteUrlFriendly(article.Title)}-{article.Id}.html"
                 });
-                return Ok(new OutputObject(200,"","").Show());
+                return Ok(new OutputObject(200,"Gửi thông báo thành công","").Show());
             }
             else
             {
@@ -376,7 +378,7 @@ public class ArticleController : BaseController
         }
         catch (Exception ex)
         {
-            this._iLogger.LogError(ex, "Gửi thông báo tin bài thành công");
+            this._iLogger.LogError(ex, "Gửi thông báo tin bài");
             return Ok(new OutputObject(400,"","").Show());
         }
     }

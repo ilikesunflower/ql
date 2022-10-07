@@ -319,7 +319,10 @@ public class OrderService : IOrderService
     public List<ExportForControlViewModel> ReadDataFromExcelAndValidate(IFormFile file)
     {
         XLWorkbook workbook = new XLWorkbook(file.OpenReadStream());
-        IXLWorksheet ws = workbook.Worksheet("order");
+        if (!workbook.TryGetWorksheet("order",out IXLWorksheet ws))
+        {
+            throw new NullReferenceException("Không tìm thấy Sheet order");
+        }
         IXLRange range = ws.RangeUsed();
         int rowCount = range.RowCount();
 
@@ -360,8 +363,16 @@ public class OrderService : IOrderService
         List<string> codes = dataFile.Select(x => x.Code).ToList();
 
         List<CMS_EF.Models.Orders.Orders> orders = _iOrdersRepository.FindByCodes(codes);
+
+        List<String> wrongCode = codes.Where(x => !orders.Select(xx => xx.Code).Contains(x)).ToList();
+
+        if (wrongCode is {Count: > 0})
+        {
+            throw new NullReferenceException($"Mã {string.Join( ",", wrongCode )} không tồn tại!");
+        }
+
         List<CMS_EF.Models.Orders.Orders> changeList = new List<CMS_EF.Models.Orders.Orders>();
-        
+
         foreach (var order in orders)
         {
             var orderExcelData = dataFile.FirstOrDefault(x => x.Code == order.Code);
@@ -372,6 +383,7 @@ public class OrderService : IOrderService
 
             if (orderExcelData.Status == order.StatusPayment) continue;
             order.StatusPayment = orderExcelData.Status;
+            order.LastModifiedAt = DateTime.Now;
             changeList.Add(order);
         }
 

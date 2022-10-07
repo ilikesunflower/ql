@@ -130,6 +130,8 @@ public class ProductCategoryController : BaseController
             ToastMessage(-1, "Thêm mới danh mục sản phẩm lỗi, liên hệ người quản trị");
         }
         createData.ListCategories = _iProductCategoryRepository.GetListProductCategory();
+        createData.ImageBanner = CmsFunction.IsValidImage(createData.ImageBanner) ? "" : createData.ImageBanner;
+        createData.ImageBannerMobile = CmsFunction.IsValidImage(createData.ImageBannerMobile) ? "" : createData.ImageBannerMobile;
         return View(createData);
     }
     
@@ -208,6 +210,8 @@ public class ProductCategoryController : BaseController
         }
         editData.ListCategories = _iProductCategoryRepository.GetListProductCategory()
             .Where(x => x.Id != editData.Id).ToList();
+        editData.ImageBanner = CmsFunction.IsValidImage(editData.ImageBanner) ? "" : editData.ImageBanner;
+        editData.ImageBannerMobile = CmsFunction.IsValidImage(editData.ImageBannerMobile) ? "" : editData.ImageBannerMobile;
         return View(editData);
     }
     

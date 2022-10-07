@@ -17,9 +17,12 @@ public class CreateModel
     public string Font { get; set; }
     
     [MaxLength(255,ErrorMessage = "Tên ảnh chỉ được phép chứa 255 ký tự!")]
-    [Required(ErrorMessage = "Vui lòng nhập Ảnh.")]
+    // [Required(ErrorMessage = "Vui lòng nhập Ảnh.")]
     [ValidXss]
     public string ImageBanner { get; set; }
+    
+    [ValidXss]
+    [MaxLength(255,ErrorMessage = "Tên ảnh chỉ được phép chứa 255 ký tự!")]
     public string ImageBannerMobile { get; set; }
     
     [Range(0, 99999999999, ErrorMessage = "Vui lòng nhập thứ tự lớn hơn 0.")]

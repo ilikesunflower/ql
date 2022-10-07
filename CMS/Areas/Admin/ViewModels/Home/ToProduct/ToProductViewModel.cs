@@ -5,19 +5,9 @@ namespace CMS.Areas.Admin.ViewModels.Home.ToProduct;
 
 public class ToProductViewModel
 {
+    [RegularExpression(@"^[1-9]*$", ErrorMessage = "Vui lòng nhập số.")]
     public int FilterStatus { get; set; }
-    [ValidXss]
-    public string DateStart { get; set; }
-    [ValidXss]
-    public string DateEnd { get; set; }
-    
-    [Editable(false)]
-    public bool IsAdmin { get; set; }
-    
-    [Editable(false)]
-    public bool IsSso { get; set; }
-    
-    [Editable(false)]
-    [ValidXss]
-    public string Role { get; set; }
+
+    [ValidXss] public string DateStart { get; set; }
+    [ValidXss] public string DateEnd { get; set; }
 }

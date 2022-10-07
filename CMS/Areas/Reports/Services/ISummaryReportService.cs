@@ -12,8 +12,8 @@ namespace CMS.Areas.Reports.Services;
 
 public interface ISummaryReportService : IScoped
 {
-    IQueryable<CMS_EF.Models.Orders.Orders> GetListOrders(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status);
-    List<ExportExcelModel> GetListOrdersExcel(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status);
+    IQueryable<CMS_EF.Models.Orders.Orders> GetListOrders(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint);
+    List<ExportExcelModel> GetListOrdersExcel(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint);
 }
 
 public class SummaryReportService : ISummaryReportService
@@ -25,14 +25,14 @@ public class SummaryReportService : ISummaryReportService
         _iOrdersRepository = iOrdersRepository;
     }
 
-    public IQueryable<CMS_EF.Models.Orders.Orders> GetListOrders(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status)
+    public IQueryable<CMS_EF.Models.Orders.Orders> GetListOrders(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint)
     {
-        return _iOrdersRepository.GetOrderIncludeProductAndAddressAndCustomer( txtSearch,start, end,paymentStatus,status);
+        return _iOrdersRepository.GetOrderIncludeProductAndAddressAndCustomer( txtSearch,start, end,paymentStatus,status,isUsePoint);
     }
 
-    public List<ExportExcelModel> GetListOrdersExcel(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status)
+    public List<ExportExcelModel> GetListOrdersExcel(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint)
     {
-        var orders = GetListOrders(txtSearch,start, end,paymentStatus,status).ToList();
+        var orders = GetListOrders(txtSearch,start, end,paymentStatus,status,isUsePoint).ToList();
 
         return (from order in orders
             from orderProduct in order.OrderProduct

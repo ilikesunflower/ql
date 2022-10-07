@@ -5,6 +5,7 @@ namespace CMS.Areas.Admin.ViewModels.Home.ToProduct;
 
 public class CharDataToProductModel
 {
+    [ValidXss]
     public List<string> Categories { get; set; }
     public List<double> Prices { get; set; }
     

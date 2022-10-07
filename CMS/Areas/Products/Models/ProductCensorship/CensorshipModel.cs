@@ -6,6 +6,7 @@ namespace CMS.Areas.Products.Models.ProductCensorship;
 public class CensorshipModel
 {
     [Required(ErrorMessage = "Vui lòng nhập mã hàng.")]
+    [RegularExpression(@"^[1-9]*$",ErrorMessage = "Vui lòng nhập mã hàng.")]
     public int ProductId { set; get; }
 
     [Required(ErrorMessage = "BackUrl lỗi")]
