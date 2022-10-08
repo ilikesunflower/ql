@@ -22,6 +22,7 @@ try
     {
         options.AddServerHeader = false;
         options.Limits.MaxRequestBodySize = null;
+        options.AllowSynchronousIO = true;
     });
     builder.WebHost.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
     builder.WebHost.UseDefaultServiceProvider(o =>

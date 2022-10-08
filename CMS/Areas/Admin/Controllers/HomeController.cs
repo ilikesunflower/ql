@@ -10,6 +10,7 @@ using CMS.Areas.Admin.ViewModels.Home.Sales;
 using CMS.Areas.Admin.ViewModels.Home.ToProduct;
 using CMS.Controllers;
 using CMS.DataTypes;
+using CMS.Extensions.Validate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,7 @@ namespace CMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
         [Consumes("application/json")]
+        [AllowParameter]
         public IActionResult GetChartDataSales([Bind("TimeFlow","DateStart", "DateEnd")] [FromBody] SalesFilterViewModel model)
         {
             try
@@ -92,6 +94,7 @@ namespace CMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
         [Consumes("application/json")]
+        [AllowParameter]
         public IActionResult GetChartDataSaleGroup([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
@@ -121,6 +124,7 @@ namespace CMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
         [Consumes("application/json")]
+        [AllowParameter]
         public IActionResult GetChartToProduct([Bind("FilterStatus","DateStart","DateEnd")] [FromBody] ToProductViewModel model)
         {
             try
@@ -151,6 +155,7 @@ namespace CMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
         [Consumes("application/json")]
+        [AllowParameter]
         public IActionResult GetChartArea([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
@@ -190,6 +195,7 @@ namespace CMS.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         [Authorize(Policy = "PermissionMVC")]
         [Consumes("application/json")]
+        [AllowParameter]
         public IActionResult GetToRating([Bind("DateStart","DateEnd")] [FromBody] SaleGroupViewModel model)
         {
             try
