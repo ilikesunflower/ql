@@ -43,7 +43,7 @@
                             @if (isEdit == true && ShowOrderStatus)
                             {
                                 <a class="btn bg-gradient-primary btn-sl" asp-action="UpFile">
-                                    <i class="fa-solid fa-arrow-up-from-line"></i> Nhập dữ liệu
+                                    <i class="fa-solid fa-arrow-up-from-line"></i> Nhập file đối soát
                                 </a>
                             }
                             @* @await Html.PartialAsync("Partial/BasicAction/Create", new { area = "Orders" }) *@
@@ -95,14 +95,19 @@
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
-                                <button type="submit" name="export" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
-                            </div>
-                            @if (ShowOrderStatus)
-                            {
-                                <div class="col-xs-12 col-sm-3 m-t-b-5">
-                                    <button type="submit" name="export" value="1" class="btn btn-success btn-block filter btn-xl">Xuất file đối soát</button>
+                                <div class="row">
+                                    <div class="col-md-6 col-12">
+                                        <button type="submit" name="export" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
+                                    </div>
+                                    <div class="col-md-6 col-12">
+                                        @if (ShowOrderStatus)
+                                        {
+                                            <button type="submit" name="export" value="1" class="btn btn-success btn-block filter btn-xl">Xuất file đs</button>
+                                        }                        
+                                    </div>
                                 </div>
-                            }
+                            </div>
+                          
                         </form>
                         <div class="table-responsive m-t-15">
                             <table class="table tab-content table-bordered table-check-all table-hover  table-bordered-index  ">
