@@ -7,8 +7,10 @@ class CropImageView extends PureComponent  {
     constructor(props) {
         super(props);
         const {showCrop, setShowCrop,src, handleValue } = props;
+        const duoiFile = src.split('.').pop() ?? '';
         this.state = {
             src: src ?? null,
+            duoiFile: duoiFile, 
             crop: {
                 unit: '%',
                 width: 100,
@@ -31,7 +33,7 @@ class CropImageView extends PureComponent  {
             await this.getCroppedImg(
                     this.imageRef,
                     crop,
-                    'newFile.jpeg'
+                    'newFile.'+ this.state.duoiFile
                 );
         }
     }
@@ -79,7 +81,7 @@ class CropImageView extends PureComponent  {
                     let file = new File([blob], fileName,{ lastModified: new Date().getTime(), type: blob.type } ) 
                     this.setState({ file });
                 },
-                'image/jpeg',
+                'image/'+ this.state.duoiFile,
                 1
             );
    
