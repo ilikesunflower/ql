@@ -95,6 +95,15 @@
                                 </select>
                             </div>
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
+                                <select class="form-control form-control-xl" name="typePayment" asp-for="@listData.RouteValue["typePayment"]">
+                                    <option value="">Tất cả hình thức thanh toán</option>
+                                    @foreach (var item in PaymentMethodConst.PaymentMethods)
+                                    {
+                                        <option value="@item.Status">@item.NameChart</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 m-t-b-5">
                                 <button type="submit" name="export" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
                             </div>
                             @if (ShowOrderStatus)
@@ -157,6 +166,8 @@
                                                 <span>
                                                     <br/>
                                                     @Html.Raw(OrderStatusPayment.BindStatus(item.StatusPayment))
+                                                    <br/>
+                                                    @Html.Raw(PaymentMethodConst.BindStatus(item.PaymentType))
                                                 </span>
                                             </td>
                                             <td class="align-middle text-center">
