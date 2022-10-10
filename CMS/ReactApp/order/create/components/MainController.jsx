@@ -21,7 +21,7 @@ function MainController(props) {
             couponCode: '',
             point: 0,
             addressType: 0,
-            customerAddressId: '',
+            customerAddressId: '0',
             provinceCode: '',
             districtCode: '',
             communeCode: '',
