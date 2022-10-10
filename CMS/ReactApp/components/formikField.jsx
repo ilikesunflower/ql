@@ -2,8 +2,7 @@
 import NumberFormat from "react-number-format";
 import { Editor } from "@tinymce/tinymce-react";
 import   "../../wwwroot/js/file-manager-upload/dist/filemanagerupload"
-import CropImageView from "./cropImage/CropImageView"
-import {getProductCategory} from "../product/create/service/httpService";
+import CropImageExample from "./cropImage/CropImageExample";
 let mediaManager = new MediaManager({
     xsrf: $('input:hidden[name="__RequestVerificationToken"]').val(),
     multiSelect: false,
@@ -210,8 +209,9 @@ export const NumberFormatFieldAfter = function (props) {
             <div className={classnamediv}>
                 <NumberFormat thousandSeparator={'.'} decimalSeparator={','} className={className} autoComplete="off" {...props}
                               value={!Number.isNaN(Number.parseInt(meta.value)) ? Number.parseInt(meta.value) : 0} onValueChange={handleChange}/>
+                {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+
             </div>
-            {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
         </>
     );
 }
@@ -322,6 +322,8 @@ export const FileFieldCropImage = function (props) {
     let [show, setShow] = useState(false);
     let [src, setSrc] = useState('');
     let [image, setImage] = useState(null);
+    let [type, setType] = useState('');
+    let [nameF,  setNameF] = useState('');
     useEffect(function () {
         if(!show){
             console.log($(refU))
@@ -342,11 +344,14 @@ export const FileFieldCropImage = function (props) {
     }
     const handleInputChange = function (event) {
         let nameFile = event.target.files[0]?.name;
+        console.log(nameFile);
         let check = "";
         if (nameFile != "") {
             check = nameFile.split('.').pop();
         }
         if (check == "jpg" || check == "jpeg" || check == "gif" || check == "png" ) {
+            setNameF(nameFile)
+            setType(check)
             setImage(event.target.files[0]);
             setSrc(URL.createObjectURL(event.target.files[0]));
             setShow(true);
@@ -361,7 +366,7 @@ export const FileFieldCropImage = function (props) {
             {
                 show
                 &&
-                <CropImageView showCrop={show} setShowCrop={setShow} src={src} handleValue={handleImageChange}/> 
+                <CropImageExample showCrop={show} nameFile={nameF} setShowCrop={setShow} src={src} typeFile={type} handleValue={handleImageChange}/> 
             }
             <div className="col-lg-12 " onClick={()=> {$(refU.current).click()}}>
                 <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />

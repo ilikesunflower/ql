@@ -19,7 +19,7 @@ import {
 import ProductPurposeView from "../../components/ProductPurposeView";
 
 import NumberFormat from "react-number-format";
-import CropImageView from "../../../components/cropImage/CropImageView";
+import CropImageExample from "../../../components/cropImage/CropImageExample";
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
     {value: 1 , label: "Nam"},
@@ -30,6 +30,7 @@ function MainApp(props) {
     const {formik, state, method} = MainController();
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
+    console.log(formik.formikProduct.values)
     return (
         <Row>
             <Col md={12}>
@@ -45,7 +46,7 @@ function MainApp(props) {
                     />}  
                 {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}
                 {(state.showCropImage) &&(
-                    <CropImageView showCrop={state.showCropImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                    <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI} setShowCrop={method.setShowCropImage} typeFile={state.typeImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
                 )
                 }
                 <Card>

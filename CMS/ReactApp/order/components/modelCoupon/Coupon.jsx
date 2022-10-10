@@ -36,7 +36,6 @@ function Coupon(props) {
                 <div className="overflow-auto modalComment  ">
                     <ul className="modal-coupon__list">
                         { listCoupon?.map(discountCode => {
-                            console.log("dfkjsdkf", couponCode === discountCode.code)
                             return (<li key={discountCode.id} className="modal-coupon__item">
                                 <input id={"radio_sort"+discountCode.id} checked={couponCode === discountCode.code} onChange={applyDiscountCode(discountCode)} name="radio_sort" type="radio"/>
                                 <label htmlFor={"radio_sort"+discountCode.id} className="modal-coupon__item-content">

@@ -25,6 +25,9 @@ function MainController(props) {
     let [showCropImage, setShowCropImage] = useState(false); 
     let [imageCrop, setImageCrop] = useState('');
     let [indexImage, setIndexImage] = useState(null);
+    let [typeImage, setTypeImage] = useState('');
+    let [nameI, setNameI] = useState('');
+
     let [typeFile, setTypeFile] = useState(0);
     let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg');
     let refI = useRef(null);
@@ -48,7 +51,7 @@ function MainController(props) {
             formikProduct.setFieldValue("sku", product.sku);
             formikProduct.setFieldValue("name", product.name);
             formikProduct.setFieldValue("weight", product.weight || 0);
-            formikProduct.setFieldValue("price", product.price || 0);
+            formikProduct.setFieldValue("price", product.price ?? 0);
             formikProduct.setFieldValue("priceSale", product.priceSale || 0);
             formikProduct.setFieldValue("description", product.description || '');
             formikProduct.setFieldValue("specifications", product.specifications || '');
@@ -103,7 +106,7 @@ function MainController(props) {
             }else{
                 formikProduct.setFieldValue("quantityStock", sima[0].quantityWh || 0);
                 formikProduct.setFieldValue("codeStock", sima[0].skuwh || '');
-                formikProduct.setFieldValue("price", sima[0].price || '');
+                formikProduct.setFieldValue("price", sima[0].price || 0);
             }
             
             let category = rs.content4;
@@ -232,6 +235,10 @@ function MainController(props) {
         let data = [...listFileOld];
         let img = data[i];
         setImageCrop(img);
+        let listName = img.split('/').pop();
+        let check = listName.split('.').pop();
+        setNameI(listName)
+        setTypeImage(check);
         setIndexImage(i);
         setShowCropImage(true);
     }
@@ -253,10 +260,18 @@ function MainController(props) {
     const cropImageNew = function (i) {
         setTypeFile(2);
         let data = [...listFile];
+        let data1 = [...listFileSave];
         let img = data[i];
+        let img1 = data1[i].name;
+
         setImageCrop(img);
         setIndexImage(i);
         setShowCropImage(true);
+        let typeImg = img1.split('.').pop();
+        let nameF =  img1;
+        setNameI(nameF)
+        setTypeImage(typeImg);
+
     }
     const handleCropImageNew = function (event){
         if(!event) return;
@@ -449,7 +464,7 @@ function MainController(props) {
         validationSchema: Yup.object().shape({
             sku: Yup.string().required("Vui lòng nhập mã hàng").validHtml().maxLength(255),
             name: Yup.string().required("Vui lòng nhập tên sản phẩm").validHtml().maxLength(255),
-            weight:Yup.number().min(0, "Vui lòng cân nặng"),
+            weight:Yup.number().min(1, "Vui lòng cân nặng"),
             price: Yup.string().positiveNumbers().required("Vui lòng nhập giá bán"),
             priceSale: Yup.string().positiveNumbers().required("Vui lòng nhập giá bán"),
             unit: Yup.string().required("Vui lòng nhập đơn vị"),
@@ -464,13 +479,11 @@ function MainController(props) {
             } ),
             checkExitSku: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
                 let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
-                console.log("checkList",checkList)
 
                 if(checkList.length == 0){
                     return  true
                 }
                 let checkSku = listProperProduct.filter(x => x.skuMh == "");
-                console.log("checkSku", checkSku)
                 return  checkSku.length == 0;
 
             } ),
@@ -638,7 +651,8 @@ function MainController(props) {
             showDeletePurpose,
             showCropImage,
             imageCrop,
-            typeFile
+            typeFile, typeImage, nameI
+
         },
         method:{
             handPurpose,

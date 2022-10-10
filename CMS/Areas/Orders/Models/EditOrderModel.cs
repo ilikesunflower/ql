@@ -9,7 +9,7 @@ public class EditOrderModel
     public int OrderId { get; set; }  
     public bool CheckChangeP { get; set; }  
     public bool CheckChangePoi { get; set; }  
-    public int? PriceShip { get; set; }
+    public double? PriceShip { get; set; }
     public double? Total { get; set; }
     public int? CouponDiscount { get; set; }
     public int? CustomerId { get; set; }

@@ -413,7 +413,6 @@ public class OrderController : BaseController
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Create()
     {
-        int i = 0;
         return View();
     }
 
@@ -599,10 +598,10 @@ public class OrderController : BaseController
                 // PointDiscount = (double) (model.Point * IsPoi),
                 TotalWeight = model.TotalWeight!.Value,
                 BillCompanyName =
-                    customer.Type == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName,
-                BillTaxCode = customer.Type == 2 ? PrudentialBillInfo.BillTaxCode : model.BillTaxCode,
-                BillAddress = customer.Type == 2 ? PrudentialBillInfo.BillAddress : model.BillAddress,
-                BillEmail = customer.Type == 2 ? PrudentialBillInfo.BillEmail : model.BillEmail,
+                    customer.TypeGroup == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName,
+                BillTaxCode = customer.TypeGroup == 2 ? PrudentialBillInfo.BillTaxCode : model.BillTaxCode,
+                BillAddress = customer.TypeGroup == 2 ? PrudentialBillInfo.BillAddress : model.BillAddress,
+                BillEmail = customer.TypeGroup == 2 ? PrudentialBillInfo.BillEmail : model.BillEmail,
                 OrderProduct = orderProduct,
                 OrderAddress = orderAddress
             };
@@ -1360,7 +1359,7 @@ public class OrderController : BaseController
             newAddress.Address = model.Address;
             newAddress.Name = model.Name;
             newAddress.Email = model.Email;
-            newAddress.Note = model.Note;
+            newAddress.Note = model.Note ?? "";
             newAddress.Phone = model.Phone;
             newAddress.CommuneCode = model.CommuneCode;
             newAddress.DistrictCode = model.DistrictCode;
@@ -1426,10 +1425,10 @@ public class OrderController : BaseController
             // order.PointDiscount = model.Point * IsPoi;
             order.PrFile = !string.IsNullOrEmpty(prFileUrl) ? prFileUrl : order.PrFile;
             order.BillCompanyName =
-                customer.Type == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName;
-            order.BillTaxCode = customer.Type == 2 ? PrudentialBillInfo.BillTaxCode : model.BillTaxCode;
-            order.BillAddress = customer.Type == 2 ? PrudentialBillInfo.BillAddress : model.BillAddress;
-            order.BillEmail = customer.Type == 2 ? PrudentialBillInfo.BillEmail : model.BillEmail;
+                customer.TypeGroup == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName;
+            order.BillTaxCode = customer.TypeGroup == 2 ? PrudentialBillInfo.BillTaxCode : model.BillTaxCode;
+            order.BillAddress = customer.TypeGroup == 2 ? PrudentialBillInfo.BillAddress : model.BillAddress;
+            order.BillEmail = customer.TypeGroup == 2 ? PrudentialBillInfo.BillEmail : model.BillEmail;
             modelApi.Order = order;
             modelApi.OrderAddress = newAddress;
             modelApi.IsChangeProduct = isChangProduct;

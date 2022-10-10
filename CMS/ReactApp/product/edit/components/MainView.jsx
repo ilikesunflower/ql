@@ -18,7 +18,7 @@ import {
 } from "../../../components/formikField"
 import NumberFormat from "react-number-format";
 import ProductPurposeView from "../../components/ProductPurposeView";
-import CropImageView from "../../../components/cropImage/CropImageView";
+import CropImageExample from "../../../components/cropImage/CropImageExample";
 
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
@@ -28,9 +28,10 @@ const optionsSex = [
 
 
 const withValueLimit = ({ floatValue }) => floatValue <= 999999999;
-
 function MainApp(props) {
     const {formik, state, method} = MainController();
+    console.log("formik", formik.formikProduct.values)
+
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
     return (
@@ -48,8 +49,8 @@ function MainApp(props) {
                     />}
                 {(state.showCropImage) &&(
                     state.typeFile == 1 ?   
-                        <CropImageView showCrop={state.showCropImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImage}/>
-                    : <CropImageView showCrop={state.showCropImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                        <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImage}/>
+                    : <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
                 )
                  }
                 {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}  

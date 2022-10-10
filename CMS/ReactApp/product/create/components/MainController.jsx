@@ -30,6 +30,8 @@ function MainController(props) {
     let [showCropImage, setShowCropImage] = useState(false);
     let [imageCrop, setImageCrop] = useState('');
     let [indexImage, setIndexImage] = useState(null); 
+    let [typeImage, setTypeImage] = useState(''); 
+    let [nameI, setNameI] = useState(''); 
     useEffect(function () {
      
         getProductCategory(function (rs) {
@@ -150,10 +152,15 @@ function MainController(props) {
 
     const cropImageNew = function (i) { 
         let data = [...listFile];
+        let data1 = [...listFileSave];
         let img = data[i];
+        let img1 = data1[i].name;
         setImageCrop(img);
         setIndexImage(i);
         setShowCropImage(true);
+        let typeImg = img1.split('.').pop();
+        setNameI(img1)
+        setTypeImage(typeImg);
     }
     const handleCropImageNew = function (event){
         if(!event) return;
@@ -519,7 +526,8 @@ function MainController(props) {
             listProperties,
             listProperProduct,
             showDeletePurpose,
-            showCropImage, imageCrop
+            showCropImage, imageCrop,
+            typeImage, nameI
         },
         method:{
             handPurpose,
