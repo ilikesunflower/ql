@@ -95,7 +95,7 @@ public class OrderController : BaseController
     // GET
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int? payment,
-        int? ship, int export = 0, int pageindex = 1)
+        int? ship,int? typePayment, int export = 0, int pageindex = 1)
     {
         if (export == 1)
         {
@@ -140,6 +140,11 @@ public class OrderController : BaseController
                 ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
                 : query.Where(x => x.StatusPayment == payment);
         }
+        
+        if (typePayment.HasValue)
+        {
+            query = query.Where(x => x.PaymentType == typePayment);
+        }
 
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
@@ -150,6 +155,7 @@ public class OrderController : BaseController
             {"status", status},
             {"payment", payment},
             {"ship", ship},
+            { "typePayment", typePayment },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Tất cả đơn hàng");
@@ -165,7 +171,7 @@ public class OrderController : BaseController
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
     public IActionResult IndexOrderCustomerSuccess(string txtSearch, string startDate, string endDate, int? payment,
-        int? ship, int pageindex = 1)
+        int? ship,int? typePayment, int export = 0,int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())
@@ -201,6 +207,10 @@ public class OrderController : BaseController
                 ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
                 : query.Where(x => x.StatusPayment == payment);
         }
+        if (typePayment.HasValue)
+        {
+            query = query.Where(x => x.PaymentType == typePayment);
+        }
 
         query = query.Where(x => (x.Status == OrderStatusConst.StatusCustomerSuccess)
                                  || (x.Status == OrderStatusConst.StatusWaitCustomerConfirm)
@@ -213,6 +223,7 @@ public class OrderController : BaseController
             {"endDate", endDate},
             {"payment", payment},
             {"ship", ship},
+            { "typePayment", typePayment },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn chờ xử lý");
@@ -228,7 +239,7 @@ public class OrderController : BaseController
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
     public IActionResult IndexOrderCustomerShip(string txtSearch, string startDate, string endDate, int? payment,
-        int? ship, int pageindex = 1)
+        int? ship,int? typePayment, int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())
@@ -264,6 +275,10 @@ public class OrderController : BaseController
                 ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
                 : query.Where(x => x.StatusPayment == payment);
         }
+        if (typePayment.HasValue)
+        {
+            query = query.Where(x => x.PaymentType == typePayment);
+        }
 
         query = query.Where(x => (x.Status == OrderStatusConst.StatusOrderShip));
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
@@ -274,6 +289,7 @@ public class OrderController : BaseController
             {"endDate", endDate},
             {"payment", payment},
             {"ship", ship},
+            { "typePayment", typePayment },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn đang giao");
@@ -289,7 +305,7 @@ public class OrderController : BaseController
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
     public IActionResult IndexOrderSuccess(string txtSearch, string startDate, string endDate, int? payment, int? ship,
-        int pageindex = 1)
+        int? typePayment,int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())
@@ -325,6 +341,10 @@ public class OrderController : BaseController
                 ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
                 : query.Where(x => x.StatusPayment == payment);
         }
+        if (typePayment.HasValue)
+        {
+            query = query.Where(x => x.PaymentType == typePayment);
+        }
 
         query = query.Where(x => x.Status == OrderStatusConst.StatusOrderSuccess);
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
@@ -336,6 +356,7 @@ public class OrderController : BaseController
             {"status", OrderStatusConst.StatusOrderSuccess},
             {"payment", payment},
             {"ship", ship},
+            { "typePayment", typePayment },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn hoàn thành");
@@ -351,7 +372,7 @@ public class OrderController : BaseController
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
     public IActionResult IndexOrderCancel(string txtSearch, string startDate, string endDate, int? payment, int? ship,
-        int pageindex = 1)
+        int? typePayment,int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
         if (!txtSearch.IsNullOrEmpty())
@@ -387,7 +408,10 @@ public class OrderController : BaseController
                 ? query.Where(x => x.StatusPayment == payment || !x.StatusPayment.HasValue)
                 : query.Where(x => x.StatusPayment == payment);
         }
-
+        if (typePayment.HasValue)
+        {
+            query = query.Where(x => x.PaymentType == typePayment);
+        }
         query = query.Where(x => x.Status == OrderStatusConst.StatusOrderCancel);
         var listData = PagingList.Create(query.OrderByDescending(x => x.OrderAt), PageSize, pageindex);
         listData.RouteValue = new RouteValueDictionary()
@@ -397,6 +421,7 @@ public class OrderController : BaseController
             {"endDate", endDate},
             {"payment", payment},
             {"ship", ship},
+            { "typePayment", typePayment },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn hủy");
@@ -917,6 +942,11 @@ public class OrderController : BaseController
                         order.Status == OrderStatusConst.StatusCustomerSuccess ||
                         order.Status == OrderStatusConst.StatusOrderConfirm)
                     {
+                        if (order.PaymentType == PaymentMethodConst.Debit.Status)
+                        {
+                            return Ok(new OutputObject(404, "", $"Đơn hàng {order.Code} thanh toán chuyển khoản, vui lòng xác nhận thanh toán trước khi gửi vận chuyển")
+                                .Show());
+                        }
                         bool isShip = false;
                         if ((order.ShipPartner == 1 || order.ShipPartner == 2))
                         {
