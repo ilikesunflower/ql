@@ -195,7 +195,8 @@ section#pay-info .pay__active .btn {
 }
 
 .modal-coupon__list .modal-coupon__item .modal-coupon__item-content .modal-coupon__item-logo {
-    background-image: url('/images/logo_daiichi.png');
+    background-image: url('/images/logo_red_daiichi.png');
+    background-size: 65px 67px;
     border: 1px solid rgba(27, 54, 93, 0.2);;
     background-position: 50%;
     background-repeat: no-repeat;
