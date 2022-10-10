@@ -215,7 +215,6 @@ function MainApp(props) {
                                                                                                </thead>
                                                                                                <tbody>
                                                                                                {state.listProperProduct.map((item, i)=> {
-                                                                                                   console.log("view",state.listProperProduct )
                                                                                                    return (
                                                                                                        <tr key={i}>
                                                                                                            <td className="">{item.name}</td>
