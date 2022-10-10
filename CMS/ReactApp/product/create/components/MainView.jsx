@@ -19,7 +19,7 @@ import {
 import ProductPurposeView from "../../components/ProductPurposeView";
 
 import NumberFormat from "react-number-format";
-import CropImageExample from "../../../components/cropImage/CropImageExample";
+import CropImage from "../../../components/crop/CropImage";
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
     {value: 1 , label: "Nam"},
@@ -46,7 +46,7 @@ function MainApp(props) {
                     />}  
                 {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}
                 {(state.showCropImage) &&(
-                    <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI} setShowCrop={method.setShowCropImage} typeFile={state.typeImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                    <CropImage showCrop={state.showCropImage} nameFile={state.nameI} setShowCrop={method.setShowCropImage} typeFile={state.typeImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
                 )
                 }
                 <Card>
