@@ -1,11 +1,11 @@
 ﻿import React, { useState } from "react";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
-import "./CropImageExample.css";
+import "./CropImage.css";
 import {Button, Form, Modal} from "react-bootstrap";
 
 
- function CropImageExample (props) {
+ function CropImage (props) {
      const {showCrop, setShowCrop,src, handleValue,typeFile, nameFile } = props;
      console.log(typeFile,nameFile)
     const [image, setImage] = useState(src);
@@ -77,4 +77,4 @@ import {Button, Form, Modal} from "react-bootstrap";
     );
 };
 
-export default CropImageExample;
+export default CropImage;

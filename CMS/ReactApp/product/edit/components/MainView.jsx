@@ -18,7 +18,7 @@ import {
 } from "../../../components/formikField"
 import NumberFormat from "react-number-format";
 import ProductPurposeView from "../../components/ProductPurposeView";
-import CropImageExample from "../../../components/cropImage/CropImageExample";
+import CropImage from "../../../components/crop/CropImage";
 
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
@@ -49,8 +49,8 @@ function MainApp(props) {
                     />}
                 {(state.showCropImage) &&(
                     state.typeFile == 1 ?   
-                        <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImage}/>
-                    : <CropImageExample showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                        <CropImage showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImage}/>
+                    : <CropImage showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
                 )
                  }
                 {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}  

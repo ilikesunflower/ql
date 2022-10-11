@@ -2,7 +2,7 @@
 import NumberFormat from "react-number-format";
 import { Editor } from "@tinymce/tinymce-react";
 import   "../../wwwroot/js/file-manager-upload/dist/filemanagerupload"
-import CropImageExample from "./cropImage/CropImageExample";
+import CropImage from "./crop/CropImage";
 let mediaManager = new MediaManager({
     xsrf: $('input:hidden[name="__RequestVerificationToken"]').val(),
     multiSelect: false,
@@ -366,7 +366,7 @@ export const FileFieldCropImage = function (props) {
             {
                 show
                 &&
-                <CropImageExample showCrop={show} nameFile={nameF} setShowCrop={setShow} src={src} typeFile={type} handleValue={handleImageChange}/> 
+                <CropImage showCrop={show} nameFile={nameF} setShowCrop={setShow} src={src} typeFile={type} handleValue={handleImageChange}/> 
             }
             <div className="col-lg-12 " onClick={()=> {$(refU.current).click()}}>
                 <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />

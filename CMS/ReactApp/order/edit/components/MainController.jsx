@@ -24,7 +24,7 @@ function MainController(props) {
             point: 0,
             checkChangePoi: false,
             addressType: 0,
-            customerAddressId: '',
+            customerAddressId: '0',
             provinceCode: '',
             districtCode: '',
             communeCode: '',

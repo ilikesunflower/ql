@@ -185,7 +185,8 @@ namespace CMS
             });
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
-                options.ValidationInterval = TimeSpan.Zero;
+                // options.ValidationInterval = TimeSpan.Zero;
+                options.ValidationInterval = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
             });
             services.AddSingleton<IUriService>(o =>
             {
