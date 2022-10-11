@@ -942,7 +942,7 @@ public class OrderController : BaseController
                         order.Status == OrderStatusConst.StatusCustomerSuccess ||
                         order.Status == OrderStatusConst.StatusOrderConfirm)
                     {
-                        if (order.PaymentType == PaymentMethodConst.Debit.Status)
+                        if (order.PaymentType == PaymentMethodConst.Debit.Status && order.StatusPayment == OrderStatusPayment.StatusNoPayment)
                         {
                             return Ok(new OutputObject(404, "", $"Đơn hàng {order.Code} thanh toán chuyển khoản, vui lòng xác nhận thanh toán trước khi gửi vận chuyển")
                                 .Show());
