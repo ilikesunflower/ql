@@ -134,6 +134,7 @@
 		<ProjectReference Include="..\CMS_Lib\CMS_Lib.csproj" />
 		<ProjectReference Include="..\CMS_Ship\CMS_Ship.csproj" />
 		<ProjectReference Include="..\CMS_WareHouse\CMS_WareHouse.csproj" />
+		<ProjectReference Include="..\ImageProxy\ImageProxy.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

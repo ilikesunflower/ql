@@ -12,12 +12,14 @@ using CMS.Extensions.Claims;
 using CMS.Extensions.Header;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
+using CMS.Extensions.StaticFiles;
 using CMS.Hubs;
 using CMS.Middleware.AuthorizationController;
 using CMS.Middleware.Hubs;
 using CMS.Middleware.Menu;
 using CMS.Services.Uris;
 using Ganss.XSS;
+using ImageProxy.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -32,18 +34,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
-using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using ReflectionIT.Mvc.Paging;
 using Serilog;
-using SameSiteMode = Microsoft.AspNetCore.Http.SameSiteMode;
 using ServiceCollectionExtensions = CMS_Lib.DI.ServiceCollectionExtensions;
 using UrlHelperExtensions = CMS.Extensions.Url.UrlHelperExtensions;
 
@@ -90,12 +89,10 @@ namespace CMS
                 options.ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
                 options.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning));
             });
-            
+
             services.AddIdentity<ApplicationUser, ApplicationRole>(o => { o.Stores.MaxLengthForKeys = 128; })
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
-            
-            // services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
-            //     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -135,14 +132,14 @@ namespace CMS
                 options.Cookie.Path = "/";
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Session";
             });
-            
+
             services.Configure<CookieTempDataProviderOptions>(options =>
             {
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.TempDataCookie";
             });
 
             services.AddCors();
-            
+
             #endregion
 
             #region authen
@@ -164,7 +161,7 @@ namespace CMS
                 // options.Cookie.Domain = appSetting.GetValue<string>("CookieDomain");
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
             });
-            
+
             services.AddDataProtection()
                 .UseCustomCryptographicAlgorithms(new ManagedAuthenticatedEncryptorConfiguration
                 {
@@ -255,58 +252,20 @@ namespace CMS
                 app.UseHeaderApplication();
                 app.UseSerilogRequestLogging();
             }
+
             app.UseRouting();
             app.UseCors();
             app.UseCookiePolicy();
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            var mimeTypeProvider = new FileExtensionContentTypeProvider();
             app.UseResponseCompression();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = context =>
-                {
-                    try
-                    {
-                        var headers = context.Context.Response.Headers;
-                        headers[HeaderNames.CacheControl] = $"public,max-age=2592000";
-                        var contentType = headers["Content-Type"];
-                        if (contentType != "application/x-gzip" && !context.File.Name.EndsWith(".gz"))
-                        {
-                            return;
-                        }
-
-                        var fileNameToTry = context.File.Name.Substring(0, context.File.Name.Length - 3);
-                        if (mimeTypeProvider.TryGetContentType(fileNameToTry, out var mimeType))
-                        {
-                            headers.Add("Content-Encoding", "gzip");
-                            headers["Content-Type"] = mimeType;
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        // ignored
-                    }
-                }
-            });
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                OnPrepareResponse = ctx =>
-                {
-                    if (ctx.Context.Request.Path.StartsWithSegments("/upload"))
-                    {
-                        if (ctx.Context.User.Identity is { IsAuthenticated: false })
-                        {
-                            ctx.Context.Response.Redirect("/");
-                        }
-                    }
-                }
-            });
-            app.UseResponseCaching();
+            app.UseStaticFilesApplication();
+            app.UseProxyImageApplication();
             // app.UseForwardedHeaders(new ForwardedHeadersOptions
             //     { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
             // );
+            app.UseResponseCaching();
             var httpContextAccessor = app.ApplicationServices.GetRequiredService<IHttpContextAccessor>();
             UrlHelperExtensions.Configure(httpContextAccessor);
             app.UseMiddleware<MenuMiddleware>();
@@ -327,7 +286,7 @@ namespace CMS
 
         #region Add service
 
-        public void AddService(IServiceCollection services)
+        private void AddService(IServiceCollection services)
         {
             services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
             services.AddHostedService<QueuedHostedService>();
@@ -336,11 +295,16 @@ namespace CMS
             services.AddSingleton<IHtmlSanitizer, HtmlSanitizer>();
             services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, AppClaimsPrincipalFactory>();
             ServiceCollectionExtensions.RegisterAllType<ITransient>(services, new[] { typeof(Program).Assembly });
-            ServiceCollectionExtensions.RegisterAllType<IScoped>(services, new[] { typeof(Program).Assembly },ServiceLifetime.Scoped);
-            ServiceCollectionExtensions.RegisterAllLib<ITransient>(services, typeof(LoadRepository).GetTypeInfo().Assembly);
-            ServiceCollectionExtensions.RegisterAllLib<IScoped>(services, typeof(LoadRepository).GetTypeInfo().Assembly,ServiceLifetime.Scoped);
+            ServiceCollectionExtensions.RegisterAllType<IScoped>(services, new[] { typeof(Program).Assembly },
+                ServiceLifetime.Scoped);
+            ServiceCollectionExtensions.RegisterAllLib<ITransient>(services,
+                typeof(LoadRepository).GetTypeInfo().Assembly);
+            ServiceCollectionExtensions.RegisterAllLib<IScoped>(services, typeof(LoadRepository).GetTypeInfo().Assembly,
+                ServiceLifetime.Scoped);
             ServiceCollectionExtensions.RegisterAllLib<ITransient>(services, typeof(AddDi).GetTypeInfo().Assembly);
-            ServiceCollectionExtensions.RegisterAllLib<IScoped>(services, typeof(AddDi).GetTypeInfo().Assembly,ServiceLifetime.Scoped);
+            ServiceCollectionExtensions.RegisterAllLib<IScoped>(services, typeof(AddDi).GetTypeInfo().Assembly,
+                ServiceLifetime.Scoped);
+            services.AddImageProxy();
             services.AddShipCod();
             services.AddWareHouse();
         }
@@ -364,6 +328,5 @@ namespace CMS
         }
 
         #endregion
-
     }
 }
