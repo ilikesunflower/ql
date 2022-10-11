@@ -231,7 +231,7 @@ public class OrderServer : IOrderServer
             Name = model.Name,
             Email = model.Email,
             Flag = 0,
-            Note = model.Note,
+            Note = model.Note ?? "",
             Phone = model.Phone,
             CommuneCode = model.CommuneCode,
             DistrictCode = model.DistrictCode,

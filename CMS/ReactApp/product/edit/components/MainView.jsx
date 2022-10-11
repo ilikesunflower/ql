@@ -14,10 +14,11 @@ import {
     FileField,
     CheckBoxField,
     FileFieldP,
-    Textarea, TextareaShort
+    Textarea, TextareaShort, FileFieldCropImage
 } from "../../../components/formikField"
 import NumberFormat from "react-number-format";
 import ProductPurposeView from "../../components/ProductPurposeView";
+import CropImage from "../../../components/crop/CropImage";
 
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
@@ -27,9 +28,10 @@ const optionsSex = [
 
 
 const withValueLimit = ({ floatValue }) => floatValue <= 999999999;
-
 function MainApp(props) {
     const {formik, state, method} = MainController();
+    console.log("formik", formik.formikProduct.values)
+
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
     return (
@@ -45,6 +47,12 @@ function MainApp(props) {
                                         clickElement={method.clickElement}
                                         deletePurpose={method.deletePurpose}
                     />}
+                {(state.showCropImage) &&(
+                    state.typeFile == 1 ?   
+                        <CropImage showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImage}/>
+                    : <CropImage showCrop={state.showCropImage} nameFile={state.nameI}  typeFile={state.typeImage} setShowCrop={method.setShowCropImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                )
+                 }
                 {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}  
                 <Card>
                     <Form  >
@@ -108,6 +116,7 @@ function MainApp(props) {
                                                                        return(
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
                                                                                <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteMany(i)}></i>
+                                                                               <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImageNew(i)}></i>
 
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>
@@ -121,6 +130,7 @@ function MainApp(props) {
                                                                        return(
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
                                                                                <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteManyOld(i)}></i>
+                                                                               <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImage(i)}></i>
 
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>
@@ -244,10 +254,12 @@ function MainApp(props) {
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <div className="row">
-                                                            <div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>
-                                                                <FileFieldP setImageString={method.setImageString} formik={formik.formikProduct} refU={state.refI}  name="image" className="hidden"/>
-                                                                <img src={state.imageString} className="imgA"/>
-                                                            </div>
+                                                            <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
+
+                                                            {/*<div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>*/}
+                                                            {/*    <FileFieldP setImageString={method.setImageString} formik={formik.formikProduct} refU={state.refI}  name="image" className="hidden"/>*/}
+                                                            {/*    <img src={state.imageString} className="imgA"/>*/}
+                                                            {/*</div>*/}
                                                          </div>
                                                     </Card.Body>
                                                 </Card>
@@ -411,6 +423,7 @@ const ModalCategory = props => {
 
 const Properties = props => {
     const {hand11, hand1, listProperties, deleteT , addDetailProperties, deleteDetailProperties} = props;
+    console.log("Properties 123", listProperties)
 
     return(
         <div className="col-12 pb-3"  >

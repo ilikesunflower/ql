@@ -299,6 +299,23 @@
                 </div>
             </div>
         </div>
+        @if (Order.Point != null)
+        {
+            <div class="row pt-3">
+                <div class="col-md-10">
+                    <div class="d-flex justify-content-end">
+                        <strong>Sử dụng điểm thưởng</strong>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex justify-content-end">
+                        <strong>
+                            - @CmsFunction.NumberFormatShow(Order.Point * IsPoi) <u>đ</u>
+                        </strong>
+                    </div>
+                </div>
+            </div>
+        }
         <div class="row pt-3">
             <div class="col-md-10">
                 <div class="d-flex justify-content-end">

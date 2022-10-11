@@ -1,4 +1,8 @@
-﻿img{
+﻿.cropper-container{
+    background-image: url("../images/crop/background_crop.png") !important;
+}
+
+img{
     max-width: 100% !important;
 }
 .user-panel img {

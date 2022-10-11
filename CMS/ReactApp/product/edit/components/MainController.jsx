@@ -22,7 +22,13 @@ function MainController(props) {
     let [listFileSave, setListFileSave] = useState([]);
     let [listFile, setListFile] = useState([]);
     let [listFileOld, setListFileOld] = useState([]);
- 
+    let [showCropImage, setShowCropImage] = useState(false); 
+    let [imageCrop, setImageCrop] = useState('');
+    let [indexImage, setIndexImage] = useState(null);
+    let [typeImage, setTypeImage] = useState('');
+    let [nameI, setNameI] = useState('');
+
+    let [typeFile, setTypeFile] = useState(0);
     let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg');
     let refI = useRef(null);
     let refImage = useRef(null);
@@ -45,7 +51,7 @@ function MainController(props) {
             formikProduct.setFieldValue("sku", product.sku);
             formikProduct.setFieldValue("name", product.name);
             formikProduct.setFieldValue("weight", product.weight || 0);
-            formikProduct.setFieldValue("price", product.price || 0);
+            formikProduct.setFieldValue("price", product.price ?? 0);
             formikProduct.setFieldValue("priceSale", product.priceSale || 0);
             formikProduct.setFieldValue("description", product.description || '');
             formikProduct.setFieldValue("specifications", product.specifications || '');
@@ -76,6 +82,7 @@ function MainController(props) {
                             return { ord: index, value: x}
                         }) : []
                     }
+                    console.log("content2 val",val )
                     data.push(val);
                 })
                 setListProperties(data);
@@ -99,6 +106,7 @@ function MainController(props) {
             }else{
                 formikProduct.setFieldValue("quantityStock", sima[0].quantityWh || 0);
                 formikProduct.setFieldValue("codeStock", sima[0].skuwh || '');
+                formikProduct.setFieldValue("price", sima[0].price || 0);
             }
             
             let category = rs.content4;
@@ -109,9 +117,11 @@ function MainController(props) {
 
     }, []);
     useEffect(function () {
+        console.log("change setListProperProduct ", listProperties)
         let data = [];
         let product = {...listProperProduct};
         let dataC = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0) || [];
+        console.log(dataC, checkEditPro)
         
         if(checkEditPro){
             if(Array.isArray(dataC) && dataC.length > 0){
@@ -130,6 +140,7 @@ function MainController(props) {
                 }else if(count > 1){
                     
                     let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
+                    console.log("valueP",valueP)
                     valueP.forEach((obj, index) => {
                         let dataP = {
                             name:  obj,
@@ -218,6 +229,62 @@ function MainController(props) {
         data.splice(i, 1);
         setListFileOld(data);
     }
+//crop imgae cũ
+    const cropImage = function (i) { 
+        setTypeFile(1);
+        let data = [...listFileOld];
+        let img = data[i];
+        setImageCrop(img);
+        let listName = img.split('/').pop();
+        let check = listName.split('.').pop();
+        setNameI(listName)
+        setTypeImage(check);
+        setIndexImage(i);
+        setShowCropImage(true);
+    }
+    const handleCropImage = function (event){
+        if(!event) return;
+        let data = [...listFileOld];
+        data.splice(indexImage, 1);
+        setListFileOld(data);
+        let data1 = [...listFile];
+        let data2 = [...listFileSave];
+        data2.push(event);
+        data1.push(URL.createObjectURL(event));
+        setListFileSave(data2);
+        setListFile(data1);
+        setShowCropImage(false)
+    }
+    
+    //crop image mới
+    const cropImageNew = function (i) {
+        setTypeFile(2);
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        let img = data[i];
+        let img1 = data1[i].name;
+
+        setImageCrop(img);
+        setIndexImage(i);
+        setShowCropImage(true);
+        let typeImg = img1.split('.').pop();
+        let nameF =  img1;
+        setNameI(nameF)
+        setTypeImage(typeImg);
+
+    }
+    const handleCropImageNew = function (event){
+        if(!event) return;
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        data[indexImage] = URL.createObjectURL(event);
+        data1[indexImage] = event;
+        setListFileSave(data1);
+        setListFile(data);
+        setShowCropImage(false)
+    }
+    
+    
     const handCategory = function () {
         setShowCategory(!showCategory);
     }
@@ -397,7 +464,7 @@ function MainController(props) {
         validationSchema: Yup.object().shape({
             sku: Yup.string().required("Vui lòng nhập mã hàng").validHtml().maxLength(255),
             name: Yup.string().required("Vui lòng nhập tên sản phẩm").validHtml().maxLength(255),
-            weight:Yup.number().min(0, "Vui lòng cân nặng"),
+            weight:Yup.number().min(1, "Vui lòng cân nặng"),
             price: Yup.string().positiveNumbers().required("Vui lòng nhập giá bán"),
             priceSale: Yup.string().positiveNumbers().required("Vui lòng nhập giá bán"),
             unit: Yup.string().required("Vui lòng nhập đơn vị"),
@@ -581,7 +648,11 @@ function MainController(props) {
             listProperties,
             listProperProduct,
             listFileOld,
-            showDeletePurpose
+            showDeletePurpose,
+            showCropImage,
+            imageCrop,
+            typeFile, typeImage, nameI
+
         },
         method:{
             handPurpose,
@@ -603,7 +674,12 @@ function MainController(props) {
             deleteManyOld,
             clickElement,
             deletePurpose,
-            handDeletePurpose
+            handDeletePurpose,
+            cropImage, 
+            handleCropImage, 
+            cropImageNew, 
+            handleCropImageNew,
+            setShowCropImage
         } };
 }
 export default MainController;

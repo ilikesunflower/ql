@@ -24,7 +24,7 @@ function MainController(props) {
             point: 0,
             checkChangePoi: false,
             addressType: 0,
-            customerAddressId: '',
+            customerAddressId: '0',
             provinceCode: '',
             districtCode: '',
             communeCode: '',
@@ -90,6 +90,7 @@ function MainController(props) {
     useEffect(function () {
         if(id != 0){
             getOrderEdit({id: id}, function (rs) {
+                console.log("get data rs", rs)
                 formik.setFieldValue("customerId", rs?.customerId || 0)
                 formik.setFieldValue("priceShip", rs?.priceShip || 0)
                 formik.setFieldValue("couponCode", rs?.couponCode || '')
@@ -103,7 +104,7 @@ function MainController(props) {
                 formik.setFieldValue("name", rs.orderAddress?.name || '' )
                 formik.setFieldValue("email", rs.orderAddress?.email || '' )
                 formik.setFieldValue("phone", rs.orderAddress?.phone || '' )
-                formik.setFieldValue("note", rs?.note || '' )
+                formik.setFieldValue("note", rs?.orderAddress?.note || '' )
                 formik.setFieldValue("shipPartner", (!rs?.shipPartner ||  rs?.shipPartner == 2) ? 0 : rs?.shipPartner )
                 formik.setFieldValue("shipType", rs?.shipType || 0 )
                 formik.setFieldValue("paymentType", rs?.paymentType || 0 )

@@ -26,6 +26,12 @@ function MainController(props) {
     let [listProperProduct, setListProperProduct] = useState([]);
     let [showDeletePurpose, setShowDeletePurpose]  = useState(false);
     let [listPurposeDelete, setListPurposeDelete] = useState([]);
+
+    let [showCropImage, setShowCropImage] = useState(false);
+    let [imageCrop, setImageCrop] = useState('');
+    let [indexImage, setIndexImage] = useState(null); 
+    let [typeImage, setTypeImage] = useState(''); 
+    let [nameI, setNameI] = useState(''); 
     useEffect(function () {
      
         getProductCategory(function (rs) {
@@ -142,6 +148,32 @@ function MainController(props) {
     const handCategory = function () {
         setShowCategory(!showCategory);
     }
+    //crop imgae
+
+    const cropImageNew = function (i) { 
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        let img = data[i];
+        let img1 = data1[i].name;
+        setImageCrop(img);
+        setIndexImage(i);
+        setShowCropImage(true);
+        let typeImg = img1.split('.').pop();
+        setNameI(img1)
+        setTypeImage(typeImg);
+    }
+    const handleCropImageNew = function (event){
+        if(!event) return;
+        let data = [...listFile];
+        let data1 = [...listFileSave];
+        data[indexImage] = URL.createObjectURL(event);
+        data1[indexImage] = event;
+        setListFileSave(data1);
+        setListFile(data);
+        setShowCropImage(false)
+    }
+
+
     const handleChangeFile = function (e) {
         let value = [];
         let value1 = [];
@@ -176,6 +208,7 @@ function MainController(props) {
     
     const addFormProperties = function (){
             let ord = maxIndexProperties(listProperties);
+            console.log(ord);
             let val = {
                 ord : ord,
                 name: '',
@@ -192,16 +225,19 @@ function MainController(props) {
         setListProperties(data);
     }
     const handFormProperties1 = function (e, property){
+        console.log("handFormProperties1", property,  e.target.value)
        let value =  e.target.value.trim();
         let data =[...listProperties] ;
         let check = data.findIndex(x => x.name == value && x.name != '');
         let index = data.findIndex(x => x.ord == property?.ord);
+        console.log("handFormProperties1 1", check, index)
         if(check >= 0 && check != index){
             data.splice(index, 1);
             setListProperties(data);
             toastr.error("Thuộc tính này đã tồn tại")
         }else{
             data[index].name = value;
+            console.log("data", data)
             setListProperties(data);
         }
     }
@@ -263,6 +299,7 @@ function MainController(props) {
         }
     }
    const deleteProperties = function (property){
+       console.log("index delete",property);
        let data =[...listProperties] ;
        let index = data.findIndex(x => x.ord == property.ord);
        data.splice(index, 1);
@@ -323,6 +360,7 @@ function MainController(props) {
             } ),
             checkExitSku: Yup.string().test('required', "Vui lòng nhập mã kho hàng", (value) => {
                 let checkList = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0 );
+                console.log("checkExitSku",checkList)
                 if(checkList.length == 0){
                     return  true
                 } 
@@ -488,6 +526,8 @@ function MainController(props) {
             listProperties,
             listProperProduct,
             showDeletePurpose,
+            showCropImage, imageCrop,
+            typeImage, nameI
         },
         method:{
             handPurpose,
@@ -509,8 +549,10 @@ function MainController(props) {
             handDeletePurpose,
             setShowDeletePurpose,
             clickElement, 
-            deletePurpose
-            
+            deletePurpose,
+            cropImageNew, 
+            handleCropImageNew, 
+            setShowCropImage
         } };
 }
 export default MainController;

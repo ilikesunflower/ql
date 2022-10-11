@@ -55,7 +55,8 @@ function Payment(props) {
                                        <dt className="col-md-4">Tên tài khoản:</dt>
                                        <dd className="col-md-8">Công ty CP Giải pháp Công nghệ Việt Nam</dd>
                                        <dt className="col-md-4">Nội dung</dt>
-                                       <dd className="col-md-8">Mã đơn hàng</dd>
+                                       <dd className="col-md-8">Nội dung chuyển khoản: “Thanh toán cho đơn hàng ”DLVN_XXXXXXXXXX
+                                           Trong đó XXXXXXXXXX là mã đơn hàng thành công được gửi vào Email</dd>
                                        <table className="table table-bordered ">
                                            <thead>
                                            <tr>
@@ -65,12 +66,12 @@ function Payment(props) {
                                            </thead>
                                            <tbody>
                                            <tr>
-                                               <td>Ngân hàng TMCP Tiên Phong (TPBank) – chi nhánh Thăng Long - Hà Nội</td>
-                                               <td className="text-center">04098489001</td>
+                                               <td>Ngân hàng TMCP Đầu tư và Phát triển Việt Nam</td>
+                                               <td className="text-center">22010000846979</td>
                                            </tr>
                                            <tr>
-                                               <td>Ngân hàng TMCP Sài Gòn (SCB) – Phòng giao dịch Hoàng Quốc Việt - Hà Nội</td>
-                                               <td className="text-center">17430390001</td>
+                                               <td>Ngân hàng TMCP Quân Đội (MB bank)</td>
+                                               <td className="text-center">0541102002009</td>
                                            </tr>
                                            </tbody>
                                        </table>

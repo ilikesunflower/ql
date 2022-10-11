@@ -1,8 +1,8 @@
-﻿import React, {useLayoutEffect, useRef, useMemo, useState} from "react";
+﻿import React, {useEffect, useRef, useMemo, useState} from "react";
 import NumberFormat from "react-number-format";
 import { Editor } from "@tinymce/tinymce-react";
 import   "../../wwwroot/js/file-manager-upload/dist/filemanagerupload"
-
+import CropImage from "./crop/CropImage";
 let mediaManager = new MediaManager({
     xsrf: $('input:hidden[name="__RequestVerificationToken"]').val(),
     multiSelect: false,
@@ -209,8 +209,9 @@ export const NumberFormatFieldAfter = function (props) {
             <div className={classnamediv}>
                 <NumberFormat thousandSeparator={'.'} decimalSeparator={','} className={className} autoComplete="off" {...props}
                               value={!Number.isNaN(Number.parseInt(meta.value)) ? Number.parseInt(meta.value) : 0} onValueChange={handleChange}/>
+                {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
+
             </div>
-            {meta.touched && meta.error ? (<span className="text-danger">{meta.error}</span>) : null}
         </>
     );
 }
@@ -309,6 +310,69 @@ export const FileFieldP = function (props) {
         <>
             <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange} className={"form-control input-sm " + (className || '')} />
             {meta.touched && meta.error ? (<p className="text-danger">{meta.error}</p>) : null}
+        </>
+    )
+}
+
+export const FileFieldCropImage = function (props) {
+    let { formik, name, className , setImageString, imageString} = props;
+    let refU = useRef(null);
+    let meta = formik.getFieldMeta(name);
+    let prop = formik.getFieldProps(name);
+    let [show, setShow] = useState(false);
+    let [src, setSrc] = useState('');
+    let [image, setImage] = useState(null);
+    let [type, setType] = useState('');
+    let [nameF,  setNameF] = useState('');
+    useEffect(function () {
+        if(!show){
+            console.log($(refU))
+            console.log($(refU.current)[0].value)
+            $(refU.current)[0].value = null;
+            // $(refU).target.val(null);
+        }
+    }, [show]);
+    const handleImageChange = function (event) {
+        if(!event){
+            formik.setFieldValue(name, image);
+            setImageString(URL.createObjectURL(image))
+        }else{
+            formik.setFieldValue(name, event);
+            setImageString(URL.createObjectURL(event))
+        }
+        setShow(false);
+    }
+    const handleInputChange = function (event) {
+        let nameFile = event.target.files[0]?.name;
+        console.log(nameFile);
+        let check = "";
+        if (nameFile != "") {
+            check = nameFile.split('.').pop();
+        }
+        if (check == "jpg" || check == "jpeg" || check == "gif" || check == "png" ) {
+            setNameF(nameFile)
+            setType(check)
+            setImage(event.target.files[0]);
+            setSrc(URL.createObjectURL(event.target.files[0]));
+            setShow(true);
+        }else {
+            toastr.error("File không đúng định dạng hình ảnh")
+        }
+
+    }
+
+    return (
+        <>
+            {
+                show
+                &&
+                <CropImage showCrop={show} nameFile={nameF} setShowCrop={setShow} src={src} typeFile={type} handleValue={handleImageChange}/> 
+            }
+            <div className="col-lg-12 " onClick={()=> {$(refU.current).click()}}>
+                <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />
+                {meta.touched && meta.error ? (<p className="text-danger">{meta.error}</p>) : null}
+                <img src={imageString} className="imgA"/>
+            </div>
         </>
     )
 }

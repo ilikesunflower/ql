@@ -39,7 +39,7 @@ function Shipment(props) {
                 shipmentTypes : [],
                 type : 3
             }];
-        let weight = productCartSelect.reduce((previousValue, currentValue) => previousValue + (currentValue.weight * currentValue.quantityBy|| 0), 1);
+        let weight = productCartSelect.reduce((previousValue, currentValue) => previousValue + (currentValue.weight * currentValue.quantityBy|| 0), 0);
         formik.setFieldValue("totalWeight", weight)
         if ( provinceCode && districtCode && communeCode) {
             let param = {provinceCode, districtCode, communeCode, weight};

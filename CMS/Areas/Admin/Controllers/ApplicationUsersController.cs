@@ -215,7 +215,9 @@ namespace CMS.Areas.Admin.Controllers
                         if (id == UserInfo.UserId)
                         {
                             var u = await _userManager.GetUserAsync(HttpContext.User);
-                            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(u).Result, new AuthenticationProperties() { IsPersistent = true });
+                            await _signInManager.RefreshSignInAsync(u);
+                            this._iClaimService.ReloadInfoUser(User, u);
+                            // await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, _signInManager.CreateUserPrincipalAsync(u).Result, new AuthenticationProperties() { IsPersistent = true });
                         }
                         else
                         {

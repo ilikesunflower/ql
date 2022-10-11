@@ -14,11 +14,12 @@ import {
     NumberFormatFieldAfter,
     FileField,
     CheckBoxField,
-    FileFieldP, Textarea, TextareaShort
+    FileFieldP, Textarea, TextareaShort, FileFieldCropImage
 } from "../../../components/formikField"
 import ProductPurposeView from "../../components/ProductPurposeView";
 
 import NumberFormat from "react-number-format";
+import CropImage from "../../../components/crop/CropImage";
 const optionsSex = [
     {value: 0 , label: "Tất cả"},
     {value: 1 , label: "Nam"},
@@ -29,6 +30,7 @@ function MainApp(props) {
     const {formik, state, method} = MainController();
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
+    console.log(formik.formikProduct.values)
     return (
         <Row>
             <Col md={12}>
@@ -42,7 +44,11 @@ function MainApp(props) {
                                         clickElement={method.clickElement} 
                                         deletePurpose={method.deletePurpose}
                     />}  
-                {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}  
+                {state.showCategory && <ModalCategory formik={formik.formikProductCategory} handCategory={method.handCategory} show={state.showCategory}/>}
+                {(state.showCropImage) &&(
+                    <CropImage showCrop={state.showCropImage} nameFile={state.nameI} setShowCrop={method.setShowCropImage} typeFile={state.typeImage} src={state.imageCrop} handleValue={method.handleCropImageNew}/>
+                )
+                }
                 <Card>
                     <Form onSubmit={formik.formikProduct.handleSubmit} >
                         <Card.Header className="row m-0 p-0 border-bottom-0 headerColor">
@@ -103,6 +109,7 @@ function MainApp(props) {
                                                                        return(
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
                                                                                <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteMany(i)}></i>
+                                                                               <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImageNew(i)}></i>
 
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>
@@ -225,10 +232,11 @@ function MainApp(props) {
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <div className="row">
-                                                            <div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>
-                                                                <FileFieldP setImageString={method.setImageString} formik={formik.formikProduct} refU={state.refI}  name="image" className="hidden"/>
-                                                                <img src={state.imageString} className="imgA"/>
-                                                            </div>
+                                                            
+                                                            {/*<div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>*/}
+                                                                <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
+                                                                {/*<img src={state.imageString} className="imgA"/>*/}
+                                                            {/*</div>*/}
                                                          </div>
                                                     </Card.Body>
                                                 </Card>
@@ -367,6 +375,7 @@ const ModalCategory = props => {
 
 const Properties = props => {
     const {hand11, hand1, listProperties, deleteT , addDetailProperties, deleteDetailProperties} = props;
+    console.log("list properties", listProperties);
     return(
         <div className="col-12 pb-3"  >
             {listProperties.map((value, index)  => {

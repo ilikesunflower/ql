@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Security.Cryptography;
 using CMS_Access.init;
 using CMS_EF.DbContext;
 using CMS_EF.Models.Identity;
@@ -8,6 +9,7 @@ using CMS_Lib.DI;
 using CMS_Ship.Extensions;
 using CMS_WareHouse.Extensions;
 using CMS.Extensions.Claims;
+using CMS.Extensions.Header;
 using CMS.Extensions.Notification;
 using CMS.Extensions.Queue;
 using CMS.Hubs;
@@ -20,6 +22,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption.ConfigurationModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Connections;
@@ -86,8 +90,12 @@ namespace CMS
                 options.ConfigureWarnings(w => w.Ignore(CoreEventId.RowLimitingOperationWithoutOrderByWarning));
                 options.ConfigureWarnings(w => w.Ignore(RelationalEventId.MultipleCollectionIncludeWarning));
             });
-            services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
+            
+            services.AddIdentity<ApplicationUser, ApplicationRole>(o => { o.Stores.MaxLengthForKeys = 128; })
                 .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+            
+            // services.AddDefaultIdentity<ApplicationUser>(o => { o.Stores.MaxLengthForKeys = 128; })
+            //     .AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -134,17 +142,7 @@ namespace CMS
             });
 
             services.AddCors();
-            // services.AddCors(options =>
-            // {
-            //     options.AddDefaultPolicy(
-            //         policy =>
-            //         {
-            //             policy.WithOrigins(Configuration.GetSection("AppSetting:Domain").Value);
-            //             policy.AllowAnyHeader();
-            //             policy.AllowAnyMethod();
-            //         });
-            // });
-
+            
             #endregion
 
             #region authen
@@ -166,24 +164,13 @@ namespace CMS
                 // options.Cookie.Domain = appSetting.GetValue<string>("CookieDomain");
                 options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
             });
-            services.AddAuthentication(options =>
+            
+            services.AddDataProtection()
+                .UseCustomCryptographicAlgorithms(new ManagedAuthenticatedEncryptorConfiguration
                 {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                })
-                .AddCookie(options =>
-                {
-                    options.CookieManager = new ChunkingCookieManager();
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.IsEssential = true;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.SlidingExpiration = true;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
-                    options.LoginPath = appSetting.GetValue<string>("LoginPath");
-                    options.LogoutPath = appSetting.GetValue<string>("LogoutPath");
-                    options.AccessDeniedPath = appSetting.GetValue<string>("AccessDeniedPath");
-                    options.Cookie.Path = "/";
-                    options.Cookie.Name = $"{appSetting.GetValue<string>("PreCookieName")}.Cookie";
+                    EncryptionAlgorithmType = typeof(Aes),
+                    EncryptionAlgorithmKeySize = 256,
+                    ValidationAlgorithmType = typeof(HMACSHA256)
                 });
 
             #endregion
@@ -198,7 +185,8 @@ namespace CMS
             });
             services.Configure<SecurityStampValidatorOptions>(options =>
             {
-                options.ValidationInterval = TimeSpan.Zero;
+                // options.ValidationInterval = TimeSpan.Zero;
+                options.ValidationInterval = TimeSpan.FromMinutes(appSetting.GetValue<int>("ExpireTimeSpan"));
             });
             services.AddSingleton<IUriService>(o =>
             {
@@ -227,7 +215,7 @@ namespace CMS
                     options.EnableEndpointRouting = false;
                 })
                 .AddRazorRuntimeCompilation()
-                // .AddSessionStateTempDataProvider()
+                .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -235,7 +223,7 @@ namespace CMS
                 });
             services.AddRazorPages()
                 .AddRazorRuntimeCompilation()
-                // .AddSessionStateTempDataProvider()
+                .AddSessionStateTempDataProvider()
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -264,6 +252,8 @@ namespace CMS
                 app.UseStatusCodePagesWithReExecute("/Error/Page/{0}");
                 app.UseHsts();
                 app.UseHttpsRedirection();
+                app.UseHeaderApplication();
+                app.UseSerilogRequestLogging();
             }
             app.UseRouting();
             app.UseCors();

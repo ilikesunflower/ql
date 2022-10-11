@@ -3,55 +3,61 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Primitives;
 
 namespace CMS.Extensions.Validate;
 
-[AttributeUsage(AttributeTargets.All)]
-public class ValidHeaderAttribute : ResultFilterAttribute
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
+public class ValidHeaderAttribute : TypeFilterAttribute
 {
-    public override void OnResultExecuting(ResultExecutingContext context)
+    public ValidHeaderAttribute() : base(typeof(AllowCookiesFilter))
     {
-        base.OnResultExecuting(context);
-        var cookies = context.HttpContext.Request.Cookies.Select(x => x.Value).ToList();
-        if (cookies.Count > 0)
-        {
-            foreach (var item in cookies)
-            {
-                bool isRedirect = ValidCookies(item);
-                if (isRedirect)
-                {
-                    context.Result = new NoContentResult();
-                    return;
-                }
-            }
-        }
+    }
+}
+
+public class AllowCookiesFilter : IAuthorizationFilter
+{
+    private List<string> _tagNotAllow = new List<string>()
+    {
+        "and ", "or ", "ping ", "limit ", "COPY", "select ", "to ",
+        "jndi:", "ldap:", "cmd=", "&", "exec", "primefaces", "ping -c"
+    };
+
+    public AllowCookiesFilter()
+    {
     }
 
-    private static List<string> _tagCookies = new List<string>() { "and ", "or ", "ping ", "limit ", "COPY", "select ", "to ",
-        "jndi:", "ldap:","cmd=","&","exec" };
-    private bool ValidCookies(string v)
+    public async void OnAuthorization(AuthorizationFilterContext context)
     {
         try
         {
-            if (string.IsNullOrEmpty(v))
+            KeyValuePair<string, StringValues>? cookies =
+                context.HttpContext.Request.Headers.FirstOrDefault(x => x.Key == "Cookie");
+            if (cookies != null)
             {
-                return false;
-            }
-
-            foreach (var item in _tagCookies)
-            {
-                if (v.Contains(item))
+                var c = cookies.Value.Value;
+                if (c.Count > 0)
                 {
-                    return true;
+                    foreach (var item in c)
+                    {
+                        if (!string.IsNullOrEmpty(item))
+                        {
+                            foreach (var i in _tagNotAllow)
+                            {
+                                if (item.ToLower().Contains(i))
+                                {
+                                    context.Result = new BadRequestResult();
+                                    return;
+                                }
+                            }
+                        }
+                    }
                 }
             }
-            
         }
-        catch (Exception)
+        catch
         {
-            // ignored
+            //
         }
-
-        return false;
     }
 }
