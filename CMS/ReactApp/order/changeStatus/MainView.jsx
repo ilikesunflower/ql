@@ -35,7 +35,6 @@ function MainView(props){
                     id: orderCode,
                 }
                 changeOrderConfirm(param, function (rs) {
-                    console.log(rs);
                     if ( rs.statusCode == 200 ){
                         window.location.reload();
                     }else{
@@ -61,7 +60,6 @@ function MainView(props){
                     id: orderCode,
                 }
                 changeOrderSynchronized(param, function (rs) {
-                    console.log(rs);
                     if ( rs.statusCode == 200 ){
                         window.location.reload();
                     }else{
@@ -97,7 +95,6 @@ function MainView(props){
                         cod:values.cod
                     }
                     changeOrderShip(param, function (rs) {
-                        console.log(rs);
                         if ( rs.statusCode == 200 ){
                             window.location.reload();
                         }else{
@@ -130,7 +127,6 @@ function MainView(props){
                             cod:priceCOD
                         }
                         changeOrderShip(param, function (rs) {
-                            console.log(rs);
                             if ( rs.statusCode == 200 ){
                                 window.location.reload();
                             }else{
@@ -157,7 +153,6 @@ function MainView(props){
                         cod:priceCOD
                     }
                     changeOrderShip(param, function (rs) {
-                        console.log(rs);
                         if ( rs.statusCode == 200 ){
                             window.location.reload();
                         }else{
@@ -185,7 +180,6 @@ function MainView(props){
                     id: orderCode,
                 }
                 changeOrderSuccess(param, function (rs) {
-                    console.log(rs);
                     if ( rs.statusCode == 200 ){
                         window.location.reload();
                     }else{
@@ -221,7 +215,6 @@ function MainView(props){
                         note: values.note
                     }
                     changeOrderCancel(param, function (rs) {
-                        console.log(rs);
                         if ( rs.statusCode == 200 ){
                             window.location.reload();
                         }else{

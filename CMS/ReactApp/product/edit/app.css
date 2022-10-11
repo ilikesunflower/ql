@@ -20,6 +20,15 @@
     color: red;
     cursor: pointer;
 }
+.buttonDelete{
+    font-size: 12px;
+}
+.buttonCrop{
+    font-size: 12px;
+}
+.buttonImage{
+    width: 15px;
+}
 .btnButtonY{
     background: #eaeaea;
     color: #19274B;

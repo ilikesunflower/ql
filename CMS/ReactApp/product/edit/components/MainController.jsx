@@ -82,7 +82,6 @@ function MainController(props) {
                             return { ord: index, value: x}
                         }) : []
                     }
-                    console.log("content2 val",val )
                     data.push(val);
                 })
                 setListProperties(data);
@@ -117,11 +116,9 @@ function MainController(props) {
 
     }, []);
     useEffect(function () {
-        console.log("change setListProperProduct ", listProperties)
         let data = [];
         let product = {...listProperProduct};
         let dataC = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0) || [];
-        console.log(dataC, checkEditPro)
         
         if(checkEditPro){
             if(Array.isArray(dataC) && dataC.length > 0){
@@ -140,7 +137,6 @@ function MainController(props) {
                 }else if(count > 1){
                     
                     let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
-                    console.log("valueP",valueP)
                     valueP.forEach((obj, index) => {
                         let dataP = {
                             name:  obj,

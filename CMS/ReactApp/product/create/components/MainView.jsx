@@ -30,7 +30,6 @@ function MainApp(props) {
     const {formik, state, method} = MainController();
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
-    console.log(formik.formikProduct.values)
     return (
         <Row>
             <Col md={12}>
@@ -108,9 +107,10 @@ function MainApp(props) {
                                                                    state.listFile.map((x, i) => {
                                                                        return(
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
-                                                                               <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteMany(i)}></i>
-                                                                               <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImageNew(i)}></i>
-
+                                                                               <div className="buttonImage" >
+                                                                                   <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteMany(i)}></i>
+                                                                                   <i className="fa-solid fa-scissors buttonCrop" onClick={() => method.cropImageNew(i)}></i>   
+                                                                               </div>
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>
                                                                                </div>
@@ -375,7 +375,6 @@ const ModalCategory = props => {
 
 const Properties = props => {
     const {hand11, hand1, listProperties, deleteT , addDetailProperties, deleteDetailProperties} = props;
-    console.log("list properties", listProperties);
     return(
         <div className="col-12 pb-3"  >
             {listProperties.map((value, index)  => {

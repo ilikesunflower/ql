@@ -12,7 +12,6 @@ import {NumberFormatField} from  "../../../components/formikField"
 function MainView(props) {
     let {formik, isEdit} = props;
     let {state,method } = MainController(props) ;
-    console.log(formik.values)
     return (
         <>
             {(state.showModelDetailProduct) && <DetailProduct formik={formik} showModelDetailProduct={state.showModelDetailProduct} productCartSelect={state.productCartSelect} setProductCartSelect={method.setProductCartSelect}  id={state.productSelect} handShowDetailProduct={method.handShowDetailProduct}/>}

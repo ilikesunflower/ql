@@ -22,7 +22,6 @@ function MainController(props) {
             setListProduct(rs);
         })
         getListPromotionShip(function (rs) {
-            console.log(rs);
             setListPromotionShip(rs);
         })
         if(isEdit){

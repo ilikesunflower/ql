@@ -15,7 +15,6 @@ function MainApp(props) {
     }
     useEffect(() => {
         getCouponCustomer({idCustomer: id, page:pageIndex }, function (rs) {
-            console.log(rs);
             setListData(rs.content);
             setForcePage(rs.pageIndex - 1);
             setPageIndex(rs.pageIndex);

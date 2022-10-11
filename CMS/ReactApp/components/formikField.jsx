@@ -82,7 +82,6 @@ export const Textarea = function (props) {
                        "Wingdings=wingdings,zapf dingbats;" +
                        " Noto Serif=noto serif,Segoe UI=segoe ui",
                    file_picker_callback: function(callback, value, meta) {
-                       console.log("upload ảnh hehe")
                        // Provide file and text for the link dialog
                        mediaManagerForTiny.on('select', function (obj) {
                            if (meta.filetype == 'image' && obj.type != 1) {
@@ -326,8 +325,6 @@ export const FileFieldCropImage = function (props) {
     let [nameF,  setNameF] = useState('');
     useEffect(function () {
         if(!show){
-            console.log($(refU))
-            console.log($(refU.current)[0].value)
             $(refU.current)[0].value = null;
             // $(refU).target.val(null);
         }
@@ -344,7 +341,6 @@ export const FileFieldCropImage = function (props) {
     }
     const handleInputChange = function (event) {
         let nameFile = event.target.files[0]?.name;
-        console.log(nameFile);
         let check = "";
         if (nameFile != "") {
             check = nameFile.split('.').pop();

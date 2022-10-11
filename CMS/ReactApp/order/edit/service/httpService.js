@@ -11,7 +11,6 @@ export const editOrder  = (param, callback) => {
             'Content-Type': 'multipart/form-data'
         }})
         .then(response => {
-            console.log(response)
             callback(response);
         })
         .catch(e => {

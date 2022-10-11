@@ -4,15 +4,12 @@ import "cropperjs/dist/cropper.css";
 import "./CropImage.css";
 import {Button, Form, Modal} from "react-bootstrap";
 
-
  function CropImage (props) {
      const {showCrop, setShowCrop,src, handleValue,typeFile, nameFile } = props;
-     console.log(typeFile,nameFile)
     const [image, setImage] = useState(src);
     const [cropper, setCropper] = useState({});
     const getCropData = () => {
         if (typeof cropper !== "undefined") {
-            console.log("getCroppedCanvas", cropper.getCroppedCanvas())
 
             cropper.getCroppedCanvas().toBlob(
                     (blob) => {
@@ -22,7 +19,6 @@ import {Button, Form, Modal} from "react-bootstrap";
                             return;
                         }
                         blob.name = nameFile;
-                        console.log( "image/"+ typeFile);
                         let file = new File([blob], nameFile,{ lastModified: new Date().getTime(), type:"image/"+ typeFile} )
                         handleValue(file)
                     },
@@ -42,13 +38,10 @@ import {Button, Form, Modal} from "react-bootstrap";
                      {src ? (
                          <Cropper
                              style={{ height: 400, width: "100%" }}
-                             zoomTo={0.25}
-                             initialAspectRatio={1}
+                             zoomTo={0}
                              preview=".img-preview"
                              src={image}
                              viewMode={1}
-                             minCropBoxHeight={10}
-                             minCropBoxWidth={10}
                              background={false}
                              responsive={true}
                              autoCropArea={1}

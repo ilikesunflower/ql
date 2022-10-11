@@ -16,9 +16,18 @@
     color: red;
     cursor: pointer;
 }
+.buttonDelete{
+    font-size: 12px;
+}
+.buttonCrop{
+    font-size: 12px;
+}
 .buttonCrop:hover{
     color: red;
     cursor: pointer;
+}
+.buttonImage{
+    width: 15px;
 }
 .btnButtonY{
     background: #eaeaea;

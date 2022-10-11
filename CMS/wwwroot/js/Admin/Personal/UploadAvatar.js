@@ -41,7 +41,6 @@ $("#btn-upload-avartar").click(function() {
         const canvas =  cropper.getCroppedCanvas();
         canvas.toBlob(function(blob) {
             let formData = new FormData();
-            console.log(blob)
             formData.append('file', blob,uuidv4() +".jpg");
             $.ajax({
                 type: 'POST',

@@ -90,7 +90,6 @@ function MainController(props) {
     useEffect(function () {
         if(id != 0){
             getOrderEdit({id: id}, function (rs) {
-                console.log("get data rs", rs)
                 formik.setFieldValue("customerId", rs?.customerId || 0)
                 formik.setFieldValue("priceShip", rs?.priceShip || 0)
                 formik.setFieldValue("couponCode", rs?.couponCode || '')
