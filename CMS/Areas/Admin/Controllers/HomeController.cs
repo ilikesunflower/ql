@@ -37,6 +37,11 @@ namespace CMS.Areas.Admin.Controllers
         public IActionResult Index()
         {
             IndexViewModel rs = new IndexViewModel();
+            rs.ListOrderDetail = _iDashBoardService.GetDataOrderDetail();
+            rs.IsOrdersStatusToday = User.HasClaim(CmsClaimType.AreaControllerAction,
+                "Admin@HomeController@GetOrdersStatusToday".ToUpper());
+            rs.IsOrderDetail = User.HasClaim(CmsClaimType.AreaControllerAction,
+                "Orders@OrderController@Index".ToUpper());
             rs.IsDataSales = User.HasClaim(CmsClaimType.AreaControllerAction,
                 "Admin@HomeController@GetChartDataSales".ToUpper());
             rs.IsProductBest = User.HasClaim(CmsClaimType.AreaControllerAction,
@@ -50,6 +55,17 @@ namespace CMS.Areas.Admin.Controllers
             rs.IsCustomerActive = User.HasClaim(CmsClaimType.AreaControllerAction,
                 "Reports@CustomerActivityController@WidgetDashboard".ToUpper());
             return View(rs); 
+        }
+
+        [Authorize(Policy = "PermissionMVC")]
+        public IActionResult GetOrdersStatusToday()
+        {
+              return Ok(new
+            {
+                code = 200,
+                msg = "successful",
+                content = ""
+            });
         }
 
         [HttpPost]

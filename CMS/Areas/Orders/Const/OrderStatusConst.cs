@@ -31,6 +31,25 @@ public class OrderStatusConst
         {5, "bg-danger text-white"}
     };
 
+    public static string GetColor(int type)
+    {
+        if (type == 0)
+        {
+            return "bg-waiting_color";
+        }
+        else if (type == 1)
+        {
+            return "bg-info";
+        }
+        else if (type == 2)
+        {
+            return "bg-success";
+        }
+        else
+        {
+            return "bg-danger";
+        }
+    }
     public static string GetStatus(int status)
     {
         return   $"<span class=\"status badge {ListColor.Where(x => x.Key == status).Select(x => x.Value).FirstOrDefault() ?? ""}\">{ListStatus.Where(x => x.Key == status).Select(x => x.Value).FirstOrDefault() ?? ""}</span>";

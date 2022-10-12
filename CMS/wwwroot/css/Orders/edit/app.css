@@ -195,15 +195,18 @@ section#pay-info .pay__active .btn {
 }
 
 .modal-coupon__list .modal-coupon__item .modal-coupon__item-content .modal-coupon__item-logo {
-    background-image: url('/images/logo_red_daiichi.png');
-    background-size: 65px 67px;
-    border: 1px solid rgba(27, 54, 93, 0.2);;
-    background-position: 50%;
-    background-repeat: no-repeat;
-    border-radius: 5px;
-    height: 80px;
-    width: 100px;
+    border:var(--theme-border);
+    border-radius:var(--theme-border-radius);
+    width:70px;
+    height:70px;
+    background-color:var(--theme-color-white);
+    background-size:65%;
+    background-repeat:no-repeat;
+    background-position:center center;
+    background-image: url('/images/logo_red.png');
 }
+
+
 .modal-coupon__item-title{
     display: flex;
     gap: 15px;

@@ -105,7 +105,6 @@
 		<Folder Include="Migrations\" />
 		<Folder Include="ReactApp\dashboard\area" />
 		<Folder Include="ViewComponents" />
-		<Folder Include="wwwroot\css\Admin\Home" />
 		<Folder Include="wwwroot\css\PreviewProduct\js\Admin\Shared" />
 		<Folder Include="wwwroot\dist" />
 		<Folder Include="wwwroot\js\Admin\Shared\" />

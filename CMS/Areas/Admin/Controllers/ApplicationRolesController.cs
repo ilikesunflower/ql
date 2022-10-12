@@ -196,7 +196,7 @@ namespace CMS.Areas.Admin.Controllers
         public IActionResult Edit(int id, EditApplicationRoleViewModel editApplicationRoleView)
         {
             if (id != editApplicationRoleView.Id) return NotFound();
-
+       
             if (ModelState.IsValid)
                 try
                 {

@@ -616,11 +616,11 @@ public class OrderController : BaseController
                 CouponCode = model.CouponCode,
                 Price = orderProduct.Sum(x => (x.Price ?? 0) * x.Quantity),
                 CouponDiscount = model.CouponDiscount,
-                // Point = model.Point,
+                Point = 0,
                 PrCode = model.PrCode,
                 PrFile = model.PrFile,
                 Status = 0,
-                // PointDiscount = (double) (model.Point * IsPoi),
+                PointDiscount = 0,
                 TotalWeight = model.TotalWeight!.Value,
                 BillCompanyName =
                     customer.TypeGroup == 2 ? PrudentialBillInfo.BillCompanyName : model.BillCompanyName,
@@ -1450,7 +1450,7 @@ public class OrderController : BaseController
             order.CouponDiscount = model.CouponDiscount;
             order.Price = orderCreate.Sum(x => (x.Price ?? 0) * x.Quantity) +
                           orderUpdate.Sum(x => (x.Price ?? 0) * x.Quantity);
-            // order.Point = model.Point;
+            // order.Point = order.Point;
             order.PrCode = model.PrCode;
             // order.PointDiscount = model.Point * IsPoi;
             order.PrFile = !string.IsNullOrEmpty(prFileUrl) ? prFileUrl : order.PrFile;

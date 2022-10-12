@@ -116,7 +116,7 @@ function MainApp(props) {
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
                                                                                <div className="buttonImage" >
                                                                                  <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteMany(i)}></i>
-                                                                                 <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImageNew(i)}></i>
+                                                                                 <i className="fa-solid fa-scissors buttonCrop" onClick={() => method.cropImageNew(i)}></i>
                                                                                </div>
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>
@@ -131,7 +131,7 @@ function MainApp(props) {
                                                                            <div className="col-2 pt-3 pb-3  d-flex justify-content-center " key={i} >
                                                                                <div className="buttonImage">
                                                                                    <i className="fas fa-minus-circle buttonDelete"  onClick={() =>method.deleteManyOld(i)}></i>
-                                                                                   <i className="fa-solid fa-pen-to-square  buttonCrop" onClick={() => method.cropImage(i)}></i>
+                                                                                   <i className="fa-solid fa-scissors buttonCrop" onClick={() => method.cropImage(i)}></i>
                                                                                </div>
                                                                                <div className="img">
                                                                                    <img src={x}  className="imgC"/>

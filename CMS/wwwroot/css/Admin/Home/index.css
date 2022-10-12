@@ -1,0 +1,12 @@
+.item-view-detail {
+    color: rgba(25, 39, 75, 0.7) !important;
+}
+.text-color-default {
+    color: #19274B;
+}
+.small-box>.inner{
+    padding-bottom: 60px;
+}
+.bg-waiting_color{
+    background-color:  #93979a!important;
+}

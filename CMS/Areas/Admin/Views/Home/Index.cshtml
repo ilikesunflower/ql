@@ -5,6 +5,7 @@
 
 @section Styles
 {
+      <link rel="stylesheet" href="~/css/Admin/Home/index.css"/>
 }
 
 <!-- Main content -->
@@ -13,6 +14,7 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row pt-3"></div>
+        @await Html.PartialAsync("Partials/OrderDetail", new { permission = Model.IsOrdersStatusToday, permissionDetail = Model.IsOrderDetail , orderDetail= Model.ListOrderDetail})
         @await Html.PartialAsync("Partials/DataSales", new { permission = Model.IsDataSales })
         @await Html.PartialAsync("Partials/ProductBest", new { permission = Model.IsProductBest })
         @await Html.PartialAsync("Partials/GroupCustomer", new { permission = Model.IsGroupCustomer })

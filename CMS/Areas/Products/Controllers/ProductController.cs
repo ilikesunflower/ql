@@ -389,7 +389,7 @@ namespace CMS.Areas.Products.Controllers
                     else
                     {
                         ToastMessage(-1, $"Thêm sản phẩm thành lỗi !");
-                        ILoggingService.Error(this._iLogger, "Thêm sản phẩm lỗi", "id:" + UserInfo.UserId);
+                        ILoggingService.Error(this._iLogger, "Thêm sản phẩm lỗi", "id:" + UserInfo.UserId + rs.Message);
 
                         return Json(new
                         {
@@ -466,7 +466,7 @@ namespace CMS.Areas.Products.Controllers
                     else
                     {
                         ToastMessage(-1, $"Sửa sản phẩm thành lỗi !");
-                        ILoggingService.Error(this._iLogger, "Chỉnh sửa sản phẩm lỗi", "id:" + editData.Id);
+                        ILoggingService.Error(this._iLogger, "Chỉnh sửa sản phẩm lỗi", "id:" + editData.Id + rs.Message);
 
                         return Json(new
                         {

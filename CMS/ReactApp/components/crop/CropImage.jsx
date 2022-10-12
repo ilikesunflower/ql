@@ -29,7 +29,7 @@ import {Button, Form, Modal} from "react-bootstrap";
     };
     return (
      <>
-         <Modal  show={showCrop}  onHide={() => setShowCrop(!showCrop)} animation={false}>
+         <Modal  show={showCrop}  animation={false}>
              <Form >
                  <Modal.Header>
                      <Modal.Title>Cắt ảnh</Modal.Title>

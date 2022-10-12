@@ -330,6 +330,7 @@ export const FileFieldCropImage = function (props) {
         }
     }, [show]);
     const handleImageChange = function (event) {
+        console.log("event", event)
         if(!event){
             formik.setFieldValue(name, image);
             setImageString(URL.createObjectURL(image))

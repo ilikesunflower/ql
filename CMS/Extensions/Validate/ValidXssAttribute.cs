@@ -8,6 +8,14 @@ namespace CMS.Extensions.Validate
 {
     public class ValidXssAttribute : ValidationAttribute
     {
+        private bool _checkTag = true;
+        public ValidXssAttribute(bool checkTag )
+        {
+            _checkTag = checkTag;
+        }
+        public ValidXssAttribute( )
+        {
+        }
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value != null && CollectionHelper.IsList(value))
@@ -32,7 +40,7 @@ namespace CMS.Extensions.Validate
                         else if (!string.IsNullOrEmpty(data) && HtmlSanitizerHelper.IsXss(data))
                         {
                             return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
-                        }else if (!string.IsNullOrEmpty(data))
+                        }else if (!string.IsNullOrEmpty(data) && _checkTag)
                         {
                             foreach (var t in HtmlSanitizerHelper.ListTagXss)
                             {
@@ -63,7 +71,7 @@ namespace CMS.Extensions.Validate
                 {
                     return new ValidationResult("Hệ thống không hỗ trợ nội dung này");
                 }
-                else if (!string.IsNullOrEmpty(data))
+                else if (!string.IsNullOrEmpty(data) && _checkTag)
                 {
                     foreach (var t in HtmlSanitizerHelper.ListTagXss)
                     {

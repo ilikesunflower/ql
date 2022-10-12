@@ -4,12 +4,14 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using CMS.Areas.Admin.Const;
 using CMS.Areas.Admin.ViewModels.Home;
+using CMS.Areas.Admin.ViewModels.Home.OrderDetail;
 using CMS.Areas.Admin.ViewModels.Home.ToProduct;
 using CMS.Areas.Customer.Const;
 using CMS_Access.Repositories.Orders;
 using CMS_Access.Repositories.Products;
 using CMS_Lib.DI;
 using CMS.Areas.Orders.Const;
+using CMS.DataTypes;
 using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -29,6 +31,7 @@ namespace CMS.Areas.Admin.Services.Home
         List<SeriesCharArea> GetDataArea(DateTime dateStart, DateTime dateEnd);
         
         List<CMS_EF.Models.Products.Products> GetDataToRating(DateTime dateStart, DateTime dateEnd);
+        List<OrderDetailViewModel> GetDataOrderDetail();
     }
 
     public class DashBoardService : IDashBoardService
@@ -191,6 +194,27 @@ namespace CMS.Areas.Admin.Services.Home
         {
             var data = _iProductRepository.FindAll().Where(x => x.RateCount > 0).OrderByDescending(x =>  (x.RateCount > 0 ? (x.Rate / x.RateCount) : 0)).Take(10).ToList();
             return data;
+        }
+
+        public List<OrderDetailViewModel> GetDataOrderDetail()
+        {
+            var rs = new List<OrderDetailViewModel>();
+            DateTime t = DateTime.Now;
+            DateTime start = new DateTime(t.Year, t.Month, t.Day, 0, 0, 0);
+            DateTime  end = new DateTime(t.Year, t.Month, t.Day, 23, 59, 59);
+            var query = _iOrdersRepository.FindAll().Where(x => x.OrderAt >= start && x.OrderAt <= end);
+            List<OrderDetailViewModel> data = OrderDetailCost.ListOrderDetail;
+            foreach (OrderDetailViewModel item in data)
+            {
+                OrderDetailViewModel i = item;
+                var p = query.Where(x => i.ListStatus.Contains(x.Status.Value));
+                i.CountOrder = p.Count();
+                i.PriceOrder = p.Sum(x => x.Total.Value);
+                i.Date = start.ToString("dd/MM/yyyy");
+                rs.Add(i);
+            }
+
+            return rs;
         }
     }
 }
