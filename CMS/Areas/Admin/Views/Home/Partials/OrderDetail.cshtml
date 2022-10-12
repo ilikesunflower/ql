@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="row p-b-5">
-                        <div class="col-12 text-color-default font-weight-bold">Ngày @(DateTime.Now.ToString("dd/MM/yyyy"))</div>
+                        <div class="col-12 text-color-default font-weight-bold text-uppercase">Doanh thu ngày @(DateTime.Now.ToString("dd/MM/yyyy")): @(CmsFunction.NumberFormatShow(data.Where(x => x.Type != 3).Sum(x => x.PriceOrder))) VND</div>
                     </div>
                     <div class="row d-flex align-items-stretch flex-row">
                         @foreach (var item in data)
@@ -43,7 +43,7 @@
                                             </div>
                                             <div class="col-8 col-sm-7">
                                                 <span class="font-size-12 text-uppercase  text-white ">
-                                                    @CmsFunction.NumberFormatShow(item.PriceOrder) <u>đ</u>
+                                                    @CmsFunction.NumberFormatShow(item.PriceOrder) <u>VND</u>
                                                 </span>
                                             </div>
                                         </div>
