@@ -191,7 +191,7 @@ function MainApp(props) {
 
                                                                                        </div>
                                                                                        <div className="row">
-                                                                                           <Form.Label className=" col-md-2 "> Giá bán</Form.Label>
+                                                                                           <Form.Label className=" col-md-2 "> Giá bán  <span className="text-danger">*</span></Form.Label>
                                                                                            <NumberFormatFieldAfter className="form-control-xl form-control  col-md-12 "   classnamediv="price_class col-8 pl-0"   placeholder="Nhập giá bán thị trường "  formik={formik.formikProduct} name="price" />
                                                                                        </div>
                                                                                    </div>
@@ -257,17 +257,13 @@ function MainApp(props) {
                                                         <div className="row">
                                                             <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
 
-                                                            {/*<div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>*/}
-                                                            {/*    <FileFieldP setImageString={method.setImageString} formik={formik.formikProduct} refU={state.refI}  name="image" className="hidden"/>*/}
-                                                            {/*    <img src={state.imageString} className="imgA"/>*/}
-                                                            {/*</div>*/}
                                                          </div>
                                                     </Card.Body>
                                                 </Card>
                                                 <Card>
                                                     <Card.Body className="row">
                                                         <Form.Group className="col-md-12 pt-3">
-                                                            <Form.Label className="form-check-label">Cân nặng</Form.Label>
+                                                            <Form.Label className="form-check-label">Cân nặng  <span className="text-danger">*</span></Form.Label>
                                                             <NumberFormatFieldAfter className="form-control-xl form-control "  classnamediv="weight_class" placeholder="Nhập cân nặng"  formik={formik.formikProduct} name="weight" />
                                                         </Form.Group>
                                                         <Form.Group className="col-md-12 pt-3">
