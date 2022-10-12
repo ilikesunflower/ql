@@ -26,7 +26,7 @@ public interface IProductService : IScoped
     ResultJson SaveProductEdit(EditProductModel editData, int userId);
     ResultJson SaveProduct(CreateProductModel editData, int userId);
 
-    
+    List<ProductCategoryModel> GetCategoryProduct();
     Message ContentSendEmail(List<string> email, string title, string link);
 
 }
@@ -85,7 +85,19 @@ public class ProductService : IProductService
 
         return null;
     }
-    
+
+    public List<ProductCategoryModel> GetCategoryProduct()
+    {
+        var query = _iProductCategoryRepository.FindAll();
+        var rs = _iProductCategoryRepository.FindAll().OrderBy(x => x.Rgt).Select(x => new ProductCategoryModel
+        {
+            Label = CmsFunction.BindNameParenChild(x.Name, x.Lvl),
+            Value = x.Id,
+            Disabled = query.Where(k => k.Pid == x.Id).Count() > 0 ? true : false,
+            Rgt = x.Rgt
+        }).OrderBy(x => x.Rgt).ToList();
+        return rs;
+    }
     public ResultJson SaveProductEdit(EditProductModel editData, int userId)
     {
         using var transaction = _applicationDbContext.Database.BeginTransaction();

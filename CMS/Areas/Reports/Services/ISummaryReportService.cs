@@ -27,12 +27,12 @@ public class SummaryReportService : ISummaryReportService
 
     public IQueryable<CMS_EF.Models.Orders.Orders> GetListOrders(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint)
     {
-        return _iOrdersRepository.GetOrderIncludeProductAndAddressAndCustomer( txtSearch,start, end,paymentStatus,status,isUsePoint);
+        return _iOrdersRepository.GetOrderIncludeProductAndAddressAndCustomer( txtSearch,start, end,paymentStatus,status,isUsePoint).Where(x => x.Status != OrderStatusConst.StatusOrderCancel);
     }
 
     public List<ExportExcelModel> GetListOrdersExcel(string txtSearch,DateTime? start, DateTime? end,int? paymentStatus,int? status,bool isUsePoint)
     {
-        var orders = GetListOrders(txtSearch,start, end,paymentStatus,status,isUsePoint).ToList();
+        var orders = GetListOrders(txtSearch,start, end,paymentStatus,status,isUsePoint).Where(x => x.Status != OrderStatusConst.StatusOrderCancel).ToList();
 
         return (from order in orders
             from orderProduct in order.OrderProduct

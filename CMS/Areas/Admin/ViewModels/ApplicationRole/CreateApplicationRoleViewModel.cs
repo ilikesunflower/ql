@@ -44,7 +44,7 @@ namespace CMS.Areas.Admin.ViewModels.ApplicationRole
         public int Id { get; set; }
         [ValidXss]
         public string Title { get; set; }
-        [ValidXss]
+        [ValidXss(false)]
         public string Name { get; set; }
         public int ControllerId { get; set; }
         public bool IsChecked { get; set; }
