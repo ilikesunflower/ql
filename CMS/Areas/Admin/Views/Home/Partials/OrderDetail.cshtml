@@ -16,11 +16,14 @@
         {
             <div class="row">
                 <div class="col-md-12">
+                    <div class="row p-b-5">
+                        <div class="col-12 text-color-default font-weight-bold">Ngày @(DateTime.Now.ToString("dd/MM/yyyy"))</div>
+                    </div>
                     <div class="row d-flex align-items-stretch flex-row">
                         @foreach (var item in data)
                         {
                             <div class="col-md-3 col-lg-3 col-12 ">
-                              
+
                                 <div class="@("small-box " + OrderStatusConst.GetColor(item.Type))">
                                     <div class="inner">
                                         <h3 class="text-uppercase text-white font-weight-bold font-size-16 pt-2 pb-2">@(item.Name)</h3>
@@ -67,14 +70,15 @@
 
                                         }
                                     </div>
-                                    @if(isShowDetail == true){
+                                    @if (isShowDetail == true)
+                                    {
                                         <a href="#" class="small-box-footer" onclick="onclickShow('@item.Date',' @item.Type' )">
-                                              Xem chi tiết <i class="fas fa-arrow-circle-right"></i>
-                                         </a>
+                                            Xem chi tiết <i class="fas fa-arrow-circle-right"></i>
+                                        </a>
                                     }
-                                   
+
                                 </div>
-                                </div>
+                            </div>
                         }
                     </div>
                 </div>
