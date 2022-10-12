@@ -101,7 +101,7 @@ function MainApp(props) {
                                                        </Form.Group>
                                                        <Form.Group className="col-md-12 pt-3">
                                                            <Form.Label className="form-check-label ">Danh mục sản phẩm  <span className="text-danger">*</span> </Form.Label>
-                                                           <SelectNewMutile2 options={state.listProductCategory} formik={formik.formikProduct} name="productCategory" hand={method.handCategory} defaultValue={[]} selectKey="value" selectText="label" placeholder="Chọn danh mục" className="basic-multi-select rounded-0 col-md-11 col-sm-9 pr-0 " />
+                                                           <SelectNewMutile2  isDisabled="disabled" options={state.listProductCategory} formik={formik.formikProduct} name="productCategory" hand={method.handCategory} defaultValue={[]} selectKey="value" selectText="label" placeholder="Chọn danh mục" className="basic-multi-select rounded-0 col-md-11 col-sm-9 pr-0 " />
                                                        </Form.Group>
                                                        <div className="d-flex justify-content-center col-12  pt-3">
                                                            <button  type="button" className="btn btn-secondary" onClick={method.onClickImage}  >Upload ảnh phụ</button>

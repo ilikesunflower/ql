@@ -14,19 +14,19 @@ function SelectNewMutile2(props){
     const [defaultV, setDefaultV] = useState([]);
     let meta = formik.getFieldMeta(name);
     let prop = formik.getFieldProps(name);
-    const formatOption = function (rawOption, key, text, value= 0){
+    const formatOption = function (rawOption, key, text, isDisabled,  value= 0){
         let option = [];
         if(Array.isArray(rawOption) && rawOption.length > 0){
             rawOption.forEach(obj => {
-                let opt = {value : obj[key], label : obj[text]}
+                let opt = {value : obj[key], label : obj[text], isDisabled:  obj[isDisabled]}
                 option.push(opt);
             })
         }
         return option;
     }
     useEffect(() => {
-        let data = formatOption(options, selectKey, selectText, (prop.value ? prop.value : defaultValue));
-        let data1 = formatOption(defaultValue, selectKey, selectText, (prop.value ? prop.value : defaultValue));
+        let data = formatOption(options, selectKey, selectText, isDisabled, (prop.value ? prop.value : defaultValue));
+        let data1 = formatOption(defaultValue, selectKey, selectText, isDisabled, (prop.value ? prop.value : defaultValue));
         setOptionV(data);
         setDefaultV(data1);
     }, [options, defaultValue]);
@@ -36,6 +36,7 @@ function SelectNewMutile2(props){
     delete customProps.selectText;
     delete customProps.defaultValue;
     delete customProps.value;
+    delete customProps.isDisabled;
     const handleSelectChange = function (event) {
         console.log(event)
         formik.setFieldValue(name, event);
