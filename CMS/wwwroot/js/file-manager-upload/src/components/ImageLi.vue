@@ -4,7 +4,7 @@
     <div class="attachment-preview js--select-attachment type-image subtype-png landscape">
       <div class="thumbnail">
         <div class="centered">
-          <img :src="file.thumbnail" draggable="false" alt="">
+          <img :src="file.thumbnail + '?w=200'" draggable="false" alt="">
         </div>
       </div>
     </div>

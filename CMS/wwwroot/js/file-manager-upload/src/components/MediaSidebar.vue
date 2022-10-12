@@ -9,13 +9,13 @@
       </h2>
       <div class="attachment-info">
         <div class="thumbnail thumbnail-image">
-          <img :src="fileInfo.thumbnail" draggable="false" alt="">
+          <img :src="fileInfo.thumbnail + '?w=200'" draggable="false" alt="">
         </div>
         <div class="details">
           <div class="filename">{{fileInfo.name}}</div>
           <div class="uploaded">{{new Date(fileInfo.createdAt).toLocaleString() }}</div>
           <div class="file-size">{{fileInfo.size}}</div>
-          <div class="dimensions"> 1920 by 1080 pixels</div>
+<!--          <div class="dimensions"> 1920 by 1080 pixels</div>-->
           <button type="button" class="button-link delete-attachment" @click="removeFile(fileInfo)">Delete permanently</button>
           <div class="compat-meta">
           </div>
