@@ -14,33 +14,36 @@
         var isShowDetail = Model.GetType().GetProperty("permissionDetail").GetValue(Model, null);
         if (isShow == true)
         {
-            <div class="row pt-4 ">
+            <div class="row">
                 <div class="col-md-12">
+                    <div class="row p-b-5">
+                        <div class="col-12 text-color-default font-weight-bold">Ngày @(DateTime.Now.ToString("dd/MM/yyyy"))</div>
+                    </div>
                     <div class="row d-flex align-items-stretch flex-row">
                         @foreach (var item in data)
                         {
                             <div class="col-md-3 col-lg-3 col-12 ">
-                              
+
                                 <div class="@("small-box " + OrderStatusConst.GetColor(item.Type))">
                                     <div class="inner">
                                         <h3 class="text-uppercase text-white font-weight-bold font-size-16 pt-2 pb-2">@(item.Name)</h3>
                                         <div class="row">
-                                            <div class="col-4">
-                                                <span class="font-size-12 text-uppercase  text-white ">Số đơn hàng</span>
+                                            <div class="col-4 col-sm-5">
+                                                <span class="font-size-12 text-uppercase  text-white ">Số đơn</span>
                                             </div>
-                                            <div class="col-8">
+                                            <div class="col-8 col-sm-7">
                                                 <span class="font-size-12 text-uppercase  text-white ">
                                                     @CmsFunction.NumberFormatShow(item.CountOrder)
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-4">
-                                                <span class="font-size-12 text-uppercase  text-white ">Doanh thu</span>
+                                            <div class="col-4 col-sm-5">
+                                                <span class="font-size-12 text-uppercase  text-white ">Tổng tiền</span>
                                             </div>
-                                            <div class="col-8">
+                                            <div class="col-8 col-sm-7">
                                                 <span class="font-size-12 text-uppercase  text-white ">
-                                                    @CmsFunction.NumberFormatShow(item.PriceOrder) <u>Đ</u>
+                                                    @CmsFunction.NumberFormatShow(item.PriceOrder) <u>đ</u>
                                                 </span>
                                             </div>
                                         </div>
@@ -48,33 +51,34 @@
                                     <div class="icon">
                                         @if (item.Type == 0)
                                         {
-                                            <i class="nav-icon fa-solid fa-arrow-right-to-bracket"></i>
+                                            <i class="nav-icon fa-solid fa-arrow-right-to-bracket font-size-75"></i>
 
                                         }
                                         else if (item.Type == 1)
                                         {
-                                            <i class="nav-icon fa-solid fa-truck-fast"></i>
+                                            <i class="nav-icon fa-solid fa-truck-fast font-size-75"></i>
 
                                         }
                                         else if (item.Type == 2)
                                         {
-                                            <i class="nav-icon fa-solid fa-circle-check"></i>
+                                            <i class="nav-icon fa-solid fa-circle-check font-size-75"></i>
 
                                         }
                                         else if (item.Type == 3)
                                         {
-                                            <i class="nav-icon fa-solid fa-ban"></i>
+                                            <i class="nav-icon fa-solid fa-ban font-size-75"></i>
 
                                         }
                                     </div>
-                                    @if(isShowDetail == true){
+                                    @if (isShowDetail == true)
+                                    {
                                         <a href="#" class="small-box-footer" onclick="onclickShow('@item.Date',' @item.Type' )">
-                                              Xem chi tiết <i class="fas fa-arrow-circle-right"></i>
-                                         </a>
+                                            Xem chi tiết <i class="fas fa-arrow-circle-right"></i>
+                                        </a>
                                     }
-                                   
+
                                 </div>
-                                </div>
+                            </div>
                         }
                     </div>
                 </div>

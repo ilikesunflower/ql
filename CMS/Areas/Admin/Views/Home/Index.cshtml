@@ -19,7 +19,7 @@
         @await Html.PartialAsync("Partials/ProductBest", new { permission = Model.IsProductBest })
         @await Html.PartialAsync("Partials/GroupCustomer", new { permission = Model.IsGroupCustomer })
         @await Html.PartialAsync("Partials/DataAreas", new { permission = Model.IsDataAreas })
-        <div class="row pt-3">
+        <div class="row">
             @await Html.PartialAsync("Partials/ProductRating", new { permission = Model.IsProductRating })
             @await Html.PartialAsync("Partials/CustomerActive", new { permission = Model.IsCustomerActive })
         </div>

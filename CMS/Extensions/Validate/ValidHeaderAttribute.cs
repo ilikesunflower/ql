@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
 
 namespace CMS.Extensions.Validate;
@@ -17,14 +18,16 @@ public class ValidHeaderAttribute : TypeFilterAttribute
 
 public class AllowCookiesFilter : IAuthorizationFilter
 {
+    private readonly ILogger<AllowCookiesFilter> _iLogger;
     private List<string> _tagNotAllow = new List<string>()
     {
         "and ", "or ", "ping ", "limit ", "COPY", "select ", "to ",
         "jndi:", "ldap:", "cmd=", "&", "exec", "primefaces", "ping -c"
     };
 
-    public AllowCookiesFilter()
+    public AllowCookiesFilter(ILogger<AllowCookiesFilter> iLogger)
     {
+        _iLogger = iLogger;
     }
 
     public async void OnAuthorization(AuthorizationFilterContext context)
@@ -46,6 +49,7 @@ public class AllowCookiesFilter : IAuthorizationFilter
                             {
                                 if (item.ToLower().Contains(i))
                                 {
+                                    this._iLogger.LogError($"{context.HttpContext.Request.Path.Value}: chứa ký tự lỗi {i}");
                                     context.Result = new BadRequestResult();
                                     return;
                                 }

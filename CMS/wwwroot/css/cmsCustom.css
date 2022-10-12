@@ -1,7 +1,9 @@
 ﻿.cropper-container{
     background-image: url("../images/crop/background_crop.png") !important;
 }
-
+.font-size-75{
+    font-size: 75px !important;
+}
 img{
     max-width: 100% !important;
 }
