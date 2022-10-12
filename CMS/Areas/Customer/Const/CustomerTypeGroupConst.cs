@@ -34,7 +34,7 @@ public class CustomerTypeGroupConst
         // { PhongBan, "<span class='badge badge-primary'>Phòng ban</span>" },
         { GA, "<span class='badge badge-info'>GA</span>" },
         { POD, $"<span class='badge badge-warning'>{PartnerText}</span>" },
-        { OP, $"<span class='badge badge-default'>{OPText}</span>" },
+        { OP, $"<span class='badge badge-secondary'>{OPText}</span>" },
     };
 
     public static string GetCustomerTypeGroup(int type)

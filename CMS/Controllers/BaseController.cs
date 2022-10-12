@@ -21,7 +21,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace CMS.Controllers
 {
     [Authorize]
-    // [ValidHeader]
+    [ValidHeader]
     // [AutoValidateAntiforgeryToken]
     [ValidateAntiForgeryToken]
     [IgnoreAntiforgeryToken]
