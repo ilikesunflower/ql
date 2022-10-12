@@ -893,44 +893,6 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="product-slide col3">
-                    <div class="product-slide__title">
-                        <h2>Sản phẩm liên quan</h2>
-                    </div>
-                    <div class="product-slide__body owl-carousel owl-theme">
-                        <div class="product-item">
-                            <div class="product-item__image">
-                                <img class="product-image" src="@product.Image" alt="@product.Name">
-                            </div>
-                            <div class="product-item__info">
-                                <a href="#">
-                                    <h2 class="product-item__title">@product.Name</h2>
-                                </a>
-                                <div class="product-item__star">
-                                    <span class="fa-solid fa-star checked"></span>
-                                    <span class="fa-solid fa-star checked"></span>
-                                    <span class="fa-solid fa-star checked"></span>
-                                    <span class="fa-solid fa-star checked"></span>
-                                    <span class="fa-solid fa-star checked"></span>
-                                </div>
-                                <div class="product-item__price">
-                                     @if (product.PriceSale != null && product.PriceSale != 0)
-                                    {
-                                        <p class="old-price">@CmsFunction.NumberFormatShow(product.PriceSale)đ</p>
-                                    }
-                                    <p class="new-price">@CmsFunction.NumberFormatShow(listS[0].Price)đ</p>
-                                </div>
-                                <a class="btn btn-outline-red-heavy w-100 btn-has-icon" href="#">
-                                    <i class="fas fa-shopping-cart mr-2"></i>Chọn mua
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="product-slide__footer">
-                        <a href="#">Xem thêm >></a>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
