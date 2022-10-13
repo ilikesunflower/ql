@@ -154,7 +154,10 @@
                                                 @item.OrderAt?.ToString("dd/MM/yyyy HH:mm")
                                             </td>
                                             <td class="align-middle text-center">
-                                                <p class="font-size-14 m-all-0">@(item.Customer.FullName) @Html.Raw($"{(!string.IsNullOrEmpty(item.Customer!.Phone) ? ($"<br/> {item.Customer!.Phone}") : "")}")</p>
+                                                @if (item.Customer != null)
+                                                {
+                                                    <p class="font-size-14 m-all-0">@(item.Customer!.FullName) @Html.Raw($"{(!string.IsNullOrEmpty(item.Customer!.Phone) ? ($"<br/> {item.Customer!.Phone}") : "")}")</p>
+                                                }
                                             </td>
                                             <td class="align-middle fontZ">
                                                 <p class="font-size-14 m-all-0">
