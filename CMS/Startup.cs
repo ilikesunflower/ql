@@ -260,8 +260,8 @@ namespace CMS
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseResponseCompression();
-            app.UseStaticFilesApplication();
             app.UseProxyImageApplication();
+            app.UseStaticFilesApplication();
             // app.UseForwardedHeaders(new ForwardedHeadersOptions
             //     { ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto }
             // );

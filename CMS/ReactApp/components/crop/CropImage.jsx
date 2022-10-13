@@ -45,6 +45,7 @@ import {Button, Form, Modal} from "react-bootstrap";
                              background={false}
                              responsive={true}
                              autoCropArea={1}
+                             aspectRatio={16 / 16}
                              checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
                              onInitialized={(instance) => {
                                  setCropper(instance);

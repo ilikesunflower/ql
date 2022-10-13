@@ -20,18 +20,18 @@
                 <div class="col-md-2 text-left vetical_text ">
                     @(item.NonName)
                 </div>
-                <div class="col-md-1 text-left ">
-                    <div class="imgProduct">
-                        @if (!string.IsNullOrEmpty(item.ImageBanner))
-                        {
-                            <img alt="image" src="@Html.Raw(item.ImageBanner+ "?w=50&h=50")" >
-                        }
-                    </div>
-                </div>
-          
-                <div class=" text-left w-45-px vetical_text ">
-                       @Html.Raw($"<i class=\"{item.Font}\"></i>")
-                </div>
+                @* <div class="col-md-1 text-left "> *@
+                @*     <div class="imgProduct"> *@
+                @*         @if (!string.IsNullOrEmpty(item.ImageBanner)) *@
+                @*         { *@
+                @*             <img alt="image" src="@Html.Raw(item.ImageBanner)" width="100%" height="100%"> *@
+                @*         } *@
+                @*     </div> *@
+                @* </div> *@
+                @* *@
+                @* <div class=" text-left w-45-px vetical_text "> *@
+                @*        @Html.Raw($"<i class=\"{item.Font}\"></i>") *@
+                @* </div> *@
                 <div class="w-230-px text-center vetical_text  function">
                     @await Html.PartialAsync("Partial/BasicActionTable/View", new {id = item.Id})
                     @await Html.PartialAsync("Partial/BasicActionTable/Edit", new {id = item.Id})
