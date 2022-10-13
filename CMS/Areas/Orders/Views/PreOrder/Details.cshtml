@@ -149,7 +149,7 @@
                                 <tr>
                                     <td class="m-0  align-middle">
                                         <div class="row">
-                                            <img src="@preOrder?.Product?.Image" class="imageCart " alt="@preOrder?.Product?.Name"/>
+                                            <img src="@(preOrder?.Product?.Image + "?w=50")"  alt="@preOrder?.Product?.Name"/>
                                             <div class="pl-2">
                                                 <strong>@preOrder?.Product?.Name </strong>
                                                 @if (preOrder?.ProductSimilar?.ProductSimilarProperty.Count > 0)

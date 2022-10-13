@@ -26,7 +26,7 @@ $("#file-input").change(function (e) {
                 if (response.msg == "successful") {
                     $("#file").empty();
                     $("#file").html('<img alt="image" class="img-circle" src="' +
-                        response.detail +
+                        response.detail + "?w=200" + 
                         '" width="200" height="200">');
                     $("#Image").val(response.detail);
                 } else {

@@ -234,7 +234,7 @@ function MainApp(props) {
                                                         <div className="row">
                                                             
                                                             {/*<div className="col-lg-12 " onClick={()=> {$(state.refI.current).click()}}>*/}
-                                                                <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
+                                                                <FileFieldCropImage widthStyle={300}  imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
                                                                 {/*<img src={state.imageString} className="imgA"/>*/}
                                                             {/*</div>*/}
                                                          </div>

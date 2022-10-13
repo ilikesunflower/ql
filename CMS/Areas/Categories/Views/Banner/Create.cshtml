@@ -115,7 +115,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <img src="@Thumbnail" class="image-preview" style="width: 100%">
+                                                    <img src="@(Thumbnail + "?w=350")" class="image-preview" style="width: 100%">
                                                     <input asp-for="Images" type="hidden" class="form-control image-value" autocomplete="off"/>
                                                 </div>
                                             </div>
@@ -145,7 +145,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-lg-12">
-                                                    <img src="@ThumbnailMobile" class="image-preview" style="width: 100%">
+                                                    <img src="@(ThumbnailMobile + "?w=350")" class="image-preview" style="width: 100%">
                                                     <input asp-for="ImagesMobile" type="hidden" class="form-control image-value" autocomplete="off"/>
                                                 </div>
                                             </div>
@@ -224,7 +224,7 @@
                     let txtValue = $(this).closest(".file-group").find('input.image-value');
                     mediaManager.on('select', function (obj) {
                         if (obj.type == 1) {
-                            imagePreview.attr("src", obj.thumbnail);
+                            imagePreview.attr("src", obj.thumbnail + "?w=350");
                             txtValue.val(obj.url);
                         } else {
                             toastr.error("file không được hỗ trợ. file phải là một hình ảnh.", "Thông báo");

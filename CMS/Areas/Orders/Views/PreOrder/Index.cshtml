@@ -80,7 +80,7 @@
                                             <td class="text-center">@(index++)</td>
                                             <td class="">
                                                 <div class="table__product-contain">
-                                                    <div class="table__product-image" style="background-image: url('@(item.Product.Image)' ) "></div>
+                                                    <div class="table__product-image" style="background-image: url('@(item.Product.Image+ "?w=50")' ) "></div>
                                                     <div class="table__product-info">
                                                         <strong class="d-block">@item.Product.Name</strong>
                                                         <span>Số lượng: @item.Quantity</span>

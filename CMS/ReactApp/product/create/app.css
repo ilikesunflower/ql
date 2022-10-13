@@ -5,11 +5,10 @@
 }
 .imgC{
     width: 100%;
-    height: 100%;
+    height: 100%;;
 }
 .imgA{
     width: 100%;
-    height: 300px;
     border: 2px dashed #b1154a;
 }
 .buttonDelete:hover{

@@ -239,7 +239,7 @@
                         <tr>
                             <td class="m-0  align-middle">
                                 <div class="row">
-                                    <img src="@item.ProductImage" class="imageCart  pl-2 "/>
+                                    <img src="@(item.ProductImage + "?w=50")" class="  pl-2 "/>
                                     <div class="pl-4">
                                         <strong> @item.ProductName </strong><br/>
                                         @if (item.OrderProductSimilarProperty.Count > 0)
