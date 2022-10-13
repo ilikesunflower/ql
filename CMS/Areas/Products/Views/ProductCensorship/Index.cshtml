@@ -117,7 +117,7 @@
                                             <td class="align-middle m-b-sm text-center ">
                                                 @if (!string.IsNullOrEmpty(item.Image))
                                                 {
-                                                    <img alt="image" src="@Html.Raw(item.Image)" width="50" height="50">
+                                                    <img alt="image" src="@Html.Raw(item.Image + "?w=50")">
                                                 }
 
                                             </td>

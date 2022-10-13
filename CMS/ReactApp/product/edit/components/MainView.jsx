@@ -134,7 +134,7 @@ function MainApp(props) {
                                                                                    <i className="fa-solid fa-scissors buttonCrop" onClick={() => method.cropImage(i)}></i>
                                                                                </div>
                                                                                <div className="img">
-                                                                                   <img src={x}  className="imgC"/>
+                                                                                   <img src={x + "?w=100"}  className="imgC"/>
                                                                                </div>
                                                                            </div>
                                                                        )
@@ -255,7 +255,7 @@ function MainApp(props) {
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <div className="row">
-                                                            <FileFieldCropImage imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
+                                                            <FileFieldCropImage  imageString={state.imageString} setImageString={method.setImageString} formik={formik.formikProduct}   name="image" className="hidden"/>
 
                                                          </div>
                                                     </Card.Body>

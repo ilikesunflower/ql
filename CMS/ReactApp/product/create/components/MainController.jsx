@@ -19,7 +19,7 @@ function MainController(props) {
     let [showCategory, setShowCategory]  = useState(false);
     let [listFileSave, setListFileSave] = useState([]);
     let [listFile, setListFile] = useState([]);
-    let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg');
+    let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg?w=300');
     let refI = useRef(null);
     let refImage = useRef(null);
     let [listProperties, setListProperties] = useState([]);

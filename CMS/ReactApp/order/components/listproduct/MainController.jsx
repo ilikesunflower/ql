@@ -98,7 +98,7 @@ function MainController(props) {
                 }
             }
         if(!isEdit){
-            formik.setFieldValue("priceShip", saleTotal);
+            formik.setFieldValue("priceShip",Number.parseInt(saleTotal));
         }
 
         formik.setFieldValue("percent", percent );

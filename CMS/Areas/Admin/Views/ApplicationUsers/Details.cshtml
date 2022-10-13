@@ -116,7 +116,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <img alt="image" class="img-circle" src="@Html.Raw(Model.Image)" width="200" height="200">
+                                                    <img alt="image" class="img-circle" src="@Html.Raw(Model.Image + "?w=200&h=200")">
                                                 }
                                             </div>
                                             <h3 class="m-t-10">@Html.Raw(Model.UserName)</h3>

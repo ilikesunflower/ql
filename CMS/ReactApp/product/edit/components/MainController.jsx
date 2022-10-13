@@ -69,7 +69,7 @@ function MainController(props) {
             formikProduct.setFieldValue("description", product.description || '');
             formikProduct.setFieldValue("specifications", product.specifications || '');
             formikProduct.setFieldValue("lead", product.lead || '');
-            setImageString(product.image || '/images/icon/defaultimage.jpg')
+            setImageString(product.image ? product.image  + "?w=350" : '/images/icon/defaultimage.jpg')
         
             let proties = rs.content2;
             if(Array.isArray(proties) && proties.length > 0){

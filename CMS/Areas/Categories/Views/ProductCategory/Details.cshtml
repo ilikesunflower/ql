@@ -75,7 +75,7 @@
                             <div class="form-group row">
                                 <label >Ảnh </label>
                                 <div class="col-lg-12 col-md-12 col-sm-12 ">
-                                    <img src="@Model.ProductCategory.ImageBanner" class="m-b-10" style="width: 100%" alt="">
+                                    <img src="@(Model.ProductCategory.ImageBanner + "?w=350")" class="m-b-10" style="width: 100%" alt="">
                                 </div>
                             </div>
                         </div>
@@ -89,7 +89,7 @@
                             <div class="form-group row">
                                 <label >Ảnh Mobile</label>
                                 <div class="col-lg-12 col-md-12 col-sm-12 ">
-                                    <img src="@Model.ProductCategory.ImageBannerMobile" class="m-b-10" style="width: 100%" alt="">
+                                    <img src="@(Model.ProductCategory.ImageBannerMobile + "?w=350")" class="m-b-10" style="width: 100%" alt="">
                                 </div>
                             </div>
                         </div>

@@ -603,9 +603,9 @@ public class OrderController : BaseController
             var orders = new CMS_EF.Models.Orders.Orders
             {
                 CustomerId = model.CustomerId ?? 0,
-                PriceShip = model.PriceShip,
+                PriceShip =  Math.Round( model.PriceShip ?? 0, 0),
                 PriceShipSalePercent = model.Percent,
-                PriceShipNonSale = model.PriceNoSale,
+                PriceShipNonSale =  model.PriceNoSale,
                 PaymentType = model.PaymentType,
                 ShipPartner = model.ShipPartner,
                 Total = model.Total,

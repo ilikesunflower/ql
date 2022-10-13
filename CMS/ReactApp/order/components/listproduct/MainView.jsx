@@ -55,7 +55,7 @@ function MainView(props) {
                                                     <tr key={i}>
                                                         <td className="  m-0  align-middle" >
                                                             <div className="row">
-                                                                <img src={item.image} className="imageCart col-md-2"/>
+                                                                <img src={(item.image +"?w=50")} className=" col-md-2"/>
                                                                 <div className=" col-md-10">
                                                                     {item.nameProduct}<br/>
                                                                     {(item.listProperties.length > 0) && item.listProperties.map((item1 , k) => {

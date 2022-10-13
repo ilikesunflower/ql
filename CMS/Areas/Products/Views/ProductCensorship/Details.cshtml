@@ -656,7 +656,7 @@
         <div class="product-preview-slide owl-carousel owl-theme">
             <div class="product-image-item"
                  data-dot="<button style='background-image: url(@(product.Image));'></button>">
-                <img class="product-image" src="@product.Image" alt=""/>
+                <img class="product-image" src="@(product.Image + "?w=380")" alt=""/>
             </div>
             @if (images is {Count: > 0 })
             {
@@ -1025,10 +1025,10 @@
         </div>
     </div>
 </div>
-<script src="/js/PreviewProduct/vendor.min.js"></script>
-<script src="/js/PreviewProduct/app.min.js"></script>
-<script src="/js/PreviewProduct/product.min.js"></script>
-<script src="/js/ProductCensorship/Details.js"></script>
+<script src="~/js/PreviewProduct/vendor.min.js"></script>
+<script src="~/js/PreviewProduct/app.min.js"></script>
+<script src="~/js/PreviewProduct/product.min.js"></script>
+<script src="~/js/ProductCensorship/Details.js"></script>
 <script >
     @if (TempData.ContainsKey("ContentMessage") && TempData.ContainsKey("IsShowMessage") && TempData[ResultMessage.IsShowMessage].ToString() == "1" && !string.IsNullOrEmpty(TempData[ResultMessage.ContentMessage].ToString()))
     {

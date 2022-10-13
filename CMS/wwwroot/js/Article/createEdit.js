@@ -51,7 +51,7 @@
         let txtValue = $(this).closest(".file-group").find('input.image-value');
         mediaManager.on('select', function (obj) {
             if (obj.type == 1) {
-                imagePreview.attr("src", obj.thumbnail);
+                imagePreview.attr("src", obj.thumbnail + "?w=350");
                 txtValue.val(obj.url);
             } else {
                 toastr.error("file không được hỗ trợ. file phải là một hình ảnh.", "Thông báo");

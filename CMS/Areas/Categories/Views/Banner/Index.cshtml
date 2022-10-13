@@ -69,7 +69,7 @@
                                             <input type="checkbox" class="i-checks chkAll" />
                                         </th>
                                         <th class="text-center"  style="width: 45px">STT</th>
-                                        <th  class="text-center" style="width:10%"  >Ảnh</th>
+                                        <th  class="text-center" style="width:4%"  >Ảnh</th>
                                         <th  class="" >Vị trí</th>
                                         <th  class=""  >Link</th>
                                         <th  class="text-center" style="width:10%" >Trạng thái</th>
@@ -92,7 +92,7 @@
                                              <div class="m-b-sm text-center">
                                                  @if (!string.IsNullOrEmpty(item.Images))
                                                      {
-                                                          <img alt="image" src="@Html.Raw(item.Images)" width="50" height="50">
+                                                          <img alt="image" src="@Html.Raw(item.Images  + "?w=70")">
                                                      }
                                              </div>
                                         </td>
