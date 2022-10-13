@@ -56,7 +56,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-2">
                                 <select class="form-control form-control-xl" name="type" asp-for="@listData.RouteValue["type"]">
-                                    <option>Chọn phòng ban</option>
+                                    <option>Chọn loại khách hàng</option>
                                     @foreach (var item in CustomerTypeGroupConst.ListCustomerTypeGroupConst)
                                     {
                                         <option value="@item.Key">@item.Value</option>
