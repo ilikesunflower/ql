@@ -13,17 +13,26 @@ import {
 
 
 function MainController(props) {
+    //listFileSave
+    let [listFileSave, setListFileSave] = useState([]);
+    let [listFile, setListFile] = useState([]);
+
+    //listProperties
+    let [listProperties, setListProperties] = useState([]);
+    
+    //listProperProduct
+    let [listProperProduct, setListProperProduct] = useState([]);
+
+
+
+
     let [listProductPurpose, setListProductPurpose] = useState([]);
     let [listProductCategory, setListProductCategory]  = useState([]);
     let [showPurpose, setShowPurpose]  = useState(false);
     let [showCategory, setShowCategory]  = useState(false);
-    let [listFileSave, setListFileSave] = useState([]);
-    let [listFile, setListFile] = useState([]);
     let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg?w=300');
     let refI = useRef(null);
     let refImage = useRef(null);
-    let [listProperties, setListProperties] = useState([]);
-    let [listProperProduct, setListProperProduct] = useState([]);
     let [showDeletePurpose, setShowDeletePurpose]  = useState(false);
     let [listPurposeDelete, setListPurposeDelete] = useState([]);
 
