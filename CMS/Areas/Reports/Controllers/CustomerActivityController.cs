@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using ClosedXML.Excel;
 using ClosedXML.Report;
+using CMS.Areas.Reports.Const;
 using CMS_Access.Repositories.Customers;
 using CMS.Areas.Reports.Models.CustomerActivity;
 using CMS.Areas.Reports.Models.SummaryReports;
@@ -69,7 +71,7 @@ public class CustomerActivityController : BaseController
                     CultureInfo.InvariantCulture);
             }
 
-            IndexViewModelCustomerType customerType = _iCustomerActivityService.GetTypeCustomerActive(txtSearch,start,end,type);
+            List<IndexCustomerType> customerType = _iCustomerActivityService.GetTypeCustomerActive(txtSearch,start,end,type);
             IQueryable<TrackingOfCustomer> numberOfCustomerGroups =  _iCustomerTrackingRepository.GetTypeCustomerActiveDetails(txtSearch, start,end, type);
             
             var listData = PagingList.Create(numberOfCustomerGroups.OrderByDescending(x => x.ActiveTime), PageSize, pageindex);
@@ -80,7 +82,7 @@ public class CustomerActivityController : BaseController
                 {"endDate", end.ToString("dd/MM/yyyy")},
                 {"type", type}
             };
-            model.CustomerType = customerType;
+            model.CustomerTypeList = customerType;
             model.Customers = listData;
             
             return View(model);
@@ -112,7 +114,7 @@ public class CustomerActivityController : BaseController
                 end = DateTime.ParseExact(endDate + " 11:59:59 PM", "dd/MM/yyyy hh:mm:ss tt",
                     CultureInfo.InvariantCulture);
             }
-            IndexViewModelCustomerType customerType = _iCustomerActivityService.GetTypeCustomerActive(txtSearch,start,end,type);
+            List<IndexCustomerType> customerType = _iCustomerActivityService.GetTypeCustomerActive(txtSearch,start,end,type);
 
             List<TrackingOfCustomer> details = _iCustomerActivityService.GetTypeCustomerActiveDetails(txtSearch,start,end,type);
             
@@ -120,13 +122,33 @@ public class CustomerActivityController : BaseController
                 "CustomerActivityTemplate.xlsx");
             var template = new XLTemplate(filePath);
 
-            template.AddVariable("ListData", details);
-            template.AddVariable("Org", customerType.Org);
-            template.AddVariable("Staff", customerType.Staff);
-            template.AddVariable("GA", customerType.GA);
+            template.AddVariable("ListCustomerType", customerType);
             template.AddVariable("From", startDate);
             template.AddVariable("To", endDate);
             template.Generate();
+            var wsh = template.Workbook.Worksheets.FirstOrDefault();
+            IXLRange w = wsh!.Range(6 + customerType.Count, 2, 6 + customerType.Count, 6);
+            ReportConst.MergeStyleExcel(w);
+            ReportConst.SetExcelRangeBgColor(w);
+            w.SetValue("Chi tiết khách hàng");
+            
+            
+            ReportConst.SetTextTitle(wsh!.Cell(7 + customerType.Count , 2),   "STT");
+            ReportConst.SetTextTitle(wsh!.Cell(7 + customerType.Count , 3),   "Tên khách hàng");
+            ReportConst.SetTextTitle(wsh!.Cell(7 + customerType.Count , 4),   "ID Khách hàng");
+            ReportConst.SetTextTitle(wsh!.Cell(7 + customerType.Count , 5),   "Loại khách hàng");
+            ReportConst.SetTextTitle(wsh!.Cell(7 + customerType.Count , 6),   "Thời gian hoạt động");
+            wsh.Column("F").Width  = 20;
+            int index = 1;
+            foreach (var item in details)
+            {
+                ReportConst.SetText(wsh!.Cell(7  + customerType.Count + index, 2),   index.ToString());
+                ReportConst.SetText(wsh!.Cell(7  + customerType.Count + index, 3),   item.FullName ?? "");
+                ReportConst.SetText(wsh!.Cell(7  + customerType.Count + index, 4),   item.Username ?? "");
+                ReportConst.SetText(wsh!.Cell(7  + customerType.Count + index, 5),   item.Org ?? "");
+                ReportConst.SetText(wsh!.Cell(7  + customerType.Count + index, 6),   item.ActiveTime.HasValue ? item.ActiveTime.Value.ToString("dd/MM/yyyy HH:mm") : ""  );
+                index++;
+            }
             byte[] excelFile;
             using (MemoryStream ms = new MemoryStream())
             {

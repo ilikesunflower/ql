@@ -11,7 +11,7 @@ namespace CMS.Areas.Reports.Services;
 
 public interface ICustomerActivityService : IScoped
 {
-    IndexViewModelCustomerType GetTypeCustomerActive(string txtSearch, DateTime startDate, DateTime endDate, int? type);
+    List<IndexCustomerType> GetTypeCustomerActive(string txtSearch, DateTime startDate, DateTime endDate, int? type);
     List<TrackingOfCustomer> GetTypeCustomerActiveDetails(string txtSearch, DateTime start, DateTime end, int? type);
     List<IndexViewModelCustomerTypeChart> GetTypeCustomerActiveChart(DateTime start, DateTime end);
 }
@@ -25,23 +25,29 @@ public class CustomerActivityService : ICustomerActivityService
         _iCustomerTrackingRepository = iCustomerTrackingRepository;
     }
 
-    public IndexViewModelCustomerType GetTypeCustomerActive(string txtSearch, DateTime startDate, DateTime endDate,
+    public  List<IndexCustomerType> GetTypeCustomerActive(string txtSearch, DateTime startDate, DateTime endDate,
         int? type)
     {
         List<NumberOfCustomerGroups> numberOfCustomerGroups =
             _iCustomerTrackingRepository.GetNumberOfCustomerGroups(txtSearch, startDate, endDate, type);
-        IndexViewModelCustomerType customerType = new IndexViewModelCustomerType
+        List<IndexCustomerType> rs = new List<IndexCustomerType>();
+        foreach (var item in CustomerTypeGroupConst.ListCustomerTypeGroupConst)
         {
-            Org = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.PhongBan)?.Count ?? 0,
-            Staff = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.Staff)?.Count ?? 0,
-            GA = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.GA)?.Count ?? 0,
-        };
-        return customerType;
+            IndexCustomerType indexCustomerType = new IndexCustomerType()
+            {
+                Name = item.Value,
+                Type = item.Key,
+                Value = numberOfCustomerGroups.FirstOrDefault(x => x.Type == item.Key)?.Count ?? 0,
+            };
+            rs.Add(indexCustomerType);
+        }
+   
+        return rs;
     }
 
     public List<TrackingOfCustomer> GetTypeCustomerActiveDetails(string txtSearch, DateTime start, DateTime end, int? type)
     {
-        List<TrackingOfCustomer> numberOfCustomerGroups =  _iCustomerTrackingRepository.GetTypeCustomerActiveDetails(txtSearch, start,end, type).ToList();
+        List<TrackingOfCustomer> numberOfCustomerGroups =  _iCustomerTrackingRepository.GetTypeCustomerActiveDetails(txtSearch, start,end, type).OrderByDescending(x => x.ActiveTime).ToList();
         return numberOfCustomerGroups.Select(x => new TrackingOfCustomer
         {
             Id = x.Id,
@@ -57,27 +63,17 @@ public class CustomerActivityService : ICustomerActivityService
     {
         List<IndexViewModelCustomerTypeChart> charts = new List<IndexViewModelCustomerTypeChart>();
         List<NumberOfCustomerGroups> numberOfCustomerGroups = _iCustomerTrackingRepository.GetNumberOfCustomerGroups("", start, end, null);
-        NumberOfCustomerGroups org = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.PhongBan);
-        NumberOfCustomerGroups staff = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.Staff);
-        NumberOfCustomerGroups ga = numberOfCustomerGroups.FirstOrDefault(x => x.Type == CustomerTypeGroupConst.GA);
 
-        charts.Add(new IndexViewModelCustomerTypeChart()
+        foreach (var item in CustomerTypeGroupConst.ListCustomerTypeGroupConst)
         {
-            Name = "Phòng ban",
-            Y = org?.Count ?? 0
-        });
-
-        charts.Add(new IndexViewModelCustomerTypeChart()
-        {
-            Name = "Staff",
-            Y = staff?.Count ?? 0
-        });
-        
-        charts.Add(new IndexViewModelCustomerTypeChart()
-        {
-            Name = "GA",
-            Y = ga?.Count ?? 0
-        });
+            IndexViewModelCustomerTypeChart indexCustomerType = new IndexViewModelCustomerTypeChart()
+            {
+                Name = item.Value,
+                Y = numberOfCustomerGroups.FirstOrDefault(x => x.Type == item.Key)?.Count ?? 0,
+            };
+            charts.Add(indexCustomerType);
+        }
+     
         return charts;
     }
 

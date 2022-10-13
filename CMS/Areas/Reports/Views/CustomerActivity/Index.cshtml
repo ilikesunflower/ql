@@ -71,11 +71,13 @@
                             </div>
                         </form>
                        <div class="tablePaddingTop">
-                            <dl class="row">
-                              <dt class="col-sm-2">Staff: @CmsFunction.NumberFormatShow(Model.CustomerType.Staff)</dt>
-                              <dt class="col-sm-2">GA: @CmsFunction.NumberFormatShow(Model.CustomerType.GA)</dt>
-                              <dt class="col-sm-2">Phòng ban: @CmsFunction.NumberFormatShow(Model.CustomerType.Org)</dt>
-                            </dl>
+                           <dl class="row">
+                               @foreach(var item in Model.CustomerTypeList)
+                                {
+                                    <dt class="col-sm-2">@(item.Name): @CmsFunction.NumberFormatShow(item.Value)</dt>
+                                }
+                               
+                           </dl>
                         </div>
                         <div class="table-responsive tablePaddingTop">
                             <table class="table tab-content table-bordered table-check-all table-bordered-index">
@@ -84,7 +86,7 @@
                                     <th class="align-middle text-center">STT</th>
                                     <th class="align-middle text-center">Tên khách hàng</th>
                                     <th class="align-middle text-center">ID Khách hàng</th>
-                                    <th class="align-middle text-center">Phòng ban</th>
+                                    <th class="align-middle text-center">Loại khách hàng</th>
                                     <th class="align-middle text-center">Thời gian hoạt động</th>
                                 </tr>
                                 </thead>
