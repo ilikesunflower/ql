@@ -24,7 +24,7 @@
                     <div class="imgProduct">
                         @if (!string.IsNullOrEmpty(item.ImageBanner))
                         {
-                            <img alt="image" src="@Html.Raw(item.ImageBanner)" width="100%" height="100%">
+                            <img alt="image" src="@Html.Raw(item.ImageBanner+ "?w=50&h=50")" >
                         }
                     </div>
                 </div>
