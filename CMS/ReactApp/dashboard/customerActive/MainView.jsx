@@ -120,9 +120,11 @@ function MainApp(props) {
                         </Form>
                         <div className="row pt-3">
                             <Chart chartData={state.chartData}/>
-                            <span className="spanWarning">
-                               * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa đc kiểm tra độ chính xác)
-                            </span>
+                            <div className="col-12 text-center">
+                                     <span className="spanWarning">
+                                   * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa đc kiểm tra độ chính xác)
+                                </span>
+                            </div>
                         </div>
                        
                     </Card.Body>
