@@ -204,6 +204,7 @@ namespace CMS_App_Api.Services.Orders
                 
                 //change status
                 orders.Note = message;
+                orders.ReasonNote = message;
                 orders.Status = OrderStatusConst.Failed.Status;
                 orders.LastModifiedAt = DateTime.Now;
                 orders.OrderStatusCancelAt = DateTime.Now;
