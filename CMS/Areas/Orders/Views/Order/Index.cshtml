@@ -194,7 +194,7 @@
                                             </td>
                                             <td class="align-middle text-center " >
                                                 @Html.Raw(OrderStatusConst.GetStatus(item.Status ?? 0))
-                                                @if (StatusCancel || item.ReasonNote != null )
+                                                @if (!string.IsNullOrEmpty(item.ReasonNote))
                                                 {
                                                     <p class=" fontZ pt-2">
                                                         <label class="m-all-0">Lý do:</label>
