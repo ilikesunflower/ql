@@ -114,7 +114,16 @@
                                         var product = item.OrderProduct.FirstOrDefault();
                                         int sttProduct = 0;
                                         <tr>
-                                            <td rowspan="@productCount" class="align-middle">@item.Code</td>
+                                            <td rowspan="@productCount" class="align-middle">
+                                                @if (Model.IsDetailOrder)
+                                                {
+                                                    <a href="/Orders/Order/Details/@item.Code" class="text-color-default">@item.Code</a>
+                                                }
+                                                else
+                                                {
+                                                    @item.Code
+                                                }
+                                            </td>
                                             <td rowspan="@productCount" class="align-middle text-left">
                                                 @item.OrderAt?.ToString("dd/MM/yyyy HH:mm")
                                             </td>
@@ -152,7 +161,10 @@
                                                 @(item!.Customer?.UserName ?? "")
                                             </td>
                                             <td rowspan="@productCount" class="align-middle text-left">
-                                                @(SummaryReportService.BindIdOrg(item!.Customer))
+                                                @if (item.Customer != null)
+                                                {
+                                                    @(SummaryReportService.BindIdOrg(item!.Customer))
+                                                }
                                             </td>
                                             <td rowspan="@productCount" class="align-middle text-left">
                                                 @(item.OrderAddress?.Name ?? "")

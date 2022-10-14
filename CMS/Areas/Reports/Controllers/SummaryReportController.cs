@@ -85,7 +85,9 @@ public class SummaryReportController : BaseController
             {
                 ListData = listData,
                 OrderStatusPayments = OrderStatusPayment.ListOrderStatusPayment,
-                ListStatus = OrderStatusConst.ListStatus
+                ListStatus = OrderStatusConst.ListStatus,
+                IsDetailOrder = User.HasClaim(CmsClaimType.AreaControllerAction,
+                    "Orders@OrderController@Details".ToUpper())
             };
 
             ILoggingService.Infor(_iLogger, "Xem báo cáo tổng hợp");

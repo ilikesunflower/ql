@@ -56,7 +56,7 @@
                             </div>
                             <div class="col-xs-12 col-sm-2">
                                 <select class="form-control form-control-xl" name="type" asp-for="@listData.RouteValue["type"]">
-                                    <option>Chọn phòng ban</option>
+                                    <option>Chọn loại khách hàng</option>
                                     @foreach (var item in CustomerTypeGroupConst.ListCustomerTypeGroupConst)
                                     {
                                         <option value="@item.Key">@item.Value</option>
@@ -71,21 +71,23 @@
                             </div>
                         </form>
                        <div class="tablePaddingTop">
-                            <dl class="row">
-                              <dt class="col-sm-2">Staff: @CmsFunction.NumberFormatShow(Model.CustomerType.Staff)</dt>
-                              <dt class="col-sm-2">GA: @CmsFunction.NumberFormatShow(Model.CustomerType.GA)</dt>
-                              <dt class="col-sm-2">Phòng ban: @CmsFunction.NumberFormatShow(Model.CustomerType.Org)</dt>
-                            </dl>
+                           <dl class="row">
+                               @foreach(var item in Model.CustomerTypeList)
+                                {
+                                    <dt class="col-sm-2">@(item.Name): @CmsFunction.NumberFormatShow(item.Value)</dt>
+                                }
+                               
+                           </dl>
                         </div>
                         <div class="table-responsive tablePaddingTop">
                             <table class="table tab-content table-bordered table-check-all table-bordered-index">
                                 <thead class="table-thead">
                                 <tr>
                                     <th class="align-middle text-center">STT</th>
-                                    <th class="align-middle text-center">Tên khách hàng</th>
-                                    <th class="align-middle text-center">ID Khách hàng</th>
-                                    <th class="align-middle text-center">Phòng ban</th>
-                                    <th class="align-middle text-center">Thời gian hoạt động</th>
+                                    <th class="align-middle">Tên khách hàng</th>
+                                    <th class="align-middle">ID Khách hàng</th>
+                                    <th class="align-middle">Loại khách hàng</th>
+                                    <th class="align-middle">Thời gian hoạt động</th>
                                 </tr>
                                 </thead>
                                 <tbody>

@@ -7,14 +7,16 @@ namespace CMS.Areas.Reports.Models.CustomerActivity;
 
 public class IndexViewModel
 {
-    public IndexViewModelCustomerType CustomerType { set; get; }
+    public List<IndexCustomerType> CustomerTypeList { set; get; }
     public PagingList<TrackingOfCustomer> Customers { get; set; }
 }
-public class IndexViewModelCustomerType
+
+
+public class IndexCustomerType
 {
-    public double Staff { set; get; }
-    public double GA { set; get; }
-    public double Org { set; get; }
+    public string Name { get; set; }
+    public double Value { get; set; }
+    public int Type { get; set; }
 }
 public class IndexViewModelCustomerTypeChart
 {

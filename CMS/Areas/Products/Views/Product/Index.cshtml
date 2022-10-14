@@ -157,33 +157,34 @@
                                                 <td class="align-middle m-b-sm text-center ">
                                                          @if (!string.IsNullOrEmpty(item.Image))
                                                          {
-                                                             <img alt="image" src="@Html.Raw(item.Image + "?w=50")" >
+                                                             <img alt="image" src="@(item.Image + "?w=50")" >
                                                          }
          
                                                 </td>
-                                                <td class="align-middle">
-                                                      @item.Sku 
-                                                </td>
+                                              <td class="align-middle">
+                                                  <a asp-area="Products" asp-action="Details" asp-route-id="@item.Id" class="text-color-default">@item.Sku</a>
+                                              </td>
                                               
-                                                <td class="align-middle ">
-                                                     @item.Name <br/>
-                                                     @if (item.IsHot ?? false)
-                                                     {
-                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Nổi bật", "#5a82c0")) 
-                                                     }
-                                                     @if (item.IsNew ?? false)
-                                                     {
-                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Mới", "#5a82c0") )
-                                                     }
-                                                     @if (item.IsBestSale ?? false)
-                                                     {
-                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Bán chạy", "#5a82c0") )
-                                                     }
-                                                     @if (item.IsPromotion ?? false)
-                                                     {
-                                                         @Html.Raw(CmsFunction.GetLayoutBackground("Khuyến mãi", "#5a82c0") )
-                                                     }
-                                                </td>
+                                              <td class="align-middle ">
+                                                  <a asp-area="Products" asp-action="Details" asp-route-id="@item.Id" class="text-color-default" >@item.Name</a>
+                                                   <br/>
+                                                  @if (item.IsHot ?? false)
+                                                  {
+                                                      @Html.Raw(CmsFunction.GetLayoutBackground("Nổi bật", "#5a82c0"))
+                                                  }
+                                                  @if (item.IsNew ?? false)
+                                                  {
+                                                      @Html.Raw(CmsFunction.GetLayoutBackground("Mới", "#5a82c0"))
+                                                  }
+                                                  @if (item.IsBestSale ?? false)
+                                                  {
+                                                      @Html.Raw(CmsFunction.GetLayoutBackground("Bán chạy", "#5a82c0"))
+                                                  }
+                                                  @if (item.IsPromotion ?? false)
+                                                  {
+                                                      @Html.Raw(CmsFunction.GetLayoutBackground("Khuyến mãi", "#5a82c0"))
+                                                  }
+                                              </td>
                                               <td class="text-right align-middle ">
                                                   @CmsFunction.NumberFormatShow(item.Quantity, true)
                                               </td>

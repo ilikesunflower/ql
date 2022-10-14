@@ -81,7 +81,13 @@
                     <div class="row">
                         <label class="col-md-4 col-xs-4">Tên khách hàng</label>
                         <div class="col-md-8 col-xs-8">
-                            <span class="control-label">@(Order.Customer.TypeGroup == 2 ?  $"Phòng ban Daiichi - {Order.Customer.FullName}" : $"{Order.Customer.UserName} - {Order.Customer.FullName}") - @(Order.Customer.Phone)</span>
+                            @if (Order.Customer != null)
+                            {
+                                <span class="control-label">
+                                    @(Order.Customer?.TypeGroup == 2 ? $"Phòng ban Daiichi - {Order.Customer?.FullName}" : $"{Order.Customer?.UserName} - {Order.Customer?.FullName}") - @(Order.Customer?.Phone);
+
+                                </span>   
+                            }
                         </div>
                     </div>
                 </div>
@@ -375,9 +381,9 @@
 </div>
 <div class="card">
     <div class="card-header">
-        <p class="card-title namePageText">@(Order.Customer.TypeGroup == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn")</p>
+        <p class="card-title namePageText">@(Order.Customer?.TypeGroup == 2 ? "Thông tin đính kèm" : "Thông tin xuất hóa đơn")</p>
     </div>
-    @if (Order.Customer.TypeGroup == 2)
+    @if (Order.Customer?.TypeGroup == 2)
     {
         <div class="card-body row">
             <div class="col-md-6">
