@@ -28,7 +28,7 @@ function MainController(props) {
     }
     useEffect(() => {
         getData();
-    }, [])
+    }, [fromDate, toDate, filterStatus])
     const onSubmitForm = () => {
         getData();
     }

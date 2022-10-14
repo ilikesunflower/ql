@@ -66,8 +66,16 @@ public class SummaryReportService : ISummaryReportService
 
     public static string BindIdOrg(CMS_EF.Models.Customers.Customer? customer)
     {
-        return customer!.TypeGroup == CustomerTypeGroupConst.PhongBan
-            ? customer.Org
-            : CustomerTypeGroupConst.GetCustomerTypeGroup(customer.TypeGroup ?? 0);
-    }
+        if (customer != null)
+        {
+            return customer!.TypeGroup == CustomerTypeGroupConst.PhongBan
+                ? customer.Org
+                : CustomerTypeGroupConst.GetCustomerTypeGroup(customer.TypeGroup ?? 0);
+        }
+        else
+        {
+            return "";
+        }
+     }
+       
 }

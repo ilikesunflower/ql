@@ -34,7 +34,7 @@ function MainController(props) {
 
     useEffect(() => {
         getData();
-    }, [])
+    }, [fromDate, toDate])
 
     const onSubmitForm = () => {
         getData();
