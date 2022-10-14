@@ -1,13 +1,18 @@
 ﻿import React , {useEffect, useState, useRef} from 'react';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
-import {CheckBoxField, InputField} from '../../components/formikField'
+import {CheckBoxField, InputField} from '../../../components/formikField'
 import ProductPurposeController from "./ProductPurposeController"
+import SelectNewMutile2 from "../../../components/SelectNewMutile2";
 
 function ProductPurposeView(props) {
-    
+    let {formikProduct} = props;
     let {formik, state, method} = ProductPurposeController(props);
     return (
         <>
+            <Form.Group className="col-md-12 pt-3">
+                <Form.Label className="form-check-label ">Danh mục sản phẩm  <span className="text-danger">*</span> </Form.Label>
+                <SelectNewMutile2 isDisabled="disabled" options={state.listProductCategory} formik={formikProduct} name="productCategory" hand={method.handCategory} defaultValue={[]} selectKey="value" selectText="label" placeholder="Chọn danh mục" className="basic-multi-select rounded-0 col-md-11 col-sm-9 pr-0" />
+            </Form.Group>
             <Modal  show={state.showPurpose}  onHide={method.handPurpose} animation={false}>
                 <Form className="form-horizontal" onSubmit={formik.handleSubmit}>
                     <Modal.Header>

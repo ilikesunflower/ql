@@ -108,6 +108,6 @@ function ProductPurposeController(props) {
             handDeletePurpose,
             clickElement,
             deletePurpose
-        } };
+    } };
 }
 export default ProductPurposeController;

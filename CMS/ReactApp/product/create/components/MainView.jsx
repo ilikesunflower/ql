@@ -27,7 +27,7 @@ const optionsSex = [
 ]
 const withValueLimit = ({ floatValue }) => floatValue <= 999999999;
 function MainApp(props) {
-    const {formik, state, method} = MainController();
+    const {formik, state, method, formikProduct } = MainController();
     let meta = formik.formikProduct.getFieldMeta("checkExitSku") ;
     let meta1 = formik.formikProduct.getFieldMeta("codeStock")
     return (

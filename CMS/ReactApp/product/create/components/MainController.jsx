@@ -517,7 +517,7 @@ function MainController(props) {
         }
     })
    
-    return {formik:{formikProduct, formikProductPurpose, formikProductCategory}, 
+    return {formikProduct, formik:{ formikProduct, formikProductPurpose, formikProductCategory}, 
         state:{
             showPurpose,
             showCategory,
