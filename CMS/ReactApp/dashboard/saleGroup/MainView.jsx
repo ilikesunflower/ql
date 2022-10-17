@@ -119,7 +119,7 @@ function MainApp(props) {
                               <Chart chartData={state.chartData} />
                               <div className="col-12 text-center">
                                      <span className="spanWarning">
-                                   * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa đc kiểm tra độ chính xác)
+                                   * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa được kiểm tra độ chính xác)
                                 </span>
                               </div>
                                  
