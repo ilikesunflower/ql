@@ -84,8 +84,7 @@
                             @if (Order.Customer != null)
                             {
                                 <span class="control-label">
-                                    @(Order.Customer?.TypeGroup == 2 ? $"Phòng ban Daiichi - {Order.Customer?.FullName}" : $"{Order.Customer?.UserName} - {Order.Customer?.FullName}") - @(Order.Customer?.Phone);
-
+                                    @(Order.Customer?.TypeGroup == 2 ? $"Phòng ban Daiichi{(string.IsNullOrEmpty(Order.Customer?.FullName) ? "" : $" - {Order.Customer?.FullName}")}" : $"{Order.Customer?.UserName}{(string.IsNullOrEmpty(Order.Customer?.FullName) ? "" : $" - {Order.Customer?.FullName}")}") @(string.IsNullOrEmpty(Order.Customer?.Phone) ? "" : $" - {Order.Customer?.Phone}")
                                 </span>   
                             }
                         </div>

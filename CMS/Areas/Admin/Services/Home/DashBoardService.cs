@@ -160,15 +160,14 @@ namespace CMS.Areas.Admin.Services.Home
         {
             CharDataToProductModel newData = new CharDataToProductModel();
             var query = _iOrderProductRepository.FindAll()
-                .Include(x => x.Product)
                 .Include(x => x.Order)
-                .Where(x => x.Flag == 0 && x.Product.Flag == 0 && x.Order.Flag == 0 &&
+                .Where(x => x.Flag == 0 && x.Order.Flag == 0 &&
                             x.Order.OrderAt.HasValue
                             && x.Order.OrderAt >= dateStart && x.Order.OrderAt <= dateEnd && x.Order.Status != OrderStatusConst.StatusOrderCancel)
                 .GroupBy(x => new
                 {
-                    ProductId = x.Product.Sku,
-                    ProductName = x.Product.Name,
+                    ProductId = x.ProductSimilarCodeWh,
+                    ProductName = x.ProductName,
                 });
             if (typeStatus == FilterToProductConst.StatusQuantity)
             {
