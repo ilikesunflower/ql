@@ -6,6 +6,8 @@ import MainController from "./MainController";
 import SelectNew2 from "../../../components/SelectNew2";
 import SelectNew from "../../../components/SelectNew";
 import SelectNewMutile2 from "../../../components/SelectNewMutile2";
+import ProductPurposeView from "../../components/purpose/ProductPurposeView";
+import CategoryView from "../../components/category/CategoryView";
 
 import {
     InputField,
@@ -16,7 +18,7 @@ import {
     CheckBoxField,
     FileFieldP, Textarea, TextareaShort, FileFieldCropImage
 } from "../../../components/formikField"
-import ProductPurposeView from "../../components/ProductPurposeView";
+// import ProductPurposeView from "../../components/ProductPurposeView";
 
 import NumberFormat from "react-number-format";
 import CropImage from "../../../components/crop/CropImage";
@@ -88,15 +90,9 @@ function MainApp(props) {
                                                            <Form.Label className="form-check-label">Tên mặt hàng  <span className="text-danger">*</span> </Form.Label>
                                                            <InputField className="form-control-xl form-control " placeholder="Nhập tên mặt hàng"  formik={formik.formikProduct} name="name"/>
                                                        </Form.Group>
-                                                   
-                                                       <Form.Group className="col-md-12 pt-3">
-                                                           <Form.Label className="form-check-label ">Mục đích sử dụng  <span className="text-danger">*</span> </Form.Label>
-                                                           <SelectNew2  selectKey="value" selectText="label"  options={state.listProductPurpose} defaultValue={formik.formikProduct.values.productPurposeId}  placeholder="Chọn mục đích sử dụng" name="productPurposeId"  formik={formik.formikProduct} handDelete={method.handDeletePurpose}  hand={method.handPurpose} className=" col-md-12" statusDelete={true}/>
-                                                       </Form.Group>
-                                                       <Form.Group className="col-md-12 pt-3">
-                                                           <Form.Label className="form-check-label ">Danh mục sản phẩm  <span className="text-danger">*</span> </Form.Label>
-                                                           <SelectNewMutile2 isDisabled="disabled" options={state.listProductCategory} formik={formik.formikProduct} name="productCategory" hand={method.handCategory} defaultValue={[]} selectKey="value" selectText="label" placeholder="Chọn danh mục" className="basic-multi-select rounded-0 col-md-11 col-sm-9 pr-0" />
-                                                       </Form.Group>
+                                                        <ProductPurposeView formikProduct={formikProduct}/>
+                                                        <CategoryView formikProduct={formikProduct}/>
+                                                    
                                                        <div className="d-flex justify-content-center col-12  pt-3">
                                                            <button  type="button" className="btn btn-secondary" onClick={method.onClickImage}  >Upload ảnh phụ</button>
                                                            <input  type="file" onChange={method.handleChangeFile} multiple ref={state.refImage} hidden/>

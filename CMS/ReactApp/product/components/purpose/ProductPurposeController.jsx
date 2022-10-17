@@ -14,6 +14,7 @@ import {
 
 function ProductPurposeController(props) {
     //ProductPurpose
+    let {formikProduct} = props;
     let [listProductPurpose, setListProductPurpose] = useState([]);
     let [showPurpose, setShowPurpose]  = useState(false);
     let [listPurposeDelete, setListPurposeDelete] = useState([]);
@@ -22,6 +23,7 @@ function ProductPurposeController(props) {
         setShowPurpose(!showPurpose);
     }
     const handDeletePurpose = function (){
+        console.log("handDeletePurpose")
         setShowDeletePurpose(!showDeletePurpose);
     }
     const clickElement = function (e) {
@@ -65,6 +67,16 @@ function ProductPurposeController(props) {
             setListProductPurpose(rs);
         });
     }, []);
+    
+    useEffect(() => {
+        if(formikProduct.values.productPurposeId != "" && formikProduct.values.productPurposeId  != 0){
+            let value = formikProduct.values.productPurposeId
+            let check = listProductPurpose.findIndex(x => x.Value == value);
+            if(check == -1){
+                formikProduct.setFieldValue('productPurposeId', 0)
+            }
+        }
+    }, [listProductPurpose])
     const formik = useFormik({
         initialValues: {
             name: ''
@@ -95,11 +107,12 @@ function ProductPurposeController(props) {
 
         }
     })
-   
+
     return {formik:formik, 
         state:{
             listProductPurpose,
-            showPurpose
+            showPurpose,
+            showDeletePurpose
         },
         method:{
             setListProductPurpose,
@@ -107,7 +120,8 @@ function ProductPurposeController(props) {
             handPurpose,
             handDeletePurpose,
             clickElement,
-            deletePurpose
+            deletePurpose,
+            
     } };
 }
 export default ProductPurposeController;
