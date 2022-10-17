@@ -3,6 +3,7 @@
 @using System.Security.Claims
 @using CMS.Extensions.HtmlTag
 @using CMS_Lib.Util
+@using CMS.Config.Consts
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,8 +11,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>@ViewData["Title"] - Quản trị Dai-ichi Life Vietnam</title>
-    @* <base href="~/" /> *@
-    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico">
+    <meta property="og:type" content="website" data-rh="true">
+    <meta http-equiv="X-UA-Compatible" content="IE=100">
+    <meta name="robots" content="all" data-rh="true">
+    <meta name="copyright" content="Vets">
+    <meta property="og:image" content="@AppConst.Domain/images/logo.png" data-rh="true">
+    <link rel="shortcut icon" type="image/x-icon" href="@AppConst.Domain/favicon.ico">
     @await Html.PartialAsync("_Styles.cshtml")
     @await RenderSectionAsync("Styles", required: false)
 </head>
