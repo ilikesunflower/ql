@@ -27,6 +27,7 @@ namespace CMS_EF.Models.Orders
 
         public double? CouponDiscount { get; set; }
         public string CouponCode { get; set; }
+        public string ReasonNote { get; set; }
         public double? PriceShip { get; set; }
         public double? PriceShipNonSale { get; set; }
         public double? PriceShipSalePercent { get; set; }

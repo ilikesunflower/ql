@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using Castle.Core.Internal;
 using CMS.Areas.Admin.Const;
 using CMS.Areas.Admin.ViewModels.Home;
 using CMS.Areas.Admin.ViewModels.Home.OrderDetail;
@@ -15,6 +16,7 @@ using CMS.DataTypes;
 using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using MoreLinq;
 
 namespace CMS.Areas.Admin.Services.Home
@@ -60,15 +62,19 @@ namespace CMS.Areas.Admin.Services.Home
                     Day = x.Key.Day,
                     Year = x.Key.Year,
                     Date =  new DateTime(x.Key.Year, x.Key.Month, x.Key.Day, 0, 0, 0).ToString("dd/MM/yyyy"),
-                    Prices = x.Sum(x => x.Total ?? 0)
+                    Prices = x.Sum(x => x.Total ?? 0),
+                    Count = x.Count()
                 }).OrderBy(x => x.Year).ThenBy(x => x.Month).ThenBy(x => x.Day).ToList();
             var chartDataModel = new CharDataModel()
             {
                 Categories = data.Select(x => x.Date).ToList(),
-                Prices = data.Select(x => x.Prices).ToList()
+                Prices = data.Select(x => x.Prices).ToList(),
+                LineData = data.Select(x => x.Count).ToList()
             };
             return chartDataModel;
         }
+
+       
         public CharDataModel GetDataSalesMonth(DateTime dateStart, DateTime dateEnd)
         {
            var data = _iOrdersRepository.FindAll().Where(x => x.OrderAt.HasValue &&
@@ -92,15 +98,18 @@ namespace CMS.Areas.Admin.Services.Home
         }
         public CharDataModel GetDataSaleGroup(DateTime dateStart, DateTime dateEnd)
         {
+
+ 
            var rs = _iOrdersRepository.FindAll().Where(x => x.OrderAt.HasValue &&
-                                                               x.OrderAt.Value >= dateStart && x.OrderAt <= dateEnd && x.Status != OrderStatusConst.StatusOrderCancel)
+                                                            x.OrderAt.Value >= dateStart && x.OrderAt <= dateEnd &&
+                                                            x.Status != OrderStatusConst.StatusOrderCancel)
+               
                .Include(x => x.Customer)
                .Select(x => new
                {
-                   Name = (x.Customer.TypeGroup == CustomerTypeGroupConst.GA ? CustomerTypeGroupConst.GAText :
-                       (x.Customer.TypeGroup == CustomerTypeGroupConst.Staff ? CustomerTypeGroupConst.StaffText : (x.Customer.TypeGroup == CustomerTypeGroupConst.PhongBan ? x.Customer.Org : ""))),
+                   Name = GetNameTypeGroup(x.Customer),
                    x.Total
-               }).Where(x => !string.IsNullOrEmpty(x.Name) && x.Total > 0)
+               }).ToList().Where(x => !string.IsNullOrEmpty(x.Name) && x.Total > 0)
                 .GroupBy(x => x.Name)
                 .Select(x => new
                 {
@@ -114,7 +123,15 @@ namespace CMS.Areas.Admin.Services.Home
                 Prices = data.Select(x => x.Prices).ToList()
             };
             return chartDataModel;
-        }  
+        }
+
+        public static string GetNameTypeGroup(CMS_EF.Models.Customers.Customer rs)
+        {
+            if (rs == null) return string.Empty;
+            var stg = CustomerTypeGroupConst.GetCustomerTypeGroup(rs.TypeGroup ?? 0);
+            return stg;
+        }
+        
         public List<SeriesCharArea> GetDataArea(DateTime dateStart, DateTime dateEnd)
         {
             var data = _iOrdersRepository.FindAll().Where(x => x.OrderAt.HasValue &&

@@ -7,6 +7,7 @@ public class CharDataModel
     public List<string> Categories { get; set; }
     public List<double> Prices { get; set; }
     public string FilterStatus { get; set; }
+    public List<int> LineData { get; set; }
 }
 public class SeriesChart
 {

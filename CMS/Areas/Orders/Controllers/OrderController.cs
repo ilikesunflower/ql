@@ -94,7 +94,7 @@ public class OrderController : BaseController
 
     // GET
     [Authorize(Policy = "PermissionMVC")]
-    public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int? payment,
+    public IActionResult Index(string txtSearch, string startDate, string endDate, int? status, int? payment, 
         int? ship,int? typePayment, int export = 0, int pageindex = 1)
     {
         if (export == 1)
@@ -124,6 +124,8 @@ public class OrderController : BaseController
             query = query.Where(x => x.OrderAt <= end);
         }
 
+   
+     
         if (status != null)
         {
             query = query.Where(x => x.Status == status);
@@ -156,11 +158,13 @@ public class OrderController : BaseController
             {"payment", payment},
             {"ship", ship},
             { "typePayment", typePayment },
+          
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Tất cả đơn hàng");
         model.AddModel("ListData", listData);
         model.AddModel("ShowOrderStatus", true);
+        model.AddModel("StatusCancel", false);
         model.AddModel("Page", pageindex);
         model.AddModel("IsEdit",
             User.HasClaim(CmsClaimType.AreaControllerAction, "Orders@OrderController@Create".ToUpper()));
@@ -230,6 +234,7 @@ public class OrderController : BaseController
         model.AddModel("ListData", listData);
         model.AddModel("ShowOrderStatus", false);
         model.AddModel("Page", pageindex);
+        model.AddModel("StatusCancel", false);
         model.AddModel("IsEdit",
             User.HasClaim(CmsClaimType.AreaControllerAction, "Orders@OrderController@Create".ToUpper()));
         model.AddModel("ListStatus", OrderStatusConst.ListStatus);
@@ -295,6 +300,7 @@ public class OrderController : BaseController
         model.AddModel("Title", "Danh sách đơn đang giao");
         model.AddModel("ListData", listData);
         model.AddModel("ShowOrderStatus", false);
+        model.AddModel("StatusCancel", false);
         model.AddModel("Page", pageindex);
         model.AddModel("IsEdit",
             User.HasClaim(CmsClaimType.AreaControllerAction, "Orders@OrderController@Create".ToUpper()));
@@ -362,6 +368,8 @@ public class OrderController : BaseController
         model.AddModel("Title", "Danh sách đơn hoàn thành");
         model.AddModel("ListData", listData);
         model.AddModel("ShowOrderStatus", false);
+        model.AddModel("StatusCancel", false);
+
         model.AddModel("Page", pageindex);
         model.AddModel("IsEdit",
             User.HasClaim(CmsClaimType.AreaControllerAction, "Orders@OrderController@Create".ToUpper()));
@@ -371,7 +379,7 @@ public class OrderController : BaseController
 
     [NonLoad]
     [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@Index")]
-    public IActionResult IndexOrderCancel(string txtSearch, string startDate, string endDate, int? payment, int? ship,
+    public IActionResult IndexOrderCancel(string txtSearch, string startDate, string endDate, int? payment, int? ship, int? reasonId,
         int? typePayment,int pageindex = 1)
     {
         var query = _iOrderServer.GetOrderAll();
@@ -401,7 +409,11 @@ public class OrderController : BaseController
         {
             query = query.Where(x => x.ShipPartner == ship);
         }
-
+        if (reasonId.HasValue)
+        {
+            var note = ReasonCancel.ListReasonCancel.Where(x => x.Type == reasonId).Select(x => x.Name).FirstOrDefault();
+            query = query.Where(x => x.ReasonNote == note);
+        }
         if (payment.HasValue)
         {
             query = payment == 0
@@ -422,11 +434,13 @@ public class OrderController : BaseController
             {"payment", payment},
             {"ship", ship},
             { "typePayment", typePayment },
+            { "reasonId", reasonId },
         };
         ModelCollection model = new ModelCollection();
         model.AddModel("Title", "Danh sách đơn hủy");
         model.AddModel("ListData", listData);
         model.AddModel("ShowOrderStatus", false);
+        model.AddModel("StatusCancel", true);
         model.AddModel("Page", pageindex);
         model.AddModel("IsEdit",
             User.HasClaim(CmsClaimType.AreaControllerAction, "Orders@OrderController@Create".ToUpper()));
@@ -1153,7 +1167,8 @@ public class OrderController : BaseController
         {
             if (ModelState.IsValid)
             {
-                var rs = this._iOrderService.CancelOrders(data.Id, data.Note);
+                var note = ReasonCancel.ListReasonCancel.Where(x => x.Type == data.Note).Select(x => x.Name).FirstOrDefault();
+                var rs = this._iOrderService.CancelOrders(data.Id, note);
                 if (rs.StatusCode == 200)
                 {
                     ToastMessage(1, $"Hủy đơn hàng {data.Id} thành công");
@@ -1174,7 +1189,19 @@ public class OrderController : BaseController
             return Ok(new OutputObject(500, "", "Đơn hàng không tồn tại").Show());
         }
     }
-
+    
+    [HttpGet]
+    [ClaimRequirement(CmsClaimType.AreaControllerAction, "Orders@OrderController@ChangeOrderCancel")]
+    public IActionResult GetReasonOrderCancel()
+    {
+        var rs = ReasonCancel.ListReasonCancel;
+        return Json(new
+        {
+            code = 200,
+            content = rs,
+            msg = "Lấy d/s sản phẩm thành công"
+        });
+    }
     [HttpPost]
     [Authorize(Policy = "PermissionMVC")]
     public IActionResult StatusPayment([FromBody] StatusPaymentModel data)

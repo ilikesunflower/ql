@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {isAllowedNumberIntThan0AndMax, isAllowedNumberThan0} from '../../common/app';
-import {changeOrderConfirm,changeOrderShip,changeOrderSuccess,changeOrderCancel, statusPayment, changeOrderSynchronized} from './service/httpService';
+import {changeOrderConfirm,changeOrderShip,changeOrderSuccess,changeOrderCancel, statusPayment, changeOrderSynchronized, getReasonOrderCancel} from './service/httpService';
 import {InputField, TextareaField,NumberFormatField,SelectField} from "../../components/formikField";
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
 import {useFormik} from "formik";
 import Yup from "../../components/Yup";
+import SelectNew from "../../components/SelectNew";
 
 
 
@@ -194,11 +195,11 @@ function MainView(props){
     
     const formikOrderCancel = useFormik({
         initialValues: {
-            note : '',
+            note : 0,
             show: false
         },
         validationSchema: Yup.object().shape({
-            note: Yup.string().required("Vui lòng nhập lý do hủy đơn").validHtml().maxLength(255),
+            note: Yup.number().min(0,"Vui lòng chọn lý do hủy đơn "),
         }),
         onSubmit: (values, {resetForm}) => {
             Swal.fire({
@@ -298,6 +299,13 @@ function MainView(props){
 
 function FormOrderCancelView(props) {
     const {formik} = props;
+    let [listReason, setListReason] = useState([]);
+    useEffect(function () {
+            getReasonOrderCancel(function (rs) {
+
+                setListReason(rs);
+            })
+    }, [])
     const cancel = () => {
         formik.setFieldValue("show", false);
     }
@@ -309,7 +317,7 @@ function FormOrderCancelView(props) {
             <Modal.Body>
                 <Form.Group className="col-md-12">
                     <Form.Label className="form-check-label">Lý do hủy đơn <span className="text-danger">*</span></Form.Label>
-                    <TextareaField className="form-control-xl form-control "  formik={formik} name="note"/>
+                    <SelectNew options={listReason} defaultValue={formik.values.note} formik={formik} name="note"   selectKey="type" selectText="name"   />
                 </Form.Group>
             </Modal.Body>
             <Modal.Footer>

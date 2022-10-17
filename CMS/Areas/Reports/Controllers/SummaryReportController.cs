@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using MoreLinq;
 using ReflectionIT.Mvc.Paging;
 
 namespace CMS.Areas.Reports.Controllers;
@@ -85,7 +86,7 @@ public class SummaryReportController : BaseController
             {
                 ListData = listData,
                 OrderStatusPayments = OrderStatusPayment.ListOrderStatusPayment,
-                ListStatus = OrderStatusConst.ListStatus,
+                ListStatus = OrderStatusConst.ListStatus.Where(x => x.Key != OrderStatusConst.StatusOrderCancel).ToDictionary(),
                 IsDetailOrder = User.HasClaim(CmsClaimType.AreaControllerAction,
                     "Orders@OrderController@Details".ToUpper())
             };

@@ -13,6 +13,7 @@
     var listData = Model.GetModel<PagingList<Orders>>("ListData");
     var IsEdit = Model.GetModel<bool>("IsEdit");
     var ShowOrderStatus = Model.GetModel<bool>("ShowOrderStatus");
+    var StatusCancel = Model.GetModel<bool>("StatusCancel") ;
     var ListStatus = Model.GetModel<Dictionary<int, string>>("ListStatus");
     bool? isEdit = (bool)TempData["IsEdit"]!;
 }
@@ -103,6 +104,19 @@
                                     }
                                 </select>
                             </div>
+                            @if (StatusCancel)
+                            {
+                                <div class="col-xs-12 col-sm-3 m-t-b-5">
+                                    <select class="form-control form-control-xl" name="reasonId" asp-for="@listData.RouteValue["reasonId"]">
+                                        <option value="">Tất cả lý do hủy đơn</option>
+                                        @foreach (var item in ReasonCancel.ListReasonCancel)
+                                        {
+                                            <option value="@item.Type">@item.Name</option>
+                                        }
+                                    </select>
+                                </div> 
+                            }
+                       
                             <div class="col-xs-12 col-sm-3 m-t-b-5">
                                 <div class="row">
                                     <div class="col-md-6 col-12">

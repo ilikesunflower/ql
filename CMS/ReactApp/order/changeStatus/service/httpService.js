@@ -81,3 +81,21 @@ export const changeOrderCancel = (param, callback) => {
             UserInterface.prototype.hideLoading();
         });
 }
+
+
+export const getReasonOrderCancel = ( callback) => {
+    UserInterface.prototype.showLoading();
+    http.get("/Orders/Order/GetReasonOrderCancel")
+        .then(response => {
+            if (response.code === 200) {
+                callback(response.content);
+            } else {
+                console.error("ApiDetail:" + response.msg)
+            }
+            UserInterface.prototype.hideLoading();
+        })
+        .catch(e => {
+            console.log(e)
+            UserInterface.prototype.hideLoading();
+        });
+}

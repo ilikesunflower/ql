@@ -7,6 +7,10 @@ import { useElementSize } from 'use-element-size'
 const useChart = (props) => {
     let {chartData} = props;
     let {categories, prices} = chartData;
+    let test = [];
+    for(let i = 0; i < 30; i++){
+        test.push(i * 4000000 );
+    }
     Highcharts.setOptions({
         lang: {
             thousandsSep: '.',
@@ -43,7 +47,22 @@ const useChart = (props) => {
                     color: "#2E5ADD"
                 }
             }
-        }],
+        },
+            {
+                title: {
+                    text: 'Số đơn',
+                    style: {
+                        color: "#2eb85c"
+                    }
+                },
+                labels: {
+                    style: {
+                        color: "#2eb85c"
+                    }
+                },
+                opposite: true
+            },
+        ],
         tooltip: {
             formatter: function () {
                 return this.points.reduce(function (s, point) {
@@ -66,11 +85,16 @@ const useChart = (props) => {
             }
         },
         legend: {
-            layout: 'horizontal',
-            align: 'center',
-            verticalAlign: 'bottom',
-            backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'rgba(255,255,255,0.25)'
+            align: 'left',
+            x: 80,
+            verticalAlign: 'top',
+            y: 80,
+            floating: true,
+            backgroundColor:
+                Highcharts.defaultOptions.legend.backgroundColor || // theme
+                'rgba(255,255,255,0.25)'
         },
+
         series: [{
             name:"Doanh số",
             showInLegend: false,
@@ -81,7 +105,18 @@ const useChart = (props) => {
             tooltip: {
                 valueSuffix: ' VND'
             }
-        }]
+        },
+            {
+                name: 'Số đơn',
+                type: 'spline',
+                data: chartData?.lineData ?? [],
+                showInLegend: false,
+                yAxis: 1,
+                color: "#2eb85c",
+                tooltip: {
+                    valueSuffix: ' '
+                }
+            }]
     });
 
     const ref = useElementSize((size, prevSize, elem) => {

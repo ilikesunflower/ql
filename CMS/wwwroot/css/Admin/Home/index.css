@@ -10,3 +10,8 @@
 .bg-waiting_color{
     background-color:  #f39c12!important;
 }
+.spanWarning{
+    font-size: 12px;
+    font-style: italic;
+    color: darkgray;
+}

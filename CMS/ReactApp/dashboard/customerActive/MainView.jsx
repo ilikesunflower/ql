@@ -34,7 +34,7 @@ function MainController(props) {
 
     useEffect(() => {
         getData();
-    }, [])
+    }, [fromDate, toDate])
 
     const onSubmitForm = () => {
         getData();
@@ -120,7 +120,11 @@ function MainApp(props) {
                         </Form>
                         <div className="row pt-3">
                             <Chart chartData={state.chartData}/>
+                            <span className="spanWarning">
+                               * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa đc kiểm tra độ chính xác)
+                            </span>
                         </div>
+                       
                     </Card.Body>
                 </Card>
 
@@ -128,5 +132,5 @@ function MainApp(props) {
         </Row>
     );
 }
-
+ 
 export default MainApp;
