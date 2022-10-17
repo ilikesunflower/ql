@@ -48,7 +48,7 @@ function MainApp(props) {
                             <h5 className="text-color-default font-weight-bold m-b-0 text-uppercase">Báo cáo doanh số các nhóm khách hàng</h5>
                         </Card.Header>
                         <Card.Body>
-                            <Form className="row">
+                          <Form className="row">
                             
                                 <Form.Group className="col-md-8">
                                     <div className="input-group">
@@ -115,8 +115,14 @@ function MainApp(props) {
                                     </button>
                                 </Form.Group>
                             </Form>
-                          <div className="row pt-3">
-                                  <Chart chartData={state.chartData} />
+                          <div className="row pt-3 ">
+                              <Chart chartData={state.chartData} />
+                              <div className="col-12 text-center">
+                                     <span className="spanWarning">
+                                   * Lưu ý: Đối tượng khách hàng được phân chia theo đăng ký của User trên website (chưa đc kiểm tra độ chính xác)
+                                </span>
+                              </div>
+                                 
                           </div>
                         </Card.Body>
                 </Card>

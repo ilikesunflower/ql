@@ -192,8 +192,15 @@
                                                     @Html.Raw(PaymentMethodConst.BindStatus(item.PaymentType))
                                                 </span>
                                             </td>
-                                            <td class="align-middle text-center">
+                                            <td class="align-middle text-center " >
                                                 @Html.Raw(OrderStatusConst.GetStatus(item.Status ?? 0))
+                                                @if (!string.IsNullOrEmpty(item.ReasonNote))
+                                                {
+                                                    <p class=" fontZ pt-2">
+                                                        <label class="m-all-0">Lý do:</label>
+                                                        <span>@(item.ReasonNote)</span><br/>
+                                                    </p>
+                                                }
                                             </td>
                                             <td class="align-middle text-center fontZ">
                                                 @(ShipConst.GetShipment((item.ShipPartner ?? 0), item.ShipType))
