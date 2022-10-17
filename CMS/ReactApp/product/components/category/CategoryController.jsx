@@ -3,12 +3,8 @@ import Yup from "../../../components/Yup"
 import {useFormik} from "formik";
 import {isHtml, parStr2Float, parInt2Str} from "../../../common/app"
 import {
-    getProductPurpose,
     getProductCategory,
-    saveProductPurpose,
     saveProductCategory,
-    saveProduct,
-    deleteProductPurpose
 } from "../service/httpService"
 
 

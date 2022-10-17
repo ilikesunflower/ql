@@ -3,12 +3,7 @@ import Yup from "../../../components/Yup"
 import {useFormik} from "formik";
 import {isHtml, parStr2Float, parInt2Str} from "../../../common/app"
 import {
-    getProductPurpose,
-    getProductCategory,
-    saveProductPurpose,
-    saveProductCategory,
     saveProduct,
-    deleteProductPurpose
 } from "../service/httpService"
 
 
@@ -16,303 +11,17 @@ function MainController(props) {
     //listFileSave
     let [listFileSave, setListFileSave] = useState([]);
     let [listFile, setListFile] = useState([]);
-
     //listProperties
     let [listProperties, setListProperties] = useState([]);
-    
     //listProperProduct
     let [listProperProduct, setListProperProduct] = useState([]);
-
-
-
-
-    let [listProductPurpose, setListProductPurpose] = useState([]);
-    let [listProductCategory, setListProductCategory]  = useState([]);
-    let [showPurpose, setShowPurpose]  = useState(false);
-    let [showCategory, setShowCategory]  = useState(false);
+    
     let [imageString, setImageString] = useState( '/images/icon/defaultimage.jpg?w=300');
-    let refI = useRef(null);
-    let refImage = useRef(null);
-    let [showDeletePurpose, setShowDeletePurpose]  = useState(false);
-    let [listPurposeDelete, setListPurposeDelete] = useState([]);
 
-    let [showCropImage, setShowCropImage] = useState(false);
-    let [imageCrop, setImageCrop] = useState('');
-    let [indexImage, setIndexImage] = useState(null); 
-    let [typeImage, setTypeImage] = useState(''); 
-    let [nameI, setNameI] = useState(''); 
-    useEffect(function () {
-     
-        getProductCategory(function (rs) {
-            setListProductCategory(rs);
-        });
-    }, []);
-    useEffect(() => {
-        getProductPurpose(function (rs) {
-            setListProductPurpose(rs);
-        }); 
-    }, []);
-    useEffect(function () {
-        let data = [];
-        let dataC = listProperties.filter(x => x.name != '' && fitterTrimArrayString(x.properties).length != 0) || [];
-        if(Array.isArray(dataC) && dataC.length > 0){
-            let count = dataC.length;
-            if(count == 1){
-                let  valueP = fitterTrimArrayString(dataC[0].properties);
-                valueP.forEach(obj => {
-                    let dataP = {
-                        name:  obj?.value || '',
-                        skuMh: '',
-                        price: 0,
-                        quantity: 0
-                    }
-                    data.push(dataP)
-                })
-            }else if(count > 1){
-                let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
-                valueP.forEach(obj => {
-                    let dataP = {
-                        name:  obj,
-                        skuMh: '',
-                        price: 0,
-                        quantity: 0
-                    }
-                    data.push(dataP)
-                })  
-            }
-        }
-        setListProperProduct(data);
-
-    }, [listProperties]);
     const fitterTrimArrayString = function (lisObj) {
         let value = lisObj.filter(x => x?.value != '');
         return value;
     }
-    const clickElement = function (e) {
-        let rs = [...listPurposeDelete, e];
-        setListPurposeDelete(rs);
-    } 
-    const deletePurpose = function () {
-        let param = {
-            "ids" : listPurposeDelete
-        };
-        if(listPurposeDelete.length > 0){  
-            deleteProductPurpose(param, function (response) {
-                if (response.code === 200) {
-                    setListPurposeDelete([]);
-                    if(Array.isArray(response?.dataNoDe) && response?.dataNoDe.length > 0){
-                        let err = "";
-                        response?.dataNoDe.forEach(x => {
-                            err += x + " . ";
-                        })
-                        setShowDeletePurpose(!showDeletePurpose);
-                        setListProductPurpose(response.content);
-                        toastr.error("Mục đích sử dụng "+ err + "  đã được sử dụng trong sản phẩm khác, không được phép xóa ")
-                    }else{
-                        setShowDeletePurpose(!showDeletePurpose);
-                        setListProductPurpose(response.content);
-                        toastr.success("Xóa mục đích sử dụng thành công")
-
-                    }
-                   
-                } else {
-                    toastr.error("Xóa mục đích sử dụng ", "Lỗi")
-                }
-            })
-        }else {
-            toastr.error("Vui lòng chọn dữ liệu")
-
-        }
-    };
-    const createListProductProperties = (listPs, listPro, index2, count) => {
-        let pro2 = fitterTrimArrayString(listPs[index2].properties);
-        let properties = [];
-        listPro.forEach(obj => {
-            pro2.forEach(obj2 => {
-                properties.push( (index2== 1? obj?.value : obj) + ' _ ' + obj2?.value );
-            })
-        })
-        let indexNext = index2 + 1;
-
-        if(indexNext == count){
-            return properties;
-        }else{
-            return createListProductProperties(listPs,properties, indexNext , count);
-        }
-    }
-    const handDeletePurpose = function (){
-        setShowDeletePurpose(!showDeletePurpose);
-    }
-    const handPurpose = function () {
-        setShowPurpose(!showPurpose);
-    }
-    const deleteMany = function (i) {
-        let data = [...listFile];
-        let data1 = [...listFileSave];
-        data.splice(i, 1);
-        data1.splice(i, 1);
-        setListFile(data);
-        setListFileSave(data1);
-    }
-    const handCategory = function () {
-        setShowCategory(!showCategory);
-    }
-    //crop imgae
-
-    const cropImageNew = function (i) { 
-        let data = [...listFile];
-        let data1 = [...listFileSave];
-        let img = data[i];
-        let img1 = data1[i].name;
-        setImageCrop(img);
-        setIndexImage(i);
-        setShowCropImage(true);
-        let typeImg = img1.split('.').pop();
-        setNameI(img1)
-        setTypeImage(typeImg);
-    }
-    const handleCropImageNew = function (event){
-        if(!event) return;
-        let data = [...listFile];
-        let data1 = [...listFileSave];
-        data[indexImage] = URL.createObjectURL(event);
-        data1[indexImage] = event;
-        setListFileSave(data1);
-        setListFile(data);
-        setShowCropImage(false)
-    }
-
-
-    const handleChangeFile = function (e) {
-        let value = [];
-        let value1 = [];
-        if( e.target.files.length > 0){
-            for (let i = 0; i < e.target.files.length; i++) {
-                let nameFile = e.target.files[i].name;
-                let check = "";
-                if (nameFile != "") {
-                    check = nameFile.split('.').pop();
-                }
-                if (check == "jpg" || check == "jpeg" || check == "gif" || check == "png" ) {
-                    value.push(e.target.files[i]);
-                    value1.push(URL.createObjectURL( e.target.files[i]));
-                }else {
-                    toastr.error("File không đúng định dạng hình ảnh")
-                }
-            }
-            setListFileSave([...listFileSave,  ...value]);
-            setListFile([...listFile,...value1]);
-        }
-    }
-    const maxIndexProperties = function (listProperties){
-        let indexMax = 0;
-        if(Array.isArray(listProperties) && listProperties.length > 0 ){
-            let properties = listProperties.reduce(function (previous, current) {
-                return (previous.ord > current.ord ? previous : current)
-            })
-            indexMax = properties.ord + 1;
-        }
-        return indexMax;
-    }
-    
-    const addFormProperties = function (){
-            let ord = maxIndexProperties(listProperties);
-            let val = {
-                ord : ord,
-                name: '',
-                properties: [{ord: 0, value: ''}]
-            }
-            setListProperties([...listProperties, val]);
-    }
-    const addDetailProperties = function (e, property){
-        let data =[...listProperties] ;
-        let ordNew = maxIndexProperties(property.properties)
-        let valueNew = {ord: (ordNew || 1), value: ''}
-        let index = data.findIndex(x => x.ord == property.ord);
-        data[index].properties.push(valueNew);
-        setListProperties(data);
-    }
-    const handFormProperties1 = function (e, property){
-       let value =  e.target.value.trim();
-        let data =[...listProperties] ;
-        let check = data.findIndex(x => x.name == value && x.name != '');
-        let index = data.findIndex(x => x.ord == property?.ord);
-        if(check >= 0 && check != index){
-            data.splice(index, 1);
-            setListProperties(data);
-            toastr.error("Thuộc tính này đã tồn tại")
-        }else{
-            data[index].name = value;
-            setListProperties(data);
-        }
-    }
-    const handFormProperties11 = function (e, property, property1){
-        let value = e.target.value.trim();
-        if(value != ''){
-
-            let data = [...listProperties];
-            let index = data.findIndex(x => x?.ord == property?.ord);
-            let check = data[index]?.properties.findIndex(x => x?.value == value);
-            let index1 = property.properties.findIndex(x => x?.value == property1?.value);
-            if(check > -1 &&  check != index1 ){
-                e.target.value = '';
-                toastr.error("Thuộc tính này đã tồn tại")
-            }else{
-                data[index].properties[index1].value = value;
-                setListProperties(data);
-            }
-        }
-    }
-    const deleteDetailProperties = function ( property1, property2) {
-        let data = [...listProperties];
-        let index = data.findIndex(x => x?.ord == property1?.ord);
-        let index1 = property1.properties.findIndex(x => x.ord == property2.ord);
-        data[index].properties.splice(index1, 1);
-        setListProperties(data);
-    }
-    const handSkuMh = function (e, index) {
-       let data = [...listProperProduct];
-       let value = e.target.value.trim();
-       let check = data.findIndex(x => x.skuMh != '' && x.skuMh == value );
-       if(check > -1 && check != index){
-           e.target.value= '';
-           toastr.error("Mã hàng này đã tồn tại")
-       }else{
-           data[index].skuMh = value;
-           setListProperProduct(data);
-       }
-    }
-    const handPriceSkuMh = function (e, index) {
-        let data = [...listProperProduct];
-        if(parInt2Str(e.floatValue) >= 0){
-            data[index].price = e.floatValue;
-            setListProperProduct(data);
-        }
-    }
-    const handPrice = function (e, index) {
-        let data = [...listProperProduct];
-        if(e.floatValue >= 0){
-            data[index].price = e.floatValue;
-            setListProperProduct(data);
-        }
-    } 
-    const handQuantitySkuMh = function (e, index) {
-        let data = [...listProperProduct];
-        if(e.floatValue <= 999999999 && e.floatValue >= 0){
-            data[index].quantity = e.floatValue;
-            setListProperProduct(data);
-        }
-    }
-   const deleteProperties = function (property){
-       let data =[...listProperties] ;
-       let index = data.findIndex(x => x.ord == property.ord);
-       data.splice(index, 1);
-       setListProperties(data);
-   }
-    const onClickImage = function () {
-        $(refImage.current).click();
-    }
-
     const formikProduct = useFormik({
         initialValues: {
             sku : '',
@@ -456,106 +165,18 @@ function MainController(props) {
 
         }
     })
-    const formikProductPurpose = useFormik({
-        initialValues: {
-            name: ''
-        },
-        validationSchema: Yup.object().shape({
-            name: Yup.string().required("Vui lòng nhập mục đích sử dụng").validHtml().maxLength(255)
-        }),
-        onSubmit: (values, {resetForm}) => {
-            let param = {name: values.name.trim()}
-            let index = listProductPurpose.findIndex(x => x.label ==  values.name.trim());
-            if(index < 0){
-                saveProductPurpose(param, function (rs) {
-                    if(rs.code === 200){
-                        setListProductPurpose(rs.content);
-                        setShowPurpose(false);
-                        resetForm();
-                        toastr.success("Tạo mục đích sử dụng thành công")
-                    }else if(rs.msg = "same"){
-                        toastr.error("Mục đích sử dụng đã tồn tại", "Lỗi")  
-                    }else{
-                        toastr.error("Tạo mục đích sử dụng ", "Lỗi")
-                    }
-                })
-              
-            }else {
-                toastr.error("Mục đích sử dụng đã tồn tại", "Lỗi")
-            }
-
-        }
-    })
-    const formikProductCategory = useFormik({
-        initialValues: {
-            name: ''
-        },
-        validationSchema: Yup.object().shape({
-            name: Yup.string().required("Vui lòng nhập tên danh mục").validHtml().maxLength(255)
-        }),
-        onSubmit: (values, {resetForm}) => {
-            let param = {name: values.name.trim()}
-            let index = listProductCategory.findIndex(x => x.label ==  values.name.trim());
-            if(index < 0){
-                saveProductCategory(param, function (rs) {
-                    if(rs.code === 200){
-                        setListProductCategory(rs.content);
-                        setShowCategory(false);
-                        resetForm();
-                        toastr.success("Tạo danh mục sản phẩm  thành công")
-                    }else if(rs.msg == "same"){
-                        toastr.error("Tạo danh mục sản phẩm đã tồn tại", "Lỗi")
-                    }else{
-                        toastr.error("Tạo danh mục sản phẩm ", "Lỗi")
-                    }
-                })
-
-            }else {
-                toastr.error("Danh mục sản phẩm đã tồn tại", "Lỗi")
-            }
-
-        }
-    })
-   
-    return {formikProduct, formik:{ formikProduct, formikProductPurpose, formikProductCategory}, 
+    return {formikProduct,
         state:{
-            showPurpose,
-            showCategory,
-            listProductPurpose,
-            listProductCategory,
-            listFile,
-            refImage,
-            refI, imageString,
+            listFile, imageString,
             listProperties,
             listProperProduct,
-            showDeletePurpose,
-            showCropImage, imageCrop,
-            typeImage, nameI
+            listFileSave
         },
         method:{
-            handPurpose,
-            handCategory,
-            handleChangeFile,
-            onClickImage,
-            deleteMany,
             setImageString,
-            addFormProperties,
-            handFormProperties1,
-            handFormProperties11,
-            deleteProperties,
-            handSkuMh,
-            handPriceSkuMh,
-            addDetailProperties,
-            deleteDetailProperties,
-            handPrice, 
-            handQuantitySkuMh,
-            handDeletePurpose,
-            setShowDeletePurpose,
-            clickElement, 
-            deletePurpose,
-            cropImageNew, 
-            handleCropImageNew, 
-            setShowCropImage
+            setListFileSave,
+            setListFile, 
+            setListProperties, setListProperProduct
         } };
 }
 export default MainController;

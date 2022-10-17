@@ -149,7 +149,7 @@ namespace CMS.Areas.Products.Controllers
             try
             {
                 var query = _iProductRepository.FindAll();
-                var model = PagingList.Create(query.OrderByDescending(x => x.Name), 20, 1);
+                var model = PagingList.Create(query.OrderByDescending(x => x.Name), PageSize, 1);
                 return Json(new
                 {
                     code = 200,
@@ -239,12 +239,7 @@ namespace CMS.Areas.Products.Controllers
                 ILoggingService.Infor(this._iLogger, "Tạo mới danh mục sản phẩm thành công id:" + category.Id,
                     "UserId: " + UserInfo.UserId);
 
-                var rs = _iProductCategoryRepository.FindAll()
-                    .OrderByDescending(x => x.Name).Select(x => new
-                    {
-                        Value = x.Id,
-                        Label = x.Name
-                    });
+                var rs = _iProductService.GetCategoryProduct();
                 return Json(new
                 {
                     code = 200,

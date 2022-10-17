@@ -1,6 +1,6 @@
 ﻿import React , {useEffect, useState, useRef} from 'react';
 import {Col, Form, Row,  Card, Table, Modal , Button } from "react-bootstrap";
-import {CheckBoxField, InputField} from '../../components/formikField'
+import {CheckBoxField, InputField} from '../../../components/formikField'
 import CategoryController from "./CategoryController"
 import SelectNewMutile2 from "../../../components/SelectNewMutile2";
 

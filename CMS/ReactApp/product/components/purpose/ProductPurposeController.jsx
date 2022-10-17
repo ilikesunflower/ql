@@ -4,10 +4,7 @@ import {useFormik} from "formik";
 import {isHtml, parStr2Float, parInt2Str} from "../../../common/app"
 import {
     getProductPurpose,
-    getProductCategory,
     saveProductPurpose,
-    saveProductCategory,
-    saveProduct,
     deleteProductPurpose
 } from "../service/httpService"
 
@@ -71,7 +68,7 @@ function ProductPurposeController(props) {
     useEffect(() => {
         if(formikProduct.values.productPurposeId != "" && formikProduct.values.productPurposeId  != 0){
             let value = formikProduct.values.productPurposeId
-            let check = listProductPurpose.findIndex(x => x.Value == value);
+            let check = listProductPurpose.findIndex(x => x.value == value);
             if(check == -1){
                 formikProduct.setFieldValue('productPurposeId', 0)
             }
