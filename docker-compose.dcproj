@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>922f6442-e097-4de4-acbc-809e11d2492b</ProjectGuid>
+    <ProjectGuid>33a4ac7b-5d39-4f18-95ea-05a49ceddd9c</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>cms</DockerServiceName>

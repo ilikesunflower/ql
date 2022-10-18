@@ -2,8 +2,8 @@
 
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
 WORKDIR /app
-EXPOSE 7600
-EXPOSE 7500
+EXPOSE 80
+EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
@@ -13,6 +13,7 @@ COPY ["CMS_EF/CMS_EF.csproj", "CMS_EF/"]
 COPY ["CMS_Lib/CMS_Lib.csproj", "CMS_Lib/"]
 COPY ["CMS_Ship/CMS_Ship.csproj", "CMS_Ship/"]
 COPY ["CMS_WareHouse/CMS_WareHouse.csproj", "CMS_WareHouse/"]
+COPY ["ImageProxy/ImageProxy.csproj", "ImageProxy/"]
 RUN dotnet restore "CMS/CMS.csproj"
 COPY . .
 WORKDIR "/src/CMS"

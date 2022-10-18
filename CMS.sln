@@ -23,7 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_Ship", "CMS_Ship\CMS_Sh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CMS_WareHouse", "CMS_WareHouse\CMS_WareHouse.csproj", "{825093C5-A0B6-494C-A2AD-C184ED40B0FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProxy", "ImageProxy\ImageProxy.csproj", "{0ED2BEFF-06FC-4805-A286-C11117EBBD25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ImageProxy", "ImageProxy\ImageProxy.csproj", "{0ED2BEFF-06FC-4805-A286-C11117EBBD25}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{33A4AC7B-5D39-4F18-95EA-05A49CEDDD9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,10 @@ Global
 		{0ED2BEFF-06FC-4805-A286-C11117EBBD25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED2BEFF-06FC-4805-A286-C11117EBBD25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED2BEFF-06FC-4805-A286-C11117EBBD25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33A4AC7B-5D39-4F18-95EA-05A49CEDDD9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A4AC7B-5D39-4F18-95EA-05A49CEDDD9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A4AC7B-5D39-4F18-95EA-05A49CEDDD9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A4AC7B-5D39-4F18-95EA-05A49CEDDD9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
