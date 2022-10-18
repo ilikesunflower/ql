@@ -5,6 +5,12 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+FROM node:lts AS node
+WORKDIR /src
+COPY . .
+RUN npm install
+RUN npm run prod
+
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 COPY ["CMS/CMS.csproj", "CMS/"]
