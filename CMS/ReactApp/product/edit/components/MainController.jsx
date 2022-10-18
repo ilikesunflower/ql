@@ -147,7 +147,7 @@ function MainController(props) {
             productSex: 0,
             productAge: 0,
             unit : '',
-            isPublic: true,
+            isPublic: false,
             isBestSale: false,
             image: '',
             images:[],

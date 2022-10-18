@@ -42,33 +42,37 @@ function PropertyController(props) {
             setListProperProduct(data);
             
         }
-        if(Array.isArray(dataC) && dataC.length > 0 && !isEdit){
-            let count = dataC.length;
-            if(count == 1){
-                let  valueP = fitterTrimArrayString(dataC[0].properties);
-                valueP.forEach(obj => {
-                    let dataP = {
-                        name:  obj?.value || '',
-                        skuMh: '',
-                        price: 0,
-                        quantity: 0
-                    }
-                    data.push(dataP)
-                })
-            }else if(count > 1){
-                let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
-                valueP.forEach(obj => {
-                    let dataP = {
-                        name:  obj,
-                        skuMh: '',
-                        price: 0,
-                        quantity: 0
-                    }
-                    data.push(dataP)
-                })
+        if(!isEdit){
+            if(Array.isArray(dataC) && dataC.length > 0  ){
+                let count = dataC.length;
+                if(count == 1){
+                    let  valueP = fitterTrimArrayString(dataC[0].properties);
+                    valueP.forEach(obj => {
+                        let dataP = {
+                            name:  obj?.value || '',
+                            skuMh: '',
+                            price: 0,
+                            quantity: 0
+                        }
+                        data.push(dataP)
+                    })
+                }
+                else if(count > 1){
+                    let valueP = createListProductProperties(dataC,fitterTrimArrayString(dataC[0].properties),1, count)
+                    valueP.forEach(obj => {
+                        let dataP = {
+                            name:  obj,
+                            skuMh: '',
+                            price: 0,
+                            quantity: 0
+                        }
+                        data.push(dataP)
+                    })
+                }
             }
             setListProperProduct(data);
         }
+    
 
     }, [listProperties]);
     const fitterTrimArrayString = function (lisObj) {

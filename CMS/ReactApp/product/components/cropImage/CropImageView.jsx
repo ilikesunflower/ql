@@ -16,7 +16,7 @@ function CropImageView(props) {
             }
             <div className="d-flex justify-content-center col-12  pt-3">
                 <button  type="button" className="btn btn-secondary" onClick={method.onClickImage}  >Upload ảnh phụ</button>
-                <input  type="file" onChange={method.handleChangeFile} multiple ref={state.refImage} hidden/>
+                <input  type="file" accept="image/*" onChange={method.handleChangeFile} multiple ref={state.refImage} hidden/>
             </div>
             <div className="col-12  pt-3">
                 <div className={"row d-flex justify-content-center  " + ((state.listFile.length > 0 || (isEdit &&

@@ -307,7 +307,7 @@ export const FileFieldP = function (props) {
     }
     return (
         <>
-            <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange} className={"form-control input-sm " + (className || '')} />
+            <input ref={refU} type="file" accept="image/*" name={name} onBlur={prop.onBlur} onChange={handleInputChange} className={"form-control input-sm " + (className || '')} />
             {meta.touched && meta.error ? (<p className="text-danger">{meta.error}</p>) : null}
         </>
     )
@@ -366,7 +366,7 @@ export const FileFieldCropImage = function (props) {
                 <CropImage showCrop={show} nameFile={nameF} setShowCrop={setShow} src={src} typeFile={type} handleValue={handleImageChange}/> 
             }
             <div className="col-lg-12 " onClick={()=> {$(refU.current).click()}}>
-                <input ref={refU} type="file" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />
+                <input ref={refU} type="file"  accept="image/*" name={name} onBlur={prop.onBlur} onChange={handleInputChange}  className={"form-control input-sm " + (className || '')} />
                 {meta.touched && meta.error ? (<p className="text-danger">{meta.error}</p>) : null}
                 <img src={imageString} className="imgA"/>
             </div>

@@ -86,12 +86,12 @@ function RightComponentView(props) {
                                 <CheckBoxField  className=" inputCheckbox pr-1" size="xl" formik={formik} name="isPromotion"/>
                             </div>
                         </Form.Group>
-                        {/*<Form.Group className="col-md-12 pt-3">*/}
-                        {/*    <div className="row">*/}
-                        {/*        <Form.Label className="form-check-label col-9 pr-2  ">Kích hoạt</Form.Label>*/}
-                        {/*        <CheckBoxField  className=" inputCheckbox pr-1" size="xl" formik={formik.formikProduct} name="isPublic"/>*/}
-                        {/*    </div>*/}
-                        {/*</Form.Group>*/}
+                        <Form.Group className="col-md-12 pt-3">
+                            <div className="row">
+                                <Form.Label className="form-check-label col-9 pr-2  ">Kích hoạt</Form.Label>
+                                <CheckBoxField  className=" inputCheckbox pr-1" size="xl" formik={formik} name="isPublic"/>
+                            </div>
+                        </Form.Group>
                     </Card.Body>
                 </Card>
             </div>

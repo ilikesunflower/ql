@@ -130,7 +130,7 @@ public class ProductService : IProductService
                     product.IsBestSale = editData.IsBestSale;
                     product.IsNew = editData.IsNew;
                     product.IsPromotion = editData.IsPromotion;
-                    
+                    product.IsPublic = editData.IsPublic;
                     product.ProductSex = editData.ProductSex;
                     product.ProductAge = editData.ProductAge;
                     int statusNotApproved = ProductCensorshipConst.NotApproved.Status;
@@ -365,7 +365,8 @@ public class ProductService : IProductService
                         ProductAge = createData.ProductAge,
                         LastModifiedAt = DateTime.Now,
                         LastModifiedBy = userId,
-                        IsPublic = ProductConst.IsNotPublish,
+                        IsPublic = createData.IsPublic,
+                        // IsPublic = ProductConst.IsNotPublish,
                         Org1Status = statusPending,
                         Org2Status = statusPending,
                         Org3Status = statusPending

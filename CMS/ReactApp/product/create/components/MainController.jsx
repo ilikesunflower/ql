@@ -41,7 +41,7 @@ function MainController(props) {
             productSex: 0,
             productAge: 0,
             unit : '',
-            isPublic: true,
+            isPublic: false,
             image: '',
             images:[],
             name1: '',
