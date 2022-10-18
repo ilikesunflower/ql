@@ -1092,7 +1092,7 @@ public class OrderController : BaseController
             string id = $"{data["id"]}";
             if (!string.IsNullOrEmpty(id))
             {
-                var order = this._iOrdersRepository.FindByCode(id);
+                var order = this._iOrdersRepository.FindByCodeWithProduct(id);
                 if (order != null)
                 {
                     if (order.OrderIdWh == null)
