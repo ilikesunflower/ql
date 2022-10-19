@@ -147,6 +147,8 @@ namespace CMS.Areas.Products.Controllers
                 model.AddModel("ListData", listData);
                 model.AddModel("ListStatus", ProductConst.ListStatus);
                 model.AddModel("ListStatusTT", ProductConst.ListStatusTT);
+                model.AddModel("isStatusExport",User.HasClaim(CmsClaimType.AreaControllerAction,
+                    "Products@ProductController@Export".ToUpper()));
                 model.AddModel("Page", pageindex);
                 model.AddModel("isWareHouse",
                     User.HasClaim(CmsClaimType.AreaControllerAction,

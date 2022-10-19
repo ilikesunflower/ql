@@ -87,12 +87,15 @@ namespace CMS.Areas.Admin.Services.Home
                     Month = x.Key.Month,
                     Year = x.Key.Year,
                     Date =  new DateTime(x.Key.Year, x.Key.Month,1, 0, 0, 0).ToString("MM/yyyy"),
-                    Prices = x.Sum(x => x.Total ?? 0)
+                    Prices = x.Sum(x => x.Total ?? 0),
+                    Count = x.Count()
                 }).OrderBy(x => x.Year).ThenBy(x => x.Month).ToList();
             var chartDataModel = new CharDataModel()
             {
                 Categories = data.Select(x => x.Date).ToList(),
-                Prices = data.Select(x => x.Prices).ToList()
+                Prices = data.Select(x => x.Prices).ToList(),
+                LineData = data.Select(x => x.Count).ToList()
+
             };
             return chartDataModel;
         }

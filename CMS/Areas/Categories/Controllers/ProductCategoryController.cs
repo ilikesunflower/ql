@@ -232,6 +232,7 @@ public class ProductCategoryController : BaseController
     [HttpPost]
     [ValidateAntiForgeryToken]
     // [Authorize(Policy = "PermissionMVC")]
+    [NonLoad]
     public JsonResult UpdateOrder(UpdateOrderViewModel form)
     {
         try

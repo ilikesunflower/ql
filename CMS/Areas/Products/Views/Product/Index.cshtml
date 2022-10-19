@@ -17,6 +17,7 @@
     var listStatus = Model.GetModel<Dictionary<int, string>>("ListStatus");
     var listStatusTT = Model.GetModel<Dictionary<int, string>>("ListStatusTT");
     var isWareHouse = Model.GetModel<bool>("isWareHouse");
+    var isStatusExport = Model.GetModel<bool>("isStatusExport");
 }
 @functions
 {
@@ -103,7 +104,7 @@
                     </div>
                     <div class="card-body">
                         <form class="row" method="get">
-                            <div class="col-xs-12 col-sm-4">
+                            <div class="@(isStatusExport ? " col-xs-12 col-sm-4 " : " col-xs-12 col-sm-6")" + >
                                 <input autocomplete="off" name="txtSearch" class="form-control form-control-xl" placeholder="Nhập mã sản phẩm hoặc tên mặt hàng" value="@listData.RouteValue["txtSearch"]" />
                             </div>
                              <div class="col-xs-12 col-sm-2">
@@ -122,12 +123,17 @@
                                     }
                                 </select>
                             </div>
+                            
                             <div class="col-xs-12 col-sm-2">
                                 <button type="submit" name="isExport" value="0" class="btn btn-danger btn-block filter btn-xl">Tìm kiếm</button>
                             </div>
-                            <div class="col-xs-12 col-sm-2">
-                                <button type="submit" name="isExport" value="1" class="btn btn-success btn-block filter btn-xl">Xuất báo cáo</button>
-                            </div>
+                            @if (isStatusExport)
+                            {
+                                <div class="col-xs-12 col-sm-2">
+                                    <button type="submit" name="isExport" value="1" class="btn btn-success btn-block filter btn-xl">Xuất báo cáo</button>
+                                </div> 
+                            }
+                        
                             
                         </form>
                         <div class="table-responsive tablePaddingTop">
