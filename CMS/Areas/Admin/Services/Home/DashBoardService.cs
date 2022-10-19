@@ -166,7 +166,6 @@ namespace CMS.Areas.Admin.Services.Home
                             && x.Order.OrderAt >= dateStart && x.Order.OrderAt <= dateEnd && x.Order.Status != OrderStatusConst.StatusOrderCancel)
                 .GroupBy(x => new
                 {
-                    ProductId = x.ProductSimilarCodeWh,
                     ProductName = x.ProductName,
                 });
             if (typeStatus == FilterToProductConst.StatusQuantity)
