@@ -6,6 +6,7 @@ using System.Linq.Dynamic.Core;
 using System.Numerics;
 using CMS_EF.DbContext;
 using CMS_EF.Models.Orders;
+using CMS_EF.Models.Products;
 using CMS_Lib.DI;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using EFCore.BulkExtensions;
@@ -69,7 +70,8 @@ public class ProductRepository : BaseRepository<CMS_EF.Models.Products.Products>
                     IsBestSale = g.Key.IsBestSale,
                     Image = g.Key.Image,
                     LastModifiedAt = g.Key.LastModifiedAt,
-                    Quantity = g.Sum(x =>(double)(x.ps.QuantityWh ?? 0) )
+                    Quantity = g.Sum(x =>(double)(x.ps.QuantityWh ?? 0) ),
+                    ListSimilar = g.Select(x => x.ps).ToList()
                 }
             );
         return rs;
@@ -178,5 +180,6 @@ public class ProductIndex
     public string Org1Comment { get; set; }
     public string Org2Comment { get; set; }
     public string Org3Comment { get; set; }
+    public List<ProductSimilar> ListSimilar { get; set; }
 
 }

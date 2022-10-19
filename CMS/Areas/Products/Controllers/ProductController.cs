@@ -5,13 +5,17 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using ClosedXML.Excel;
+using ClosedXML.Report;
 using CMS.Areas.Categories.Const;
 using CMS.Areas.Orders.Const;
 using CMS.Areas.Products.Const;
 using CMS_EF.Models.Products;
 using CMS.Areas.Products.Models.Product;
 using CMS.Areas.Products.Services;
+using CMS.Areas.Reports.Const;
 using CMS.Models;
 using CMS.Models.ModelContainner;
 using CMS.Services.Files;
@@ -24,6 +28,7 @@ using CMS_Lib.Extensions.Claim;
 using CMS_Lib.Extensions.HtmlAgilityPack;
 using CMS_Lib.Util;
 using CMS.Config.Consts;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -50,9 +55,10 @@ namespace CMS.Areas.Products.Controllers
         private readonly IFileService _iFileService;
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IProductService _iProductService;
+        private readonly IWebHostEnvironment _iHostingEnvironment;
 
 
-        public ProductController(ILogger<ProductController> iLogger, IProductRepository iProductRepository,
+        public ProductController(ILogger<ProductController> iLogger, IProductRepository iProductRepository, IWebHostEnvironment iHostingEnvironment,
             IProductPurposeRepository iProductPurposeRepository,
             IProductPropertiesRepository iProductPropertiesRepository,
             IProductCategoryRepository iProductCategoryRepository,
@@ -78,70 +84,194 @@ namespace CMS.Areas.Products.Controllers
             _iProductPropertiesValueRepository = iProductPropertiesValueRepository;
             _iProductService = iProductService;
             _iLoggingService = iLoggingService;
+            _iHostingEnvironment = iHostingEnvironment;
         }
 
         // GET
         [Authorize(Policy = "PermissionMVC")]
-        public IActionResult Index(string txtSearch, int? status, int? statusTT, int pageindex = 1)
+        public IActionResult Index(int isExport, string txtSearch, int? status, int? statusTT, int pageindex = 1)
         {
-            var query = _iProductRepository.GetProductAllIndex();
-            if (!string.IsNullOrEmpty(txtSearch))
-            {
-                query = query.Where(x =>
-                    EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
-                    EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
-            }
-
-            if (statusTT != null && statusTT != 0)
-            {
-                switch (statusTT)
+            if (isExport == 1)
+                return RedirectToAction("Export", new
                 {
-                    case 1:
-                        query = query.Where(x => x.IsHot.Value);
-                        break;
-                    case 2:
-                        query = query.Where(x => x.IsNew.Value);
-                        break;
-                    case 3:
-                        query = query.Where(x => x.IsBestSale.Value);
-                        break;
-                    case 4:
-                        query = query.Where(x => x.IsPromotion.Value);
-                        break;
-                }
-            }
+                    status,
+                    statusTT,
+                    txtSearch
+                });
 
-            if (status != null && status != 0)
+            try
             {
-                switch (status)
+                var query = _iProductRepository.GetProductAllIndex();
+                if (!string.IsNullOrEmpty(txtSearch))
+                    query = query.Where(x =>
+                        EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                        EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
+
+                if (statusTT != null && statusTT != 0)
+                    switch (statusTT)
+                    {
+                        case 1:
+                            query = query.Where(x => x.IsHot.Value);
+                            break;
+                        case 2:
+                            query = query.Where(x => x.IsNew.Value);
+                            break;
+                        case 3:
+                            query = query.Where(x => x.IsBestSale.Value);
+                            break;
+                        case 4:
+                            query = query.Where(x => x.IsPromotion.Value);
+                            break;
+                    }
+
+                if (status != null && status != 0)
+                    switch (status)
+                    {
+                        case 1:
+                            query = query.Where(x => x.IsPublic.Value);
+                            break;
+                        case 2:
+                            query = query.Where(x => !x.IsPublic.Value);
+                            break;
+                    }
+
+                var kk = query.OrderByDescending(x => x.LastModifiedAt).ToList();
+                var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
+                listData.RouteValue = new RouteValueDictionary
                 {
-                    case 1:
-                        query = query.Where(x => x.IsPublic.Value);
-                        break;
-                    case 2:
-                        query = query.Where(x => !x.IsPublic.Value);
-                        break;
-                }
+                    {"txtSearch", txtSearch},
+                    {"status", status},
+                    {"statusTT", statusTT}
+                };
+                var model = new ModelCollection();
+                model.AddModel("ListData", listData);
+                model.AddModel("ListStatus", ProductConst.ListStatus);
+                model.AddModel("ListStatusTT", ProductConst.ListStatusTT);
+                model.AddModel("Page", pageindex);
+                model.AddModel("isWareHouse",
+                    User.HasClaim(CmsClaimType.AreaControllerAction,
+                        "Products@ProductController@WhHouseByProductIdSync".ToUpper()));
+                return View(model);
             }
-
-            var listData = PagingList.Create(query.OrderByDescending(x => x.LastModifiedAt), PageSize, pageindex);
-            listData.RouteValue = new RouteValueDictionary()
+            catch (Exception e)
             {
-                {"txtSearch", txtSearch},
-                {"status", status},
-                {"statusTT", statusTT},
-            };
-            ModelCollection model = new ModelCollection();
-            model.AddModel("ListData", listData);
-            model.AddModel("ListStatus", ProductConst.ListStatus);
-            model.AddModel("ListStatusTT", ProductConst.ListStatusTT);
-            model.AddModel("Page", pageindex);
-            model.AddModel("isWareHouse",
-                User.HasClaim(CmsClaimType.AreaControllerAction,
-                    "Products@ProductController@WhHouseByProductIdSync".ToUpper()));
-            return View(model);
+                ILoggingService.Infor(_iLogger, "Xem báo cáo hoạt động nguười dùng", "Lỗi: " + e.Message);
+                return BadRequest();
+            }
         }
 
+        [Authorize(Policy = "PermissionMVC")]
+        [HttpGet]
+        public IActionResult Export(string txtSearch, int? status, int? statusTT)
+        {
+            try
+            {
+                var query = _iProductRepository.GetProductAllIndex();
+                if (!string.IsNullOrEmpty(txtSearch))
+                    query = query.Where(x =>
+                        EF.Functions.Like(x.Name, "%" + txtSearch.Trim() + "%") ||
+                        EF.Functions.Like(x.Sku, "%" + txtSearch.Trim() + "%"));
+
+                if (statusTT != null && statusTT != 0)
+                    switch (statusTT)
+                    {
+                        case 1:
+                            query = query.Where(x => x.IsHot.Value);
+                            break;
+                        case 2:
+                            query = query.Where(x => x.IsNew.Value);
+                            break;
+                        case 3:
+                            query = query.Where(x => x.IsBestSale.Value);
+                            break;
+                        case 4:
+                            query = query.Where(x => x.IsPromotion.Value);
+                            break;
+                    }
+
+                if (status != null && status != 0)
+                    switch (status)
+                    {
+                        case 1:
+                            query = query.Where(x => x.IsPublic.Value);
+                            break;
+                        case 2:
+                            query = query.Where(x => !x.IsPublic.Value);
+                            break;
+                    }
+
+                var listData = query.OrderByDescending(x => x.LastModifiedAt).ToList();
+                var filePath = Path.Combine(_iHostingEnvironment.WebRootPath, "Templates/Excels/Product",
+                    "ProductTemplate.xlsx");
+                var template = new XLTemplate(filePath);
+                var wsh = template.Workbook.Worksheets.FirstOrDefault();
+                int rowStart = 3;
+                for (int i = 0; i < listData.Count; i++)
+                {
+                    var item = listData[i];
+                    if (item.ListSimilar.Count > 1)
+                    {
+                        IXLRange w = wsh!.Range(rowStart , 2, rowStart + item.ListSimilar.Count - 1, 2);
+                        IXLRange w1 = wsh!.Range(rowStart , 3, rowStart + item.ListSimilar.Count -1, 3);
+                        IXLRange w2 = wsh!.Range(rowStart , 4, rowStart + item.ListSimilar.Count -1, 4);
+                        IXLRange w3 = wsh!.Range(rowStart , 7, rowStart + item.ListSimilar.Count -1, 7);
+                        ReportConst.MergeStyleExcel(w);
+                        ReportConst.MergeStyleExcel(w1);
+                        ReportConst.MergeStyleExcel(w2);
+                        ReportConst.MergeStyleExcel(w3);
+                        ReportConst.SetExcelRangeBgColor(w, "#fff", false);
+                        ReportConst.SetExcelRangeBgColor(w1, "#fff", false);
+                        ReportConst.SetExcelRangeBgColor(w2, "#fff", false);
+                        ReportConst.SetExcelRangeBgColor(w3, "#fff", false);
+                        w.SetValue((i + 1).ToString());
+                        w.Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                        w1.SetValue(item.Sku);
+                        w2.SetValue(item.Name);
+                        w3.SetValue(StatusProductConst.BindStatus(item));
+                        
+                        for (int j = 0; j < item.ListSimilar.Count; j++)
+                        {
+                            var item2 = item.ListSimilar[j];
+                            ReportConst.SetText(wsh!.Cell(rowStart + j, 5),   item2.Skuwh);
+                            ReportConst.SetText(wsh!.Cell(rowStart + j, 6),  CmsFunction.NumberFormatShow(item2.QuantityWh) );
+                            wsh!.Cell(rowStart + j, 6).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+
+                        }
+
+                    }  
+                    else
+                    {
+                        ReportConst.SetText(wsh!.Cell(rowStart , 2),  (i + 1).ToString());
+                        wsh!.Cell(rowStart , 2).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Center);
+                        ReportConst.SetText(wsh!.Cell(rowStart , 3),   item.Sku);
+                        ReportConst.SetText(wsh!.Cell(rowStart , 4),   item.Name);
+                        ReportConst.SetText(wsh!.Cell(rowStart , 5),   item.ListSimilar[0].Skuwh);
+                        ReportConst.SetText(wsh!.Cell(rowStart , 6),  CmsFunction.NumberFormatShow( item.ListSimilar[0].QuantityWh) ); 
+                        wsh!.Cell(rowStart , 6).Style.Alignment.SetHorizontal(XLAlignmentHorizontalValues.Right);
+                        ReportConst.SetText(wsh!.Cell(rowStart , 7),  StatusProductConst.BindStatus(item)); 
+                    }
+                    rowStart += item.ListSimilar.Count;
+
+                }
+                byte[] excelFile;
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    template.SaveAs(ms);
+                    ms.Position = 0;
+                    excelFile = ms.ToArray();
+                }
+
+                ILoggingService.Infor(_iLogger, "Xuất file Danh sách sản phẩm", "Thành công");
+                return File(excelFile, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    $"danh_sach_san_pham.xlsx");
+            }
+            catch (Exception e)
+            {
+                ILoggingService.Infor(_iLogger, "Xuất file Danh sách sản phẩm", "Lỗi: " + e.Message);
+                return BadRequest();
+            }
+        }
+        
         [ClaimRequirement(CmsClaimType.AreaControllerAction, "Products@ProductController@Index")]
         [NonLoad]
         public JsonResult GetListProduct()

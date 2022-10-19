@@ -17,4 +17,10 @@ public static class StatusConst
             ? "<span class=\"status badge bg-success text-dark p-2\"> Đã duyệt </span>"
             : "<span class=\"status badge bg-secondary text-dark p-2\"> Chờ duyệt </span>";
     }
+    public static string BindStatusText(bool? status)
+    {
+        return status == true
+            ? " Đã duyệt "
+            : " Chờ duyệt ";
+    }
 }
