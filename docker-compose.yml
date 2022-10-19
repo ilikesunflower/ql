@@ -3,12 +3,19 @@ version: '3.4'
 services:
   cms:
     image: ${DOCKER_REGISTRY-}cms
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=https://+:7650
+    ports:
+        - "7650:7650" 
     build:
       context: .
       dockerfile: CMS/Dockerfile
 
   cms_app_api:
     image: ${DOCKER_REGISTRY-}cmsappapi
+    ports:
+        - "7652:7652" 
     build:
       context: .
       dockerfile: CMS_App_Api/Dockerfile
